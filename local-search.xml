@@ -4,35 +4,6 @@
   
   
   <entry>
-    <title>AI安全学习记录01 - 方向确认与资源盘点</title>
-    <link href="/2026/07/20/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9501-%E6%96%B9%E5%90%91%E7%A1%AE%E8%AE%A4%E4%B8%8E%E8%B5%84%E6%BA%90%E7%9B%98%E7%82%B9/"/>
-    <url>/2026/07/20/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9501-%E6%96%B9%E5%90%91%E7%A1%AE%E8%AE%A4%E4%B8%8E%E8%B5%84%E6%BA%90%E7%9B%98%E7%82%B9/</url>
-    
-    <content type="html"><![CDATA[<h2 id="本篇目标"><a href="#本篇目标" class="headerlink" title="本篇目标"></a>本篇目标</h2><p>正式确认”AI 在网络空间安全的应用”为长期学习方向，盘点可用资源，建立可执行的学习路径。本文是学习记录的第一篇，后续每完成一个模块都会更新一篇。</p><span id="more"></span><h2 id="一、方向确认"><a href="#一、方向确认" class="headerlink" title="一、方向确认"></a>一、方向确认</h2><p>考研目标：<strong>东南大学网络空间安全学院</strong>（第五轮学科评估 A 类，首批国家一流网络安全学院建设示范项目高校）。研究方向意向：<strong>人工智能在网络空间安全的应用</strong>，覆盖大模型安全、对抗机器学习、AI 驱动威胁检测。</p><p>定位很明确：**”读代码找漏洞”的人，不是”造功能”的人**。AI 算法学到能改 PyTorch 代码、能看懂对抗 ML 论文为止，过了这条线就跳过。这决定了学习边界——必学数学+经典 ML&#x2F;DL+Transformer+预训练 SFT&#x2F;RLHF+tokenization+PyTorch+对抗 ML 算法（FGSM&#x2F;PGD&#x2F;CW）；跳过 CUDA&#x2F;量化部署&#x2F;反向传播从零实现。</p><h2 id="二、资源盘点"><a href="#二、资源盘点" class="headerlink" title="二、资源盘点"></a>二、资源盘点</h2><h3 id="已评估的两个-GitHub-项目"><a href="#已评估的两个-GitHub-项目" class="headerlink" title="已评估的两个 GitHub 项目"></a>已评估的两个 GitHub 项目</h3><table><thead><tr><th>项目</th><th>定位</th><th>对我的价值</th></tr></thead><tbody><tr><td><code>bojieli/ai-agent-book</code></td><td>中文 Agent 实战教材，第 2 章 prompt-injection 实验是金矿</td><td>第一优先读第 2 章 prompt injection 攻防实验，第 3 章按”找漏洞”视角读</td></tr><tr><td><code>FeeiCN/security-engineering</code></td><td>企业安全工程笔记，文字为主无代码</td><td>当”安全字典”按需查；合规法规板块值得读；AI 安全本体去看 OWASP&#x2F;MITRE</td></tr></tbody></table><h3 id="核心资源分层"><a href="#核心资源分层" class="headerlink" title="核心资源分层"></a>核心资源分层</h3><p><strong>概念地基层</strong></p><ul><li>MITRE ATLAS（<code>atlas.mitre.org</code>）—— AI 攻击知识库，16 战术 84 技术</li><li>OWASP LLM Top 10 2025 —— LLM 漏洞分类标准</li><li>DeepLearning.AI: Quality and Safety for LLM Applications（免费短课）</li></ul><p><strong>LLM 安全实战层</strong></p><ul><li>ai-agent-book 第 2 章 <code>prompt-injection</code> 实验（3 攻击 × 4 防御）</li><li>OWASP LLM 中文靶场（Jack-MRJ，21 关卡，Docker 一键起）</li><li>garak（NVIDIA 出品，”nmap for LLMs”）</li></ul><p><strong>对抗机器学习层</strong></p><ul><li>CleverHans（FGSM&#x2F;PGD&#x2F;Carlini-Wagner 攻击库，MNIST 教程是标准入门路径）</li><li>ART (Adversarial Robustness Toolbox, IBM) —— 四类攻击全覆盖</li><li><code>gopeshkhandelwal/ai-security</code> —— 10 个 hands-on labs 直接对标 MITRE ATLAS</li></ul><h2 id="三、环境清单"><a href="#三、环境清单" class="headerlink" title="三、环境清单"></a>三、环境清单</h2><table><thead><tr><th>环境</th><th>用途</th><th>限制</th></tr></thead><tbody><tr><td>Windows + WSL Ubuntu</td><td>日常开发</td><td>主力环境</td></tr><tr><td>阿里云 ECS 2G2核</td><td>跑工具&#x2F;靶场</td><td>2G 内存跑不了本地 LLM，需租云 GPU</td></tr><tr><td>VPN</td><td>访问 GitHub&#x2F;HuggingFace&#x2F;arXiv</td><td>关键优势</td></tr></tbody></table><h2 id="四、下一步"><a href="#四、下一步" class="headerlink" title="四、下一步"></a>四、下一步</h2><ol><li>读 MITRE ATLAS 案例研究 + OWASP LLM Top 10 文档</li><li>部署 OWASP LLM 中文靶场到云服务器</li><li>装 garak 扫本地 Ollama 模型</li></ol><h2 id="五、检查点"><a href="#五、检查点" class="headerlink" title="五、检查点"></a>五、检查点</h2><ul><li><input disabled="" type="checkbox"> 能口述 evasion &#x2F; poisoning &#x2F; extraction &#x2F; injection 各指什么</li><li><input disabled="" type="checkbox"> 能画出 AI 系统的攻击面有哪些</li><li><input disabled="" type="checkbox"> 知道 MITRE ATLAS 和 OWASP LLM Top 10 分别解决什么问题</li></ul>]]></content>
-    
-    
-    <categories>
-      
-      <category>AI安全学习</category>
-      
-    </categories>
-    
-    
-    <tags>
-      
-      <tag>AI安全</tag>
-      
-      <tag>学习路径</tag>
-      
-      <tag>资源盘点</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
     <title>从零搭建 Hexo 博客并部署到 GitHub Pages</title>
     <link href="/2026/05/15/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     <url>/2026/05/15/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
