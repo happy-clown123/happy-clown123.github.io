@@ -1,0 +1,17 @@
+<svg width="560" height="300" viewBox="0 0 560 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="560" height="300" fill="#ffffff"/>
+  <text x="280" y="26" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#222" text-anchor="middle">激活函数：为什么要它？</text>
+  <line x1="70" y1="250" x2="510" y2="250" stroke="#888" stroke-width="1.5"/>
+  <line x1="70" y1="250" x2="70" y2="50" stroke="#888" stroke-width="1.5"/>
+  <text x="40" y="150" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#555" text-anchor="middle" transform="rotate(-90 40 150)">输出</text>
+  <text x="290" y="278" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#555" text-anchor="middle">输入 z</text>
+  <!-- ReLU: y=max(0,z) -->
+  <polyline points="70,250 280,250 510,60" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+  <text x="470" y="90" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#2563eb" font-weight="700">ReLU  y = max(0, z)</text>
+  <text x="400" y="160" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#555">负区压成 0，稀疏、不易梯度消失</text>
+  <!-- Sigmoid -->
+  <path d="M 70 230 C 180 230, 220 70, 510 70" fill="none" stroke="#dc2626" stroke-width="2.5"/>
+  <text x="150" y="120" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#dc2626" font-weight="700">Sigmoid  y = 1/(1+e⁻ᶻ)</text>
+  <text x="120" y="160" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#555">两端饱和→梯度≈0，深层易梯度消失</text>
+  <text x="280" y="40" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#555">没有激活函数 → 多层堆叠仍等价于一个线性变换</text>
+</svg>

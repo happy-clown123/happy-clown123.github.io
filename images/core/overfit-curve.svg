@@ -1,0 +1,19 @@
+<svg width="560" height="360" viewBox="0 0 560 360" xmlns="http://www.w3.org/2000/svg">
+  <rect width="560" height="360" fill="#ffffff"/>
+  <text x="280" y="26" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#222" text-anchor="middle">过拟合：训练误差↓ 但验证误差↑</text>
+  <line x1="70" y1="300" x2="520" y2="300" stroke="#888" stroke-width="1.5"/>
+  <line x1="70" y1="300" x2="70" y2="60" stroke="#888" stroke-width="1.5"/>
+  <text x="40" y="180" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#555" text-anchor="middle" transform="rotate(-90 40 180)">误差 Error</text>
+  <text x="300" y="330" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#555" text-anchor="middle">模型复杂度 / 训练轮数 →</text>
+  <!-- train error: low and stays low -->
+  <polyline points="80,250 160,180 260,130 360,95 470,85" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+  <text x="430" y="78" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#2563eb" font-weight="700">训练误差</text>
+  <!-- val error: goes down then up -->
+  <polyline points="80,255 160,195 260,150 360,180 470,235" fill="none" stroke="#dc2626" stroke-width="2.5"/>
+  <text x="430" y="250" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#dc2626" font-weight="700">验证误差</text>
+  <!-- sweet spot marker -->
+  <line x1="270" y1="60" x2="270" y2="300" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <text x="278" y="70" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#16a34a" font-weight="700">最佳泛化点</text>
+  <text x="150" y="150" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#dc2626">↑ 过拟合区：记太死，新样本错</text>
+  <text x="300" y="120" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#2563eb">↓ 欠拟合区：还学不会</text>
+</svg>

@@ -1,0 +1,1156 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="KachaKacha">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="PyTorch 实操（PyTorch Hands-on） 定位：对抗样本实验的第一工具。不会 PyTorch，对抗 ML 实验就没法动手——官方 FGSM 教程就是你第一个 AI 安全实验，得懂 requires_grad、.backward() 才能跑通。前置：模块 D（深度学习）、B（Python）｜ 后继：模块 J（对抗 ML）、F（LLM）及格线：能跑通 pt01（torch 训练小网络">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PyTorch 实操（E 模块）">
+<meta property="og:url" content="https://happy-clown123.github.io/2026/08/31/E-pytorch/index.html">
+<meta property="og:site_name" content="KachaKacha的空间">
+<meta property="og:description" content="PyTorch 实操（PyTorch Hands-on） 定位：对抗样本实验的第一工具。不会 PyTorch，对抗 ML 实验就没法动手——官方 FGSM 教程就是你第一个 AI 安全实验，得懂 requires_grad、.backward() 才能跑通。前置：模块 D（深度学习）、B（Python）｜ 后继：模块 J（对抗 ML）、F（LLM）及格线：能跑通 pt01（torch 训练小网络">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://happy-clown123.github.io/images/core/autograd-graph.svg">
+<meta property="article:published_time" content="2026-08-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-08-31T08:17:01.638Z">
+<meta property="article:author" content="KachaKacha">
+<meta property="article:tag" content="PyTorch">
+<meta property="article:tag" content="SGD">
+<meta property="article:tag" content="autograd">
+<meta property="article:tag" content="反向传播">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://happy-clown123.github.io/images/core/autograd-graph.svg">
+  
+  
+  
+  <title>PyTorch 实操（E 模块） - KachaKacha的空间</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"happy-clown123.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.2"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="PyTorch 实操（E 模块）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-08-31 00:00" pubdate>
+          2026年8月31日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          48 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">PyTorch 实操（E 模块）</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="PyTorch-实操（PyTorch-Hands-on）"><a href="#PyTorch-实操（PyTorch-Hands-on）" class="headerlink" title="PyTorch 实操（PyTorch Hands-on）"></a>PyTorch 实操（PyTorch Hands-on）</h1><blockquote>
+<p>定位：对抗样本实验的第一工具。不会 PyTorch，对抗 ML 实验就没法动手——官方 FGSM 教程就是你第一个 AI 安全实验，得懂 <code>requires_grad</code>、<code>.backward()</code> 才能跑通。<br>前置：模块 D（深度学习）、B（Python）｜ 后继：模块 J（对抗 ML）、F（LLM）<br>及格线：能跑通 pt01（torch 训练小网络 + 输入梯度 + 存读模型）；知道攻击评测为什么必须 <code>model.eval()</code>。</p>
+</blockquote>
+<hr>
+<h2 id="0-学习执行清单"><a href="#0-学习执行清单" class="headerlink" title="0 学习执行清单"></a>0 学习执行清单</h2><table>
+<thead>
+<tr>
+<th>#</th>
+<th>这一步干什么</th>
+<th>主资源（定位到位置）</th>
+<th>动手产出</th>
+<th>过关判据</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Tensor 与 autograd：<code>requires_grad</code> / <code>.backward()</code> / <code>.grad</code></td>
+<td>本笔记 §1 + <a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/beginner/deep_learning_60min_blitz.html">PyTorch 官方 60 分钟教程</a></td>
+<td>跑 §1 代码，打印 x.grad</td>
+<td>能解释 <code>x.grad</code> 存的是损失对<strong>输入</strong>的梯度</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>nn.Module</code> 搭网络：forward 自己定义</td>
+<td>本笔记 §2 + 官方 <a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/beginner/basics/buildmodel_tutorial.html">nn 教程</a></td>
+<td>搭一个 FC + 一个 CNN</td>
+<td>能说出 CNN 里 <code>view(x.size(0), -1)</code> 在干嘛</td>
+</tr>
+<tr>
+<td>3</td>
+<td>训练循环：zero_grad → forward → backward → step</td>
+<td>本笔记 §3 + 官方 <a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/beginner/basics/optimization_tutorial.html">Optimization 教程</a></td>
+<td>跑 <code>labs/pt01_train_grad_save.py</code></td>
+<td>loss 下降、acc &gt; 0.9；能说出四步顺序为什么不能乱</td>
+</tr>
+<tr>
+<td>4</td>
+<td>train vs eval：为什么评测必须 eval()</td>
+<td>本笔记 §3 + §4</td>
+<td>一段话 + 亲手触发一次”忘记 eval 的漂移”</td>
+<td>能解释 Dropout 随机性对攻击指标的影响</td>
+</tr>
+<tr>
+<td>5</td>
+<td>设备切换与模型存取</td>
+<td>本笔记 §4</td>
+<td>save/load 一遍</td>
+<td>能说出 <code>model.to(device)</code> 与 <code>xb.to(device)</code> 缺一不可</td>
+</tr>
+<tr>
+<td>6</td>
+<td>接上 J：用 torch 生成第一个对抗样本</td>
+<td><a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/beginner/fgsm_tutorial.html">官方 FGSM 教程</a></td>
+<td>把 pt01 模型当靶子，改输入生成对抗样本</td>
+<td>输出扰动前后预测变化；能说出 <code>x.grad</code> 就是 FGSM 的 ∇_xL</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="1-Tensor-与-autograd（求导引擎）"><a href="#1-Tensor-与-autograd（求导引擎）" class="headerlink" title="1 Tensor 与 autograd（求导引擎）"></a>1 Tensor 与 autograd（求导引擎）</h2><p><strong>是什么</strong>：Tensor 是 PyTorch 的数组（类似 numpy，但能跑 GPU、能记录计算图）。<code>requires_grad=True</code> 的 Tensor 会记录”怎么由它算出来的”，<code>.backward()</code> 后就能拿到梯度 <code>.grad</code>。</p>
+<ul>
+<li><code>x.requires_grad_(True)</code>：<strong>声明</strong>“我要对这个 x 求梯度”——之后所有以 x 为祖先的运算都会被记录进计算图。</li>
+<li><code>x.grad</code>：<code>.backward()</code> 之后，<strong>x 处累积的梯度</strong>就存在这里（对攻击来说，这就是 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.357ex;" xmlns="http://www.w3.org/2000/svg" width="4.528ex" height="1.904ex" role="img" focusable="false" viewBox="0 -684 2001.5 841.8"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="\nabla_x L"><g data-mml-node="msub" data-latex="\nabla_x"><g data-mml-node="mi" data-latex="\nabla"><path data-c="2207" d="M780 657C783 664 785 669 785 671C785 679 776 683 759 683L73 683C56 683 47 679 47 670L387-13C394-26 403-33 416-33C429-33 438-26 445-13M445 72L179 605L710 605Z"></path></g><g data-mml-node="mi" transform="translate(866,-150) scale(0.707)" data-latex="x"><path data-c="1D465" d="M527 373C527 419 482 442 432 442C389 442 355 419 329 373C308 419 273 442 222 442C173 442 133 419 101 374C74 335 60 306 60 287C60 278 65 273 75 273C84 273 90 278 92 287C111 345 153 413 220 413C253 413 269 392 269 351C269 330 251 252 216 118C199 51 169 18 126 18C112 18 99 21 88 26C114 36 127 54 127 80C127 106 114 119 87 119C54 119 29 91 29 58C29 12 76-11 125-11C167-11 201 12 228 58C247 12 283-11 335-11C383-11 423 12 455 57C482 96 496 125 496 144C496 153 491 158 481 158C472 158 467 153 464 144C447 87 402 18 337 18C304 18 287 38 287 79C287 92 292 120 303 165L337 300C356 375 387 413 431 413C445 413 458 410 469 405C442 396 429 378 429 351C429 325 443 312 470 312C502 312 527 341 527 373Z"></path></g></g><g data-mml-node="mi" data-latex="L" transform="translate(1320.5,0)"><path data-c="1D43F" d="M520 667C520 678 513 683 500 683L354 680L223 683C208 684 200 676 200 659C200 652 203 647 209 646C218 645 226 644 231 644C262 643 279 641 284 640C289 639 292 636 292 631C292 629 291 623 288 613L156 82C150 60 140 47 125 42C119 40 101 39 70 39C49 39 39 31 39 15C39 5 49 0 70 0L527 0C552 0 554 0 561 19L639 233C642 240 643 245 643 248C643 258 638 263 627 263C617 263 612 254 607 240C588 191 570 154 555 131C518 75 455 39 363 39L270 39C259 39 252 39 249 40C242 40 239 42 239 45C239 47 241 54 244 67L377 601C383 624 396 637 415 642C421 643 442 644 478 644C506 644 520 644 520 667Z"></path></g></g></g></svg></mjx-container>）。</li>
+</ul>
+<p><strong>数值实例</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br>x = torch.tensor(<span class="hljs-number">2.0</span>, requires_grad=<span class="hljs-literal">True</span>)<br>y = x * <span class="hljs-number">3</span><br>L = (y - <span class="hljs-number">5</span>) ** <span class="hljs-number">2</span>            <span class="hljs-comment"># 损失</span><br>L.backward()                 <span class="hljs-comment"># 反向传播，自动算 ∂L/∂x</span><br><span class="hljs-built_in">print</span>(x.grad)               <span class="hljs-comment"># tensor(12.)  = 2*3*(6-5) = 12</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/images/core/autograd-graph.svg" srcset="/img/loading.gif" lazyload></p>
+<p><strong>你在哪用</strong>：FGSM 攻击就是把 <code>x</code>（图片像素）设 <code>requires_grad_(True)</code>，前向算损失 → <code>loss.backward()</code> → 读 <code>x.grad</code> 得梯度方向 → <code>x + ε·sign(x.grad)</code>。<strong>这正是模块 J 的第一枪</strong>（对照 dl01 里手算的 <code>dL/dx</code>）。</p>
+<h3 id="1-1-两种乘法：逐元素乘-mul-vs-矩阵乘-matmul"><a href="#1-1-两种乘法：逐元素乘-mul-vs-矩阵乘-matmul" class="headerlink" title="1.1 两种乘法：逐元素乘 * / .mul()  vs  矩阵乘 @ / .matmul()"></a>1.1 两种乘法：逐元素乘 <code>*</code> / <code>.mul()</code>  vs  矩阵乘 <code>@</code> / <code>.matmul()</code></h3><p>新手最易混淆的一对。PyTorch 里”乘”有两种完全不同的含义，形状规则也不同：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br>a = torch.tensor([[<span class="hljs-number">1.</span>, <span class="hljs-number">0.</span>, <span class="hljs-number">1.</span>, <span class="hljs-number">1.</span>],<br>                  [<span class="hljs-number">1.</span>, <span class="hljs-number">0.</span>, <span class="hljs-number">1.</span>, <span class="hljs-number">1.</span>]])      <span class="hljs-comment"># 你今天敲的那个 tensor</span><br><br><span class="hljs-built_in">print</span>(a.mul(a))      <span class="hljs-comment"># 方法写法</span><br><span class="hljs-built_in">print</span>(a * a)         <span class="hljs-comment"># 运算符写法 —— 内部就是调用 .mul()，结果完全一样</span><br><span class="hljs-comment"># 两者都是"逐元素乘"：对应位置相乘，不求和、不跨行列</span><br><span class="hljs-comment"># [[1*1,0*0,1*1,1*1], ...] = [[1,0,1,1], ...]</span><br><span class="hljs-comment"># 你的 tensor 只有 0/1，平方后不变（0²=0, 1²=1），所以输出和原 tensor 一样——</span><br><span class="hljs-comment"># 不是没算，是结果巧合相等。换非 0/1 的数就看得出：[2.,3.]*[2.,3.] -&gt; [4., 9.]</span><br><br><span class="hljs-built_in">print</span>(a @ a.T)       <span class="hljs-comment"># 矩阵乘（@ 或 .matmul()）：行×列求和，形状规则完全不同</span><br></code></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>含义</th>
+<th>形状规则</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>a * b</code> / <code>a.mul(b)</code></td>
+<td>逐元素乘（Hadamard 积）</td>
+<td>a、b <strong>形状必须完全一致</strong></td>
+</tr>
+<tr>
+<td><code>a @ b</code> / <code>a.matmul(b)</code> / <code>a.mm(b)</code></td>
+<td>矩阵乘</td>
+<td>a 的列数 <strong>必须 =</strong> b 的行数</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>💡 一句话记牢：<strong><code>*</code> 是”位置对位置”，<code>@</code> 是”行乘列求和”。</strong> <code>nn.Linear</code>（你前面搭的网络）内部是 <code>@</code>（矩阵乘）；mask 遮罩、注意力门控、ReLU 后的逐元素操作用的是 <code>* / .mul()</code>。混淆这俩是高频 bug。</p>
+</blockquote>
+<p><strong>在哪用</strong>：FGSM 公式 <code>x' = x + ε·sign(∇L)</code> 里 <code>ε</code> 是标量，<code>ε * sign(∇L)</code> 就是逐元素乘（每个元素都乘同一个数）；注意力里的 <code>scores * mask</code> 把某些位置清零，也是 <code>.mul()</code>。</p>
+<h3 id="1-2-官网-tensor-tutorial-其余要点速查"><a href="#1-2-官网-tensor-tutorial-其余要点速查" class="headerlink" title="1.2 官网 tensor tutorial 其余要点速查"></a>1.2 官网 tensor tutorial 其余要点速查</h3><blockquote>
+<p>完整教程：<a target="_blank" rel="noopener" href="https://docs.pytorch.org/tutorials/beginner/blitz/tensor_tutorial.html">PyTorch Tensor Tutorial</a>。下面只列”本文没讲、但你后面会撞上”的点；基础 API 和 numpy 几乎一致，细节看官网即可。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>主题</th>
+<th>一句话</th>
+<th>路线连接 / 坑</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>创建 tensor</td>
+<td><code>torch.tensor(数据)</code> / <code>torch.from_numpy(np_arr)</code> / <code>torch.rand/ones/zeros(shape)</code></td>
+<td>加载数据、初始化权重都会用；<code>from_numpy</code> 与 numpy <strong>共享内存</strong>（见下）</td>
+</tr>
+<tr>
+<td>三属性</td>
+<td><code>.shape</code> <code>.dtype</code> <code>.device</code></td>
+<td><code>.device</code> 你已见过（<code>cpu</code>/<code>cuda</code>，见 §4）；<code>dtype</code> 不匹配是高频报错（float32 vs float64）</td>
+</tr>
+<tr>
+<td>拼接</td>
+<td><code>torch.cat([a,b], dim=1)</code> 沿已有维拼；<code>torch.stack([a,b])</code> 新增一维</td>
+<td>组 batch、拼多路特征时天天用</td>
+</tr>
+<tr>
+<td><strong>in-place（<code>_</code> 后缀）</strong></td>
+<td><code>x.add_(5)</code> 直接就地改 <code>x</code>，省内存</td>
+<td><strong>求导场景下官方不建议</strong>：会破坏计算图、让 <code>.backward()</code> 出错——你 §1 的 autograd 场景用 <code>x = x + 5</code> 而非 <code>x.add_(5)</code></td>
+</tr>
+<tr>
+<td><strong>numpy 桥共享内存</strong></td>
+<td>CPU 上 <code>t.numpy()</code> 与 <code>t</code> 共用底层内存，改一个另一个也变</td>
+<td><strong>隐蔽污染坑</strong>：numpy 预处理后转 tensor，若以为”已拷贝”去原地改 numpy，tensor 也被改。要隔离用 <code>torch.tensor(np_arr)</code> 或 <code>.clone()</code></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>💡 切片/索引（<code>t[:, 1] = 0</code>）与 numpy 完全一样，见 numpy.md §3，这里不重复。</p>
+</blockquote>
+<hr>
+<h2 id="2-用-nn-Module-搭网络"><a href="#2-用-nn-Module-搭网络" class="headerlink" title="2 用 nn.Module 搭网络"></a>2 用 nn.Module 搭网络</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Net</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-built_in">super</span>().__init__()<br>        <span class="hljs-variable language_">self</span>.fc1 = nn.Linear(<span class="hljs-number">784</span>, <span class="hljs-number">128</span>)<br>        <span class="hljs-variable language_">self</span>.fc2 = nn.Linear(<span class="hljs-number">128</span>, <span class="hljs-number">10</span>)<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x</span>):                    <span class="hljs-comment"># 前向怎么走，自己定义</span><br>        x = torch.relu(<span class="hljs-variable language_">self</span>.fc1(x))<br>        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">self</span>.fc2(x)<br><br>model = Net()<br><span class="hljs-built_in">print</span>(model)                                <span class="hljs-comment"># 打印结构</span><br></code></pre></td></tr></table></figure>
+
+<p>CNN 版本（图像用卷积更合适）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">CNN</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-built_in">super</span>().__init__()<br>        <span class="hljs-variable language_">self</span>.conv1 = nn.Conv2d(<span class="hljs-number">1</span>, <span class="hljs-number">16</span>, <span class="hljs-number">3</span>)    <span class="hljs-comment"># 1 通道→16 通道，3×3 卷积</span><br>        <span class="hljs-variable language_">self</span>.conv2 = nn.Conv2d(<span class="hljs-number">16</span>, <span class="hljs-number">32</span>, <span class="hljs-number">3</span>)<br>        <span class="hljs-variable language_">self</span>.fc = nn.Linear(<span class="hljs-number">32</span> * <span class="hljs-number">5</span> * <span class="hljs-number">5</span>, <span class="hljs-number">10</span>) <span class="hljs-comment"># 展平后接全连接</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x</span>):<br>        x = torch.relu(<span class="hljs-variable language_">self</span>.conv1(x))<br>        x = torch.relu(<span class="hljs-variable language_">self</span>.conv2(x))<br>        x = x.view(x.size(<span class="hljs-number">0</span>), -<span class="hljs-number">1</span>)           <span class="hljs-comment"># 展平 (batch, 32*5*5)</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">self</span>.fc(x)<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="3-DataLoader-与训练循环"><a href="#3-DataLoader-与训练循环" class="headerlink" title="3 DataLoader 与训练循环"></a>3 DataLoader 与训练循环</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> torch.utils.data <span class="hljs-keyword">import</span> DataLoader<br><span class="hljs-keyword">from</span> torchvision <span class="hljs-keyword">import</span> datasets, transforms<br><br>train = datasets.MNIST(<span class="hljs-string">"data"</span>, train=<span class="hljs-literal">True</span>, download=<span class="hljs-literal">True</span>,<br>                       transform=transforms.ToTensor())<br>loader = DataLoader(train, batch_size=<span class="hljs-number">64</span>, shuffle=<span class="hljs-literal">True</span>)<br><br>opt = torch.optim.Adam(model.parameters(), lr=<span class="hljs-number">1e-3</span>)<br>model.train()                                <span class="hljs-comment"># 开启 dropout / BN 训练行为</span><br><span class="hljs-keyword">for</span> xb, yb <span class="hljs-keyword">in</span> loader:                       <span class="hljs-comment"># 每个 batch</span><br>    opt.zero_grad()                         <span class="hljs-comment"># ① 清空上次梯度（累积会叠加！）</span><br>    loss = nn.functional.cross_entropy(model(xb), yb)  <span class="hljs-comment"># ② 前向算损失</span><br>    loss.backward()                         <span class="hljs-comment"># ③ 反传梯度</span><br>    opt.step()                             <span class="hljs-comment"># ④ 更新参数</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>四步顺序为什么不能乱</strong>：梯度是累积的——不清空，上个 batch 的梯度会叠加进来；先 forward 后 backward；step 必须等 backward 算完梯度再更新。</p>
+<p><strong>train vs eval</strong>：<code>model.train()</code> 启用 Dropout、BatchNorm 用本 batch 统计；<code>model.eval()</code> 关掉 Dropout、BatchNorm 用全局统计量。<strong>推理/评测/对抗攻击测试必须 <code>model.eval()</code></strong>，否则结果会随机漂移（见 D §5）。</p>
+<hr>
+<h2 id="4-GPU-CPU-切换与模型存取"><a href="#4-GPU-CPU-切换与模型存取" class="headerlink" title="4 GPU / CPU 切换与模型存取"></a>4 GPU / CPU 切换与模型存取</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python">device = <span class="hljs-string">"cuda"</span> <span class="hljs-keyword">if</span> torch.cuda.is_available() <span class="hljs-keyword">else</span> <span class="hljs-string">"cpu"</span><br>model.to(device)                            <span class="hljs-comment"># 模型搬设备</span><br>xb = xb.to(device)                          <span class="hljs-comment"># 数据也要搬同一设备（缺一个就报错）</span><br><br>torch.save(model.state_dict(), <span class="hljs-string">"cnn.pth"</span>)  <span class="hljs-comment"># 存权重</span><br>model.load_state_dict(torch.load(<span class="hljs-string">"cnn.pth"</span>))<span class="hljs-comment"># 读权重</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>本地 CPU 跑 MNIST 级小网络几秒一个 epoch 完全够；大模型/大数据再上云 GPU。攻击评测一律 CPU 可做（J 模块的 labs 全部 CPU 跑通）。</p>
+</blockquote>
+<hr>
+<h2 id="5-里程碑：从零写通-MNIST-CNN（约-60-行）"><a href="#5-里程碑：从零写通-MNIST-CNN（约-60-行）" class="headerlink" title="5 里程碑：从零写通 MNIST CNN（约 60 行）"></a>5 里程碑：从零写通 MNIST CNN（约 60 行）</h2><p>完整脚本见 <code>labs/pt01_train_grad_save.py</code>（含训练 + 输入梯度 + 存读模型三合一）。核心循环：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python">model.train()<br><span class="hljs-keyword">for</span> epoch <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">3</span>):<br>    <span class="hljs-keyword">for</span> xb, yb <span class="hljs-keyword">in</span> loader:<br>        opt.zero_grad()<br>        loss = F.cross_entropy(model(xb), yb)<br>        loss.backward(); opt.step()<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f"epoch <span class="hljs-subst">{epoch}</span>  loss=<span class="hljs-subst">{loss.item():<span class="hljs-number">.4</span>f}</span>"</span>)   <span class="hljs-comment"># 应降到 0.1 以下</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>下一步（模块 J 衔接）</strong>：跑通 <a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/beginner/fgsm_tutorial.html">PyTorch 官方 FGSM 教程</a>——把 pt01 的模型当被攻击目标，生成第一个对抗样本。这就是你第一个 AI 安全产出。</p>
+<hr>
+<h2 id="6-常见误区"><a href="#6-常见误区" class="headerlink" title="6 常见误区"></a>6 常见误区</h2><ol>
+<li><strong>以为 <code>.backward()</code> 会自动更新参数</strong> —— 它只算梯度；<code>opt.step()</code> 才是更新。忘了 step = 白训；忘了 zero_grad = 梯度累积错乱。</li>
+<li><strong>以为 <code>x.grad</code> 是”模型参数的梯度”</strong> —— 它是对 <code>x</code>（输入）的梯度。攻击要 <code>x.grad</code>（FGSM 用），训练要 <code>w.grad</code>（optimizer 用），同一个 backward 看你要谁的。</li>
+<li><strong>以为 <code>model.eval()</code> 只是”性能优化”</strong> —— 它改变函数行为（关 Dropout/BN），攻击评测不 eval() 指标必飘（D §5 的坑）。</li>
+<li><strong>以为数据不用搬设备</strong> —— <code>model.to("cuda")</code> 后数据还在 CPU，forward 直接报错；两个都必须 <code>.to(device)</code>。</li>
+<li><strong>以为 CNN 必须手动展平</strong> —— <code>nn.Flatten()</code> 就是干这个的；<code>view(x.size(0), -1)</code> 手写版等价。搞错维度是新手第一报错来源。</li>
+</ol>
+<hr>
+<h2 id="7-实验清单（Labs）"><a href="#7-实验清单（Labs）" class="headerlink" title="7 实验清单（Labs）"></a>7 实验清单（Labs）</h2><table>
+<thead>
+<tr>
+<th>Lab</th>
+<th>目标</th>
+<th>脚本</th>
+<th>依赖</th>
+<th>硬件/成本</th>
+<th>过关判据</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>pt01</td>
+<td>torch 三合一：训练小 CNN、算输入梯度（FGSM 素材）、存读模型</td>
+<td><code>labs/pt01_train_grad_save.py</code></td>
+<td>torch</td>
+<td>CPU，MNIST 3 epoch 约 1 分钟</td>
+<td>loss 降到 &lt;0.15、测试 acc &gt; 0.9；输出 x.grad 形状与扰动前后预测变化</td>
+</tr>
+</tbody></table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> 01-foundation/pytorch/labs<br>pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu<br>python pt01_train_grad_save.py<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="8-检查点（自测）"><a href="#8-检查点（自测）" class="headerlink" title="8 检查点（自测）"></a>8 检查点（自测）</h2><ul>
+<li><input disabled="" type="checkbox"> <code>x.requires_grad_(True)</code> 和 <code>x.grad</code> 各自在干什么？FGSM 攻击怎么用它们</li>
+<li><input disabled="" type="checkbox"> 写出训练四步（zero_grad/forward/backward/step）并解释为什么顺序不能乱</li>
+<li><input disabled="" type="checkbox"> <code>model.train()</code> 和 <code>model.eval()</code> 的区别？为什么攻击评测要固定 eval</li>
+<li><input disabled="" type="checkbox"> 从零写完 MNIST CNN 训练脚本、跑通、loss 降到 0.1 以下（pt01）</li>
+<li><input disabled="" type="checkbox"> 能用 <code>torch.save/load_state_dict</code> 存读模型，能 <code>model.to("cuda"/"cpu")</code> 切设备</li>
+<li><input disabled="" type="checkbox"> 对 pt01 模型做一次 FGSM 式输入扰动，贴出扰动前后预测</li>
+</ul>
+<hr>
+<h2 id="9-与主线的连接"><a href="#9-与主线的连接" class="headerlink" title="9 与主线的连接"></a>9 与主线的连接</h2><ul>
+<li><strong>→ 模块 J §3.1 FGSM</strong>：<code>x.requires_grad_() → loss.backward() → x.grad</code> 就是 FGSM 的梯度获取代码；J01/J02 的 numpy 版是”看清原理”，pt01 是”生产工具版”。</li>
+<li><strong>→ 模块 J §3.2 PGD</strong>：PGD 的投影循环（clamp 回 ε 球）在 torch 里就是 <code>torch.clamp(x_adv, x-eps, x+eps)</code>。</li>
+<li><strong>→ 模块 F（LLM）</strong>：Transformer 也全是 torch 张量运算；llm02 的注意力验证就是 torch 最简实践。</li>
+<li><strong>→ 模块 K §4 jailbreak</strong>：GCG 在开源模型上做 token 级梯度搜索，底层就是 <code>.backward()</code> + <code>.grad</code>——同一套 autograd。</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">AI安全学习</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/%E5%9F%BA%E7%A1%80%E9%98%B6%E6%AE%B5/" class="category-chain-item">基础阶段</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/%E5%9F%BA%E7%A1%80%E9%98%B6%E6%AE%B5/PyTorch/" class="category-chain-item">PyTorch</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD/" class="print-no-link">#反向传播</a>
+      
+        <a href="/tags/PyTorch/" class="print-no-link">#PyTorch</a>
+      
+        <a href="/tags/autograd/" class="print-no-link">#autograd</a>
+      
+        <a href="/tags/SGD/" class="print-no-link">#SGD</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>PyTorch 实操（E 模块）</div>
+      <div>https://happy-clown123.github.io/2026/08/31/E-pytorch/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>KachaKacha</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年8月31日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/08/31/I-re/" title="逆向工程基础（I 模块）">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">逆向工程基础（I 模块）</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/08/31/L-ai-driven-security/" title="用 AI 做安全（L 模块）">
+                        <span class="hidden-mobile">用 AI 做安全（L 模块）</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

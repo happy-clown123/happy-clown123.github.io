@@ -1,0 +1,1220 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="KachaKacha">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="经典机器学习（Classical Machine Learning） 定位：对抗攻击的本质是”利用 ML 模型的漏洞”——不懂 ML 基本原理，就不知道漏洞在哪。FGSM 攻击依赖损失函数  的梯度，你得先知道什么是损失函数、什么是训练，才能理解攻击怎么做。前置：模块 A（数学）、B（Python）｜ 后继：模块 D（深度学习）、J（对抗 ML）、L（副线：用 ML 做安全）及格线：能用 scik">
+<meta property="og:type" content="article">
+<meta property="og:title" content="经典机器学习（C 模块）">
+<meta property="og:url" content="https://happy-clown123.github.io/2026/08/31/C-ml/index.html">
+<meta property="og:site_name" content="KachaKacha的空间">
+<meta property="og:description" content="经典机器学习（Classical Machine Learning） 定位：对抗攻击的本质是”利用 ML 模型的漏洞”——不懂 ML 基本原理，就不知道漏洞在哪。FGSM 攻击依赖损失函数  的梯度，你得先知道什么是损失函数、什么是训练，才能理解攻击怎么做。前置：模块 A（数学）、B（Python）｜ 后继：模块 D（深度学习）、J（对抗 ML）、L（副线：用 ML 做安全）及格线：能用 scik">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://happy-clown123.github.io/images/core/pca-projection.svg">
+<meta property="og:image" content="https://happy-clown123.github.io/images/core/confusion-matrix.svg">
+<meta property="og:image" content="https://happy-clown123.github.io/images/core/overfit-curve.svg">
+<meta property="article:published_time" content="2026-08-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-08-31T08:17:01.606Z">
+<meta property="article:author" content="KachaKacha">
+<meta property="article:tag" content="PCA">
+<meta property="article:tag" content="最优化">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="经典ML">
+<meta property="article:tag" content="过拟合">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://happy-clown123.github.io/images/core/pca-projection.svg">
+  
+  
+  
+  <title>经典机器学习（C 模块） - KachaKacha的空间</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"happy-clown123.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.2"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="经典机器学习（C 模块）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-08-31 00:00" pubdate>
+          2026年8月31日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          9.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          80 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">经典机器学习（C 模块）</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="经典机器学习（Classical-Machine-Learning）"><a href="#经典机器学习（Classical-Machine-Learning）" class="headerlink" title="经典机器学习（Classical Machine Learning）"></a>经典机器学习（Classical Machine Learning）</h1><blockquote>
+<p>定位：对抗攻击的本质是”利用 ML 模型的漏洞”——不懂 ML 基本原理，就不知道漏洞在哪。FGSM 攻击依赖损失函数 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.561ex;" xmlns="http://www.w3.org/2000/svg" width="8.777ex" height="2.253ex" role="img" focusable="false" viewBox="0 -748 3879.3 996"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="L(\theta,x,y)"><g data-mml-node="mi" data-latex="L"><path data-c="1D43F" d="M520 667C520 678 513 683 500 683L354 680L223 683C208 684 200 676 200 659C200 652 203 647 209 646C218 645 226 644 231 644C262 643 279 641 284 640C289 639 292 636 292 631C292 629 291 623 288 613L156 82C150 60 140 47 125 42C119 40 101 39 70 39C49 39 39 31 39 15C39 5 49 0 70 0L527 0C552 0 554 0 561 19L639 233C642 240 643 245 643 248C643 258 638 263 627 263C617 263 612 254 607 240C588 191 570 154 555 131C518 75 455 39 363 39L270 39C259 39 252 39 249 40C242 40 239 42 239 45C239 47 241 54 244 67L377 601C383 624 396 637 415 642C421 643 442 644 478 644C506 644 520 644 520 667Z"></path></g><g data-mml-node="mo" data-latex="(" transform="translate(681,0)"><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z"></path></g><g data-mml-node="mi" data-latex="\theta" transform="translate(1070,0)"><path data-c="1D703" d="M164-11C209-11 256 16 302 70C382 163 455 335 455 498C455 539 448 582 434 625C416 678 382 705 333 705C288 705 243 678 196 624C116 532 42 360 42 196C42 94 75-11 164-11M332 675C365 675 382 637 382 560C382 517 372 452 352 367L155 367C180 460 204 529 229 574C266 641 301 675 332 675M145 327L341 327C322 246 299 181 274 132C235 57 199 19 164 19C131 19 115 58 115 135C115 185 125 249 145 327Z"></path></g><g data-mml-node="mo" data-latex="," transform="translate(1539,0)"><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z"></path></g><g data-mml-node="mi" data-latex="x" transform="translate(1983.7,0)"><path data-c="1D465" d="M527 373C527 419 482 442 432 442C389 442 355 419 329 373C308 419 273 442 222 442C173 442 133 419 101 374C74 335 60 306 60 287C60 278 65 273 75 273C84 273 90 278 92 287C111 345 153 413 220 413C253 413 269 392 269 351C269 330 251 252 216 118C199 51 169 18 126 18C112 18 99 21 88 26C114 36 127 54 127 80C127 106 114 119 87 119C54 119 29 91 29 58C29 12 76-11 125-11C167-11 201 12 228 58C247 12 283-11 335-11C383-11 423 12 455 57C482 96 496 125 496 144C496 153 491 158 481 158C472 158 467 153 464 144C447 87 402 18 337 18C304 18 287 38 287 79C287 92 292 120 303 165L337 300C356 375 387 413 431 413C445 413 458 410 469 405C442 396 429 378 429 351C429 325 443 312 470 312C502 312 527 341 527 373Z"></path></g><g data-mml-node="mo" data-latex="," transform="translate(2555.7,0)"><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z"></path></g><g data-mml-node="mi" data-latex="y" transform="translate(3000.3,0)"><path data-c="1D466" d="M163 442C118 442 83 417 58 367C39 328 29 301 29 286C29 277 34 272 45 272C59 272 60 278 64 293C87 372 119 412 160 412C173 412 180 403 180 385C180 369 175 346 164 317C126 214 107 145 107 108C107 32 154-13 231-13C264-13 295-1 323 23C288-109 233-175 158-175C124-175 101-164 89-142C129-140 149-121 149-85C149-60 136-47 109-47C72-47 50-78 50-115C50-170 100-205 158-205C273-205 367-99 392-1L486 377C489 388 490 396 490 401C490 421 479 431 458 431C442 431 429 423 420 408C414 387 409 369 406 354L342 97C332 61 279 16 234 16C196 16 177 41 177 92C177 134 194 198 227 284C240 319 247 343 247 357C247 406 212 442 163 442Z"></path></g><g data-mml-node="mo" data-latex=")" transform="translate(3490.3,0)"><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z"></path></g></g></g></svg></mjx-container> 的梯度，你得先知道什么是损失函数、什么是训练，才能理解攻击怎么做。<br>前置：模块 A（数学）、B（Python）｜ 后继：模块 D（深度学习）、J（对抗 ML）、L（副线：用 ML 做安全）<br>及格线：能用 scikit-learn 在自带数据集上完成一次”训练 + 混淆矩阵 + 准确率”全流程（ml01）；能说清”攻击改的是 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="1.294ex" height="1.025ex" role="img" focusable="false" viewBox="0 -442 572 453"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="x"><g data-mml-node="mi" data-latex="x"><path data-c="1D465" d="M527 373C527 419 482 442 432 442C389 442 355 419 329 373C308 419 273 442 222 442C173 442 133 419 101 374C74 335 60 306 60 287C60 278 65 273 75 273C84 273 90 278 92 287C111 345 153 413 220 413C253 413 269 392 269 351C269 330 251 252 216 118C199 51 169 18 126 18C112 18 99 21 88 26C114 36 127 54 127 80C127 106 114 119 87 119C54 119 29 91 29 58C29 12 76-11 125-11C167-11 201 12 228 58C247 12 283-11 335-11C383-11 423 12 455 57C482 96 496 125 496 144C496 153 491 158 481 158C472 158 467 153 464 144C447 87 402 18 337 18C304 18 287 38 287 79C287 92 292 120 303 165L337 300C356 375 387 413 431 413C445 413 458 410 469 405C442 396 429 378 429 351C429 325 443 312 470 312C502 312 527 341 527 373Z"></path></g></g></g></svg></mjx-container> 不是 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="1.061ex" height="1.62ex" role="img" focusable="false" viewBox="0 -705 469 716"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="\theta"><g data-mml-node="mi" data-latex="\theta"><path data-c="1D703" d="M164-11C209-11 256 16 302 70C382 163 455 335 455 498C455 539 448 582 434 625C416 678 382 705 333 705C288 705 243 678 196 624C116 532 42 360 42 196C42 94 75-11 164-11M332 675C365 675 382 637 382 560C382 517 372 452 352 367L155 367C180 460 204 529 229 574C266 641 301 675 332 675M145 327L341 327C322 246 299 181 274 132C235 57 199 19 164 19C131 19 115 58 115 135C115 185 125 249 145 327Z"></path></g></g></g></svg></mjx-container>”。</p>
+</blockquote>
+<hr>
+<h2 id="0-学习执行清单"><a href="#0-学习执行清单" class="headerlink" title="0 学习执行清单"></a>0 学习执行清单</h2><table>
+<thead>
+<tr>
+<th>#</th>
+<th>这一步干什么</th>
+<th>主资源（定位到位置）</th>
+<th>动手产出</th>
+<th>过关判据</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>监督学习：回归 vs 分类，概率输出的直觉</td>
+<td>本笔记 §1 + <a target="_blank" rel="noopener" href="https://scikit-learn.org/stable/tutorial/basic/tutorial.html">sklearn 官方入门</a></td>
+<td>跑 §1 逻辑回归代码</td>
+<td>能说出 <code>predict_proba</code> 里”接近 0.5 的样本最危险”为什么</td>
+</tr>
+<tr>
+<td>2</td>
+<td>损失函数拆解：θ/x/y 各是谁，攻击改哪个</td>
+<td>本笔记 §2 + 模块 J §3.1</td>
+<td>手算一次 MSE 与交叉熵</td>
+<td>能写出 FGSM 里 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="1.541ex" height="1.548ex" role="img" focusable="false" viewBox="0 -684 681 684"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="L"><g data-mml-node="mi" data-latex="L"><path data-c="1D43F" d="M520 667C520 678 513 683 500 683L354 680L223 683C208 684 200 676 200 659C200 652 203 647 209 646C218 645 226 644 231 644C262 643 279 641 284 640C289 639 292 636 292 631C292 629 291 623 288 613L156 82C150 60 140 47 125 42C119 40 101 39 70 39C49 39 39 31 39 15C39 5 49 0 70 0L527 0C552 0 554 0 561 19L639 233C642 240 643 245 643 248C643 258 638 263 627 263C617 263 612 254 607 240C588 191 570 154 555 131C518 75 455 39 363 39L270 39C259 39 252 39 249 40C242 40 239 42 239 45C239 47 241 54 244 67L377 601C383 624 396 637 415 642C421 643 442 644 478 644C506 644 520 644 520 667Z"></path></g></g></g></svg></mjx-container> 对谁求导（输入 x）</td>
+</tr>
+<tr>
+<td>3</td>
+<td>无监督：K-Means 聚类 + PCA 降维</td>
+<td>本笔记 §3 + sklearn 文档</td>
+<td>跑 KMeans/PCA，打印 <code>explained_variance_ratio_</code></td>
+<td>能说出”方差最大 ≠ 分类最有用”</td>
+</tr>
+<tr>
+<td>4</td>
+<td>评估：混淆矩阵 + precision/recall</td>
+<td>本笔记 §4 + <a target="_blank" rel="noopener" href="https://scikit-learn.org/stable/modules/model_evaluation.html">sklearn metrics 文档</a></td>
+<td>跑 §4 的 100 样本算例</td>
+<td>能口算 TP/FP/FN/TN；说出调低阈值后 P/R 怎么变</td>
+</tr>
+<tr>
+<td>5</td>
+<td>过拟合与正则化：3 解法 + 代码判断</td>
+<td>本笔记 §5 + math.md §4.3</td>
+<td>跑 train_test_split + cross_val_score</td>
+<td>能说出”训练分高测试分低 = 过拟合”及对对抗攻击的影响</td>
+</tr>
+<tr>
+<td>6</td>
+<td>全流程通关：load_digits 训练+评估</td>
+<td>本笔记 §8 + <code>labs/ml01_digits_pipeline.py</code></td>
+<td>跑通 ml01</td>
+<td>输出准确率 ≈0.95 与混淆矩阵；能读”8 常被认成 1/9”</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="1-监督学习：回归与分类"><a href="#1-监督学习：回归与分类" class="headerlink" title="1 监督学习：回归与分类"></a>1 监督学习：回归与分类</h2><p>监督学习 = 给带标签 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.561ex;" xmlns="http://www.w3.org/2000/svg" width="5.169ex" height="2.253ex" role="img" focusable="false" viewBox="0 -748 2284.7 996"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="(x, y)"><g data-mml-node="mo" data-latex="("><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z"></path></g><g data-mml-node="mi" data-latex="x" transform="translate(389,0)"><path data-c="1D465" d="M527 373C527 419 482 442 432 442C389 442 355 419 329 373C308 419 273 442 222 442C173 442 133 419 101 374C74 335 60 306 60 287C60 278 65 273 75 273C84 273 90 278 92 287C111 345 153 413 220 413C253 413 269 392 269 351C269 330 251 252 216 118C199 51 169 18 126 18C112 18 99 21 88 26C114 36 127 54 127 80C127 106 114 119 87 119C54 119 29 91 29 58C29 12 76-11 125-11C167-11 201 12 228 58C247 12 283-11 335-11C383-11 423 12 455 57C482 96 496 125 496 144C496 153 491 158 481 158C472 158 467 153 464 144C447 87 402 18 337 18C304 18 287 38 287 79C287 92 292 120 303 165L337 300C356 375 387 413 431 413C445 413 458 410 469 405C442 396 429 378 429 351C429 325 443 312 470 312C502 312 527 341 527 373Z"></path></g><g data-mml-node="mo" data-latex="," transform="translate(961,0)"><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z"></path></g><g data-mml-node="mi" data-latex="y" transform="translate(1405.7,0)"><path data-c="1D466" d="M163 442C118 442 83 417 58 367C39 328 29 301 29 286C29 277 34 272 45 272C59 272 60 278 64 293C87 372 119 412 160 412C173 412 180 403 180 385C180 369 175 346 164 317C126 214 107 145 107 108C107 32 154-13 231-13C264-13 295-1 323 23C288-109 233-175 158-175C124-175 101-164 89-142C129-140 149-121 149-85C149-60 136-47 109-47C72-47 50-78 50-115C50-170 100-205 158-205C273-205 367-99 392-1L486 377C489 388 490 396 490 401C490 421 479 431 458 431C442 431 429 423 420 408C414 387 409 369 406 354L342 97C332 61 279 16 234 16C196 16 177 41 177 92C177 134 194 198 227 284C240 319 247 343 247 357C247 406 212 442 163 442Z"></path></g><g data-mml-node="mo" data-latex=")" transform="translate(1895.7,0)"><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z"></path></g></g></g></svg></mjx-container> 的数据，学一个映射 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="5.101ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2254.6 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="f_\theta(x)\approx y"><g data-mml-node="msub" data-latex="f_\theta"><g data-mml-node="mi" data-latex="f"><path data-c="1D453" d="M552 633C552 677 509 705 462 705C400 705 357 665 334 586C329 568 318 517 302 433L237 433C215 433 204 432 204 411C204 400 214 395 235 395L295 395L222 8C211-49 201-91 192-119C180-156 163-175 141-175C126-175 114-171 103-164C135-159 151-140 151-108C151-82 138-69 111-69C77-69 53-99 53-133C53-177 94-205 141-205C166-205 189-195 208-174C240-141 265-94 283-31C294 8 304 46 311 84L369 395L451 395C474 395 484 396 484 419C484 428 474 433 454 433L377 433C383 474 411 625 420 644C430 665 444 675 462 675C477 675 490 671 501 664C470 657 454 639 454 608C454 582 467 569 494 569C528 569 552 599 552 633Z"></path></g><g data-mml-node="mi" transform="translate(523,-150) scale(0.707)" data-latex="\theta"><path data-c="1D703" d="M164-11C209-11 256 16 302 70C382 163 455 335 455 498C455 539 448 582 434 625C416 678 382 705 333 705C288 705 243 678 196 624C116 532 42 360 42 196C42 94 75-11 164-11M332 675C365 675 382 637 382 560C382 517 372 452 352 367L155 367C180 460 204 529 229 574C266 641 301 675 332 675M145 327L341 327C322 246 299 181 274 132C235 57 199 19 164 19C131 19 115 58 115 135C115 185 125 249 145 327Z"></path></g></g><g data-mml-node="mo" data-latex="(" transform="translate(904.6,0)"><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z"></path></g><g data-mml-node="mi" data-latex="x" transform="translate(1293.6,0)"><path data-c="1D465" d="M527 373C527 419 482 442 432 442C389 442 355 419 329 373C308 419 273 442 222 442C173 442 133 419 101 374C74 335 60 306 60 287C60 278 65 273 75 273C84 273 90 278 92 287C111 345 153 413 220 413C253 413 269 392 269 351C269 330 251 252 216 118C199 51 169 18 126 18C112 18 99 21 88 26C114 36 127 54 127 80C127 106 114 119 87 119C54 119 29 91 29 58C29 12 76-11 125-11C167-11 201 12 228 58C247 12 283-11 335-11C383-11 423 12 455 57C482 96 496 125 496 144C496 153 491 158 481 158C472 158 467 153 464 144C447 87 402 18 337 18C304 18 287 38 287 79C287 92 292 120 303 165L337 300C356 375 387 413 431 413C445 413 458 410 469 405C442 396 429 378 429 351C429 325 443 312 470 312C502 312 527 341 527 373Z"></path></g><g data-mml-node="mo" data-latex=")" transform="translate(1865.6,0)"><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z"></path></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="3.486ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1540.8 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="f_\theta(x)\approx y"><g data-mml-node="mo" data-latex="\approx"><path data-c="2248" d="M717 432L717 434C717 445 712 450 701 450C694 450 689 446 686 439C679 404 665 377 645 360C612 331 577 317 539 317C510 317 480 328 449 349C392 390 358 413 347 420C304 445 266 457 232 457C125 457 77 382 56 284L56 281C56 271 61 266 72 266C81 266 86 270 88 278C95 313 108 339 128 356C161 385 196 399 235 399C264 399 293 388 324 366C381 326 415 303 426 296C469 271 507 259 541 259C648 259 696 334 717 432M717 216L717 219C717 229 712 234 701 234C694 234 689 230 686 223C679 188 665 162 645 144C612 115 577 101 539 101C510 101 480 112 449 134C392 174 358 197 347 204C304 229 266 241 232 241C125 241 77 166 56 68L56 66C56 55 61 50 72 50C81 50 86 54 88 62C95 97 108 123 128 140C161 169 196 183 235 183C264 183 293 172 324 151C381 110 415 87 426 80C469 55 507 43 541 43C648 43 696 118 717 216Z"></path></g><g data-mml-node="mi" data-latex="y" transform="translate(1050.8,0)"><path data-c="1D466" d="M163 442C118 442 83 417 58 367C39 328 29 301 29 286C29 277 34 272 45 272C59 272 60 278 64 293C87 372 119 412 160 412C173 412 180 403 180 385C180 369 175 346 164 317C126 214 107 145 107 108C107 32 154-13 231-13C264-13 295-1 323 23C288-109 233-175 158-175C124-175 101-164 89-142C129-140 149-121 149-85C149-60 136-47 109-47C72-47 50-78 50-115C50-170 100-205 158-205C273-205 367-99 392-1L486 377C489 388 490 396 490 401C490 421 479 431 458 431C442 431 429 423 420 408C414 387 409 369 406 354L342 97C332 61 279 16 234 16C196 16 177 41 177 92C177 134 194 198 227 284C240 319 247 343 247 357C247 406 212 442 163 442Z"></path></g></g></g></svg></mjx-container>。</p>
+<ul>
+<li><strong>回归</strong>：输出连续值（如预测房价）。损失常用 <strong>MSE</strong> <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="1.541ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 681 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="L=\frac1n\sum(y-\hat y)^2"><g data-mml-node="mi" data-latex="L"><path data-c="1D43F" d="M520 667C520 678 513 683 500 683L354 680L223 683C208 684 200 676 200 659C200 652 203 647 209 646C218 645 226 644 231 644C262 643 279 641 284 640C289 639 292 636 292 631C292 629 291 623 288 613L156 82C150 60 140 47 125 42C119 40 101 39 70 39C49 39 39 31 39 15C39 5 49 0 70 0L527 0C552 0 554 0 561 19L639 233C642 240 643 245 643 248C643 258 638 263 627 263C617 263 612 254 607 240C588 191 570 154 555 131C518 75 455 39 363 39L270 39C259 39 252 39 249 40C242 40 239 42 239 45C239 47 241 54 244 67L377 601C383 624 396 637 415 642C421 643 442 644 478 644C506 644 520 644 520 667Z"></path></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.798ex;" xmlns="http://www.w3.org/2000/svg" width="9.099ex" height="2.755ex" role="img" focusable="false" viewBox="0 -864.9 4021.7 1217.7"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="L=\frac1n\sum(y-\hat y)^2"><g data-mml-node="mo" data-latex="="><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g><g data-mml-node="mfrac" data-latex="\frac1n" transform="translate(1055.8,0)"><g data-mml-node="mn" transform="translate(255.4,394) scale(0.707)" data-latex="1"><path data-c="31" d="M269 666C228 624 168 603 89 603L89 564C141 564 184 572 217 588L217 82C217 64 213 52 204 47C195 42 170 39 130 39L95 39L95 0C120 2 174 3 257 3C340 3 394 2 419 0L419 39L384 39C343 39 318 42 310 47C302 52 297 64 297 82L297 636C297 660 295 666 269 666Z"></path></g><g data-mml-node="mi" transform="translate(220,-345) scale(0.707)" data-latex="n"><path data-c="1D45B" d="M537 137C514 58 481 18 440 18C427 18 420 28 420 47C420 61 426 84 438 115C478 224 498 296 498 333C498 403 451 442 381 442C322 442 271 416 230 363C222 407 187 442 136 442C80 442 58 390 44 345C34 313 29 294 29 287C29 278 34 273 45 273C50 273 53 274 56 276C61 285 64 292 65 299C83 375 106 413 133 413C151 413 160 399 160 371C160 358 155 331 144 290L87 63C84 50 78 24 78 19C78-1 89-11 111-11C130-11 144-1 151 19C153 24 159 49 170 92L191 181L221 295C232 318 249 341 270 365C299 397 335 413 378 413C411 413 427 391 427 348C427 310 406 234 363 120C356 102 353 87 353 74C353 25 390-11 438-11C482-11 517 14 542 64C561 104 571 131 571 144C571 153 566 158 555 158C552 158 537 149 537 137Z"></path></g><rect width="624.3" height="60" x="120" y="220"></rect></g><g data-mml-node="mo" data-latex="\sum" transform="translate(2086.7,0)"><path data-c="2211" d="M56 713L417 216L67-217C60-225 57-231 57-235C57-245 67-250 88-250L913-250L1001 5L967 5C954-33 933-66 902-95C825-166 719-188 565-188L152-188L490 232C497 240 500 246 500 250C500 254 498 259 493 266L175 702L560 702C682 702 764 691 854 644C907 616 944 571 967 510L1001 510L913 750L88 750C57 750 56 746 56 713Z"></path></g><g data-mml-node="mo" data-latex="(" transform="translate(3142.7,0)"><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z"></path></g><g data-mml-node="mi" data-latex="y" transform="translate(3531.7,0)"><path data-c="1D466" d="M163 442C118 442 83 417 58 367C39 328 29 301 29 286C29 277 34 272 45 272C59 272 60 278 64 293C87 372 119 412 160 412C173 412 180 403 180 385C180 369 175 346 164 317C126 214 107 145 107 108C107 32 154-13 231-13C264-13 295-1 323 23C288-109 233-175 158-175C124-175 101-164 89-142C129-140 149-121 149-85C149-60 136-47 109-47C72-47 50-78 50-115C50-170 100-205 158-205C273-205 367-99 392-1L486 377C489 388 490 396 490 401C490 421 479 431 458 431C442 431 429 423 420 408C414 387 409 369 406 354L342 97C332 61 279 16 234 16C196 16 177 41 177 92C177 134 194 198 227 284C240 319 247 343 247 357C247 406 212 442 163 442Z"></path></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="5.239ex" height="2.452ex" role="img" focusable="false" viewBox="0 -833.9 2315.8 1083.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="L=\frac1n\sum(y-\hat y)^2"><g data-mml-node="mo" data-latex="-"><path data-c="2212" d="M698 270L80 270C64 270 56 263 56 250C56 237 64 230 80 230L698 230C714 230 722 237 722 250C722 262 710 270 698 270Z"></path></g><g data-mml-node="TeXAtom" data-latex="\hat y" data-mjx-texclass="ORD" transform="translate(1000.2,0)"><g data-mml-node="mover"><g data-mml-node="mi" data-latex="y"><path data-c="1D466" d="M163 442C118 442 83 417 58 367C39 328 29 301 29 286C29 277 34 272 45 272C59 272 60 278 64 293C87 372 119 412 160 412C173 412 180 403 180 385C180 369 175 346 164 317C126 214 107 145 107 108C107 32 154-13 231-13C264-13 295-1 323 23C288-109 233-175 158-175C124-175 101-164 89-142C129-140 149-121 149-85C149-60 136-47 109-47C72-47 50-78 50-115C50-170 100-205 158-205C273-205 367-99 392-1L486 377C489 388 490 396 490 401C490 421 479 431 458 431C442 431 429 423 420 408C414 387 409 369 406 354L342 97C332 61 279 16 234 16C196 16 177 41 177 92C177 134 194 198 227 284C240 319 247 343 247 357C247 406 212 442 163 442Z"></path></g><g data-mml-node="mo" transform="translate(304,32) translate(-250 0)"><path data-c="2C6" d="M386 515L403 533L250 694L97 533L114 515L250 618Z"></path></g></g></g><g data-mml-node="msup" data-latex=")^2" transform="translate(1490.2,0)"><g data-mml-node="mo" data-latex=")"><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z"></path></g><g data-mml-node="mn" transform="translate(422,363) scale(0.707)" data-latex="2"><path data-c="32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path></g></g></g></g></svg></mjx-container>。</li>
+<li><strong>分类</strong>：输出离散类别（如”恶意/正常”）。损失常用 <strong>交叉熵</strong> <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="1.541ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 681 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="L=-\sum y\log \hat y"><g data-mml-node="mi" data-latex="L"><path data-c="1D43F" d="M520 667C520 678 513 683 500 683L354 680L223 683C208 684 200 676 200 659C200 652 203 647 209 646C218 645 226 644 231 644C262 643 279 641 284 640C289 639 292 636 292 631C292 629 291 623 288 613L156 82C150 60 140 47 125 42C119 40 101 39 70 39C49 39 39 31 39 15C39 5 49 0 70 0L527 0C552 0 554 0 561 19L639 233C642 240 643 245 643 248C643 258 638 263 627 263C617 263 612 254 607 240C588 191 570 154 555 131C518 75 455 39 363 39L270 39C259 39 252 39 249 40C242 40 239 42 239 45C239 47 241 54 244 67L377 601C383 624 396 637 415 642C421 643 442 644 478 644C506 644 520 644 520 667Z"></path></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="1.76ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 778 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="L=-\sum y\log \hat y"><g data-mml-node="mo" data-latex="="><path data-c="3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path></g></g></g></svg><mjx-break size="4"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="10.766ex" height="2.434ex" role="img" focusable="false" viewBox="0 -826 4758.7 1076"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="L=-\sum y\log \hat y"><g data-mml-node="mo" data-latex="-"><path data-c="2212" d="M698 270L80 270C64 270 56 263 56 250C56 237 64 230 80 230L698 230C714 230 722 237 722 250C722 262 710 270 698 270Z"></path></g><g data-mml-node="mo" data-latex="\sum" transform="translate(944.7,0)"><path data-c="2211" d="M56 713L417 216L67-217C60-225 57-231 57-235C57-245 67-250 88-250L913-250L1001 5L967 5C954-33 933-66 902-95C825-166 719-188 565-188L152-188L490 232C497 240 500 246 500 250C500 254 498 259 493 266L175 702L560 702C682 702 764 691 854 644C907 616 944 571 967 510L1001 510L913 750L88 750C57 750 56 746 56 713Z"></path></g><g data-mml-node="mi" data-latex="y" transform="translate(2167.3,0)"><path data-c="1D466" d="M163 442C118 442 83 417 58 367C39 328 29 301 29 286C29 277 34 272 45 272C59 272 60 278 64 293C87 372 119 412 160 412C173 412 180 403 180 385C180 369 175 346 164 317C126 214 107 145 107 108C107 32 154-13 231-13C264-13 295-1 323 23C288-109 233-175 158-175C124-175 101-164 89-142C129-140 149-121 149-85C149-60 136-47 109-47C72-47 50-78 50-115C50-170 100-205 158-205C273-205 367-99 392-1L486 377C489 388 490 396 490 401C490 421 479 431 458 431C442 431 429 423 420 408C414 387 409 369 406 354L342 97C332 61 279 16 234 16C196 16 177 41 177 92C177 134 194 198 227 284C240 319 247 343 247 357C247 406 212 442 163 442Z"></path></g><g data-mml-node="mi" data-latex="\log" transform="translate(2824,0)"><path data-c="6C" d="M144 3L255 0L255 39C219 39 197 40 190 44C183 48 180 60 180 79L180 694L33 683L33 645C68 645 90 642 97 636C104 630 108 616 108 593L108 79C108 60 105 48 98 44C91 40 69 39 33 39L33 0Z"></path><path data-c="6F" d="M249-11C311-11 363 11 406 55C449 99 471 152 471 214C471 277 450 332 408 378C366 424 313 448 250 448C187 448 135 424 92 378C49 332 28 277 28 214C28 152 49 99 92 55C135 11 188-11 249-11M250 21C202 21 166 42 141 85C125 113 117 159 117 222C117 283 125 327 140 355C164 398 200 419 249 419C296 419 332 398 357 357C374 329 382 284 382 222C382 106 348 21 250 21Z" transform="translate(278,0)"></path><path data-c="67" d="M431 453C393 453 358 438 326 408C296 431 262 442 223 442C137 442 59 378 59 294C59 252 74 218 104 192C85 168 75 141 75 110C75 72 88 43 113 24C71 10 28-26 28-77C28-120 56-154 111-178C153-197 199-206 249-206C300-206 347-197 389-178C444-154 471-120 471-75C471-22 449 17 405 42C359 67 308 70 234 70C190 70 166 70 161 71C133 75 113 102 113 133C113 148 117 162 126 174C154 155 186 145 223 145C309 145 386 209 386 293C386 332 373 364 347 389C372 412 399 423 428 423C423 418 420 410 420 400C420 378 431 367 453 367C474 367 485 378 485 401C485 432 461 453 431 453M223 411C277 411 304 372 304 294C304 215 277 175 223 175C168 175 141 214 141 293C141 372 168 411 223 411M164 4L222 4C274 4 316 1 348-6C391-15 412-39 412-77C412-109 392-134 352-153C321-168 287-175 250-175C214-175 180-168 148-153C107-134 87-109 87-77C87-35 123 4 164 4Z" transform="translate(778,0)"></path></g><g data-mml-node="mo" transform="translate(4102,0)"><path data-c="2061" d=""></path></g><g data-mml-node="TeXAtom" data-latex="\hat y" data-mjx-texclass="ORD" transform="translate(4268.7,0)"><g data-mml-node="mover"><g data-mml-node="mi" data-latex="y"><path data-c="1D466" d="M163 442C118 442 83 417 58 367C39 328 29 301 29 286C29 277 34 272 45 272C59 272 60 278 64 293C87 372 119 412 160 412C173 412 180 403 180 385C180 369 175 346 164 317C126 214 107 145 107 108C107 32 154-13 231-13C264-13 295-1 323 23C288-109 233-175 158-175C124-175 101-164 89-142C129-140 149-121 149-85C149-60 136-47 109-47C72-47 50-78 50-115C50-170 100-205 158-205C273-205 367-99 392-1L486 377C489 388 490 396 490 401C490 421 479 431 458 431C442 431 429 423 420 408C414 387 409 369 406 354L342 97C332 61 279 16 234 16C196 16 177 41 177 92C177 134 194 198 227 284C240 319 247 343 247 357C247 406 212 442 163 442Z"></path></g><g data-mml-node="mo" transform="translate(304,32) translate(-250 0)"><path data-c="2C6" d="M386 515L403 533L250 694L97 533L114 515L250 618Z"></path></g></g></g></g></g></svg></mjx-container>。</li>
+</ul>
+<p><strong>实例（逻辑回归做二分类）</strong>：判断一封邮件是否钓鱼。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">from</span> sklearn.linear_model <span class="hljs-keyword">import</span> LogisticRegression<br><span class="hljs-keyword">from</span> sklearn.datasets <span class="hljs-keyword">import</span> make_classification<br><br>X, y = make_classification(n_samples=<span class="hljs-number">200</span>, n_features=<span class="hljs-number">20</span>, n_classes=<span class="hljs-number">2</span>,<br>                            random_state=<span class="hljs-number">0</span>)<br><span class="hljs-comment">#                          ↑ 200 条样本  ↑ 20 个特征  ↑ 二分类  ↑ 随机种子：固定后每次</span><br><span class="hljs-comment">#                                                             生成的数据一模一样（可复现）</span><br><span class="hljs-comment">#   make_classification 是"造数据"函数：默认只有 2 个特征真正含信息，其余 18 个是</span><br><span class="hljs-comment">#   冗余/噪声——模拟真实数据"大部分特征是废话"的情况</span><br>clf = LogisticRegression()                       <span class="hljs-comment"># 建一个逻辑回归分类器</span><br>clf.fit(X, y)                                    <span class="hljs-comment"># 训练：找最优参数 θ（就是 w 和 b）</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">"权重 w:"</span>, clf.coef_, <span class="hljs-string">"偏置 b:"</span>, clf.intercept_)<br><span class="hljs-comment">#              ↑ 每个特征的权重(20个)  ↑ 偏置(1个)      → 这条决策边界就是 20 维里</span><br><span class="hljs-comment">#                                                      的一个超平面，即 §2 里的 θ</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">"训练准确率:"</span>, clf.score(X, y))            <span class="hljs-comment"># score = 预测对的样本占比，训练集上跑</span><br>pred = clf.predict(X[:<span class="hljs-number">3</span>])                        <span class="hljs-comment"># 预测前 3 条：输出类别 0 或 1</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">"预测标签:"</span>, pred)<br></code></pre></td></tr></table></figure>
+
+<p><strong>关键认知：分类器输出的其实是”概率”，不是直接下结论</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">proba = clf.predict_proba(X[:<span class="hljs-number">3</span>])    <span class="hljs-comment"># 前 3 条样本分别属于两类的概率</span><br><span class="hljs-built_in">print</span>(proba)                        <span class="hljs-comment"># 每行 2 个数 = [P(类0), P(类1)]，行和 = 1</span><br></code></pre></td></tr></table></figure>
+
+<p><code>predict</code> 只是把 <code>proba</code> 里”概率更大的一类”挑出来：P(类1) ≥ 0.5 就判成 1，&lt; 0.5 判成 0，这个 0.5 叫<strong>阈值</strong>。</p>
+<blockquote>
+<p>💡 为什么这很重要：<strong>分数越接近 0.5，说明模型越”犹豫”</strong>——把概率从 0.49 推到 0.51 只需要一点点输入变化。对抗攻击（模块 J）干的事就是找到这种”最小的推动力”让预测翻盘。FGSM 的本质：沿损失函数梯度方向推输入，让 P(类1) 从 0.49 翻过 0.5。</p>
+</blockquote>
+<p><strong>追问</strong>：<code>clf.predict_proba(X[:3])</code> 每一行两个数加起来是多少？为什么 <code>predict</code> 和 <code>predict_proba</code> 的结果可能不同步（比如某条样本 proba=[0.49, 0.51] 而另一条 [0.1, 0.9]）？</p>
+<blockquote>
+<p><strong>参考答案</strong>：每行和为 1（两类概率全覆盖）。两条样本都可能被判为类 1，但一条”几乎打平”（0.49/0.51）、一条”很笃定”（0.1/0.9）——<code>predict</code> 只看谁大，<code>predict_proba</code> 保留了”犹豫程度”。安全检测里，犹豫的样本正是要重点复查的（也最容易被攻击者利用）。</p>
+</blockquote>
+<p><strong>在哪用</strong>：二分类就是安全里最常见的”恶意/良性”判定。逻辑回归、SVM、随机森林都是检测模型 baseline；对抗攻击（模块 J）研究的就是”怎么用微小扰动骗过 <code>clf.predict</code>“。</p>
+<h2 id="2-损失函数-L-theta-x-y-拆开看"><a href="#2-损失函数-L-theta-x-y-拆开看" class="headerlink" title="2 损失函数 $L(\theta, x, y)$ 拆开看"></a>2 损失函数 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.561ex;" xmlns="http://www.w3.org/2000/svg" width="8.777ex" height="2.253ex" role="img" focusable="false" viewBox="0 -748 3879.3 996"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="L(\theta, x, y)"><g data-mml-node="mi" data-latex="L"><path data-c="1D43F" d="M520 667C520 678 513 683 500 683L354 680L223 683C208 684 200 676 200 659C200 652 203 647 209 646C218 645 226 644 231 644C262 643 279 641 284 640C289 639 292 636 292 631C292 629 291 623 288 613L156 82C150 60 140 47 125 42C119 40 101 39 70 39C49 39 39 31 39 15C39 5 49 0 70 0L527 0C552 0 554 0 561 19L639 233C642 240 643 245 643 248C643 258 638 263 627 263C617 263 612 254 607 240C588 191 570 154 555 131C518 75 455 39 363 39L270 39C259 39 252 39 249 40C242 40 239 42 239 45C239 47 241 54 244 67L377 601C383 624 396 637 415 642C421 643 442 644 478 644C506 644 520 644 520 667Z"></path></g><g data-mml-node="mo" data-latex="(" transform="translate(681,0)"><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z"></path></g><g data-mml-node="mi" data-latex="\theta" transform="translate(1070,0)"><path data-c="1D703" d="M164-11C209-11 256 16 302 70C382 163 455 335 455 498C455 539 448 582 434 625C416 678 382 705 333 705C288 705 243 678 196 624C116 532 42 360 42 196C42 94 75-11 164-11M332 675C365 675 382 637 382 560C382 517 372 452 352 367L155 367C180 460 204 529 229 574C266 641 301 675 332 675M145 327L341 327C322 246 299 181 274 132C235 57 199 19 164 19C131 19 115 58 115 135C115 185 125 249 145 327Z"></path></g><g data-mml-node="mo" data-latex="," transform="translate(1539,0)"><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z"></path></g><g data-mml-node="mi" data-latex="x" transform="translate(1983.7,0)"><path data-c="1D465" d="M527 373C527 419 482 442 432 442C389 442 355 419 329 373C308 419 273 442 222 442C173 442 133 419 101 374C74 335 60 306 60 287C60 278 65 273 75 273C84 273 90 278 92 287C111 345 153 413 220 413C253 413 269 392 269 351C269 330 251 252 216 118C199 51 169 18 126 18C112 18 99 21 88 26C114 36 127 54 127 80C127 106 114 119 87 119C54 119 29 91 29 58C29 12 76-11 125-11C167-11 201 12 228 58C247 12 283-11 335-11C383-11 423 12 455 57C482 96 496 125 496 144C496 153 491 158 481 158C472 158 467 153 464 144C447 87 402 18 337 18C304 18 287 38 287 79C287 92 292 120 303 165L337 300C356 375 387 413 431 413C445 413 458 410 469 405C442 396 429 378 429 351C429 325 443 312 470 312C502 312 527 341 527 373Z"></path></g><g data-mml-node="mo" data-latex="," transform="translate(2555.7,0)"><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z"></path></g><g data-mml-node="mi" data-latex="y" transform="translate(3000.3,0)"><path data-c="1D466" d="M163 442C118 442 83 417 58 367C39 328 29 301 29 286C29 277 34 272 45 272C59 272 60 278 64 293C87 372 119 412 160 412C173 412 180 403 180 385C180 369 175 346 164 317C126 214 107 145 107 108C107 32 154-13 231-13C264-13 295-1 323 23C288-109 233-175 158-175C124-175 101-164 89-142C129-140 149-121 149-85C149-60 136-47 109-47C72-47 50-78 50-115C50-170 100-205 158-205C273-205 367-99 392-1L486 377C489 388 490 396 490 401C490 421 479 431 458 431C442 431 429 423 420 408C414 387 409 369 406 354L342 97C332 61 279 16 234 16C196 16 177 41 177 92C177 134 194 198 227 284C240 319 247 343 247 357C247 406 212 442 163 442Z"></path></g><g data-mml-node="mo" data-latex=")" transform="translate(3490.3,0)"><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z"></path></g></g></g></svg></mjx-container> 拆开看</h2><p>路径文档检查点第一题：<mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="1.061ex" height="1.62ex" role="img" focusable="false" viewBox="0 -705 469 716"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="\theta"><g data-mml-node="mi" data-latex="\theta"><path data-c="1D703" d="M164-11C209-11 256 16 302 70C382 163 455 335 455 498C455 539 448 582 434 625C416 678 382 705 333 705C288 705 243 678 196 624C116 532 42 360 42 196C42 94 75-11 164-11M332 675C365 675 382 637 382 560C382 517 372 452 352 367L155 367C180 460 204 529 229 574C266 641 301 675 332 675M145 327L341 327C322 246 299 181 274 132C235 57 199 19 164 19C131 19 115 58 115 135C115 185 125 249 145 327Z"></path></g></g></g></svg></mjx-container>、<mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="1.294ex" height="1.025ex" role="img" focusable="false" viewBox="0 -442 572 453"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="x"><g data-mml-node="mi" data-latex="x"><path data-c="1D465" d="M527 373C527 419 482 442 432 442C389 442 355 419 329 373C308 419 273 442 222 442C173 442 133 419 101 374C74 335 60 306 60 287C60 278 65 273 75 273C84 273 90 278 92 287C111 345 153 413 220 413C253 413 269 392 269 351C269 330 251 252 216 118C199 51 169 18 126 18C112 18 99 21 88 26C114 36 127 54 127 80C127 106 114 119 87 119C54 119 29 91 29 58C29 12 76-11 125-11C167-11 201 12 228 58C247 12 283-11 335-11C383-11 423 12 455 57C482 96 496 125 496 144C496 153 491 158 481 158C472 158 467 153 464 144C447 87 402 18 337 18C304 18 287 38 287 79C287 92 292 120 303 165L337 300C356 375 387 413 431 413C445 413 458 410 469 405C442 396 429 378 429 351C429 325 443 312 470 312C502 312 527 341 527 373Z"></path></g></g></g></svg></mjx-container>、<mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.464ex;" xmlns="http://www.w3.org/2000/svg" width="1.109ex" height="1.464ex" role="img" focusable="false" viewBox="0 -442 490 647"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="y"><g data-mml-node="mi" data-latex="y"><path data-c="1D466" d="M163 442C118 442 83 417 58 367C39 328 29 301 29 286C29 277 34 272 45 272C59 272 60 278 64 293C87 372 119 412 160 412C173 412 180 403 180 385C180 369 175 346 164 317C126 214 107 145 107 108C107 32 154-13 231-13C264-13 295-1 323 23C288-109 233-175 158-175C124-175 101-164 89-142C129-140 149-121 149-85C149-60 136-47 109-47C72-47 50-78 50-115C50-170 100-205 158-205C273-205 367-99 392-1L486 377C489 388 490 396 490 401C490 421 479 431 458 431C442 431 429 423 420 408C414 387 409 369 406 354L342 97C332 61 279 16 234 16C196 16 177 41 177 92C177 134 194 198 227 284C240 319 247 343 247 357C247 406 212 442 163 442Z"></path></g></g></g></svg></mjx-container> 各代表什么？</p>
+<ul>
+<li><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="1.061ex" height="1.62ex" role="img" focusable="false" viewBox="0 -705 469 716"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="\theta"><g data-mml-node="mi" data-latex="\theta"><path data-c="1D703" d="M164-11C209-11 256 16 302 70C382 163 455 335 455 498C455 539 448 582 434 625C416 678 382 705 333 705C288 705 243 678 196 624C116 532 42 360 42 196C42 94 75-11 164-11M332 675C365 675 382 637 382 560C382 517 372 452 352 367L155 367C180 460 204 529 229 574C266 641 301 675 332 675M145 327L341 327C322 246 299 181 274 132C235 57 199 19 164 19C131 19 115 58 115 135C115 185 125 249 145 327Z"></path></g></g></g></svg></mjx-container>：<strong>模型参数</strong>（权重 + 偏置），学习的目标就是找到让损失最小的 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="1.061ex" height="1.62ex" role="img" focusable="false" viewBox="0 -705 469 716"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="\theta"><g data-mml-node="mi" data-latex="\theta"><path data-c="1D703" d="M164-11C209-11 256 16 302 70C382 163 455 335 455 498C455 539 448 582 434 625C416 678 382 705 333 705C288 705 243 678 196 624C116 532 42 360 42 196C42 94 75-11 164-11M332 675C365 675 382 637 382 560C382 517 372 452 352 367L155 367C180 460 204 529 229 574C266 641 301 675 332 675M145 327L341 327C322 246 299 181 274 132C235 57 199 19 164 19C131 19 115 58 115 135C115 185 125 249 145 327Z"></path></g></g></g></svg></mjx-container>。</li>
+<li><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="1.294ex" height="1.025ex" role="img" focusable="false" viewBox="0 -442 572 453"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="x"><g data-mml-node="mi" data-latex="x"><path data-c="1D465" d="M527 373C527 419 482 442 432 442C389 442 355 419 329 373C308 419 273 442 222 442C173 442 133 419 101 374C74 335 60 306 60 287C60 278 65 273 75 273C84 273 90 278 92 287C111 345 153 413 220 413C253 413 269 392 269 351C269 330 251 252 216 118C199 51 169 18 126 18C112 18 99 21 88 26C114 36 127 54 127 80C127 106 114 119 87 119C54 119 29 91 29 58C29 12 76-11 125-11C167-11 201 12 228 58C247 12 283-11 335-11C383-11 423 12 455 57C482 96 496 125 496 144C496 153 491 158 481 158C472 158 467 153 464 144C447 87 402 18 337 18C304 18 287 38 287 79C287 92 292 120 303 165L337 300C356 375 387 413 431 413C445 413 458 410 469 405C442 396 429 378 429 351C429 325 443 312 470 312C502 312 527 341 527 373Z"></path></g></g></g></svg></mjx-container>：<strong>输入样本</strong>（如一张图片的像素、一条流量的特征向量）。</li>
+<li><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.464ex;" xmlns="http://www.w3.org/2000/svg" width="1.109ex" height="1.464ex" role="img" focusable="false" viewBox="0 -442 490 647"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="y"><g data-mml-node="mi" data-latex="y"><path data-c="1D466" d="M163 442C118 442 83 417 58 367C39 328 29 301 29 286C29 277 34 272 45 272C59 272 60 278 64 293C87 372 119 412 160 412C173 412 180 403 180 385C180 369 175 346 164 317C126 214 107 145 107 108C107 32 154-13 231-13C264-13 295-1 323 23C288-109 233-175 158-175C124-175 101-164 89-142C129-140 149-121 149-85C149-60 136-47 109-47C72-47 50-78 50-115C50-170 100-205 158-205C273-205 367-99 392-1L486 377C489 388 490 396 490 401C490 421 479 431 458 431C442 431 429 423 420 408C414 387 409 369 406 354L342 97C332 61 279 16 234 16C196 16 177 41 177 92C177 134 194 198 227 284C240 319 247 343 247 357C247 406 212 442 163 442Z"></path></g></g></g></svg></mjx-container>：<strong>真实标签</strong>（如类别 3、是否恶意）。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 用 numpy 手算一次"均方误差"，看清 L 怎么来</span><br>y_true  = np.array([<span class="hljs-number">1.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">1.0</span>])<br>y_pred  = np.array([<span class="hljs-number">0.8</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">0.9</span>])<br>mse = np.mean((y_true - y_pred) ** <span class="hljs-number">2</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">"MSE ="</span>, mse)                    <span class="hljs-comment"># (0.2² + 0.2² + 0.1²)/3 ≈ 0.03</span><br></code></pre></td></tr></table></figure>
+
+<p>分类任务不用 MSE，用<strong>交叉熵</strong>——因为分类要惩罚的是”预测错了还自信”：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 交叉熵：预测概率 p 与真实标签 y 之间的"不匹配度"</span><br>p = np.array([<span class="hljs-number">0.8</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">0.9</span>])          <span class="hljs-comment"># 模型预测"是恶意"的概率（3 条样本）</span><br>y = np.array([<span class="hljs-number">1.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">1.0</span>])          <span class="hljs-comment"># 真实标签</span><br>ce = -np.mean(y * np.log(p) + (<span class="hljs-number">1</span> - y) * np.log(<span class="hljs-number">1</span> - p))<br><span class="hljs-comment">#         ↑ 预测对的那部分    ↑ 预测错的那部分</span><br><span class="hljs-comment">#          y=1: 看 -log(p)      y=0: 看 -log(1-p)</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">"交叉熵 ="</span>, <span class="hljs-built_in">round</span>(ce, <span class="hljs-number">3</span>))        <span class="hljs-comment"># ≈ 0.184（3 条全猜对，但第 2 条 p=0.2 不够"笃定"）</span><br></code></pre></td></tr></table></figure>
+
+<p>交叉熵的直觉：模型”猜对但不敢确定”也会受罚。对比一下——如果第 1 条样本预测改成 <code>p=0.1</code>（错得离谱且自信），<code>-log(0.1) = 2.3</code>，损失瞬间爆炸。<strong>预测概率越接近真实标签，损失越小</strong>。</p>
+<p><strong>追问</strong>：MSE 用”差值平方”，交叉熵用”负对数”，为什么分类任务更偏爱交叉熵？</p>
+<blockquote>
+<p><strong>参考答案</strong>：MSE 对”猜对但不够自信”（p=0.6 vs 0.9）惩罚一样，梯度很小；交叉熵的梯度正比于 <code>(p - y)</code>，预测错得越离谱梯度越大、收敛越快。而且交叉熵天然处理概率输出（分类器输出总和为 1）。学到模块 F/K 你会看到：<strong>LLM 训练/微调的目标函数就是交叉熵</strong>（逐 token 预测），RLHF 也是从它出发的。</p>
+</blockquote>
+<p><strong>在哪用</strong>：FGSM 公式 <code>x' = x + ε·sign(∇_x L)</code> 里的 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="1.541ex" height="1.548ex" role="img" focusable="false" viewBox="0 -684 681 684"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="L"><g data-mml-node="mi" data-latex="L"><path data-c="1D43F" d="M520 667C520 678 513 683 500 683L354 680L223 683C208 684 200 676 200 659C200 652 203 647 209 646C218 645 226 644 231 644C262 643 279 641 284 640C289 639 292 636 292 631C292 629 291 623 288 613L156 82C150 60 140 47 125 42C119 40 101 39 70 39C49 39 39 31 39 15C39 5 49 0 70 0L527 0C552 0 554 0 561 19L639 233C642 240 643 245 643 248C643 258 638 263 627 263C617 263 612 254 607 240C588 191 570 154 555 131C518 75 455 39 363 39L270 39C259 39 252 39 249 40C242 40 239 42 239 45C239 47 241 54 244 67L377 601C383 624 396 637 415 642C421 643 442 644 478 644C506 644 520 644 520 667Z"></path></g></g></g></svg></mjx-container> 就是这个损失；攻击就是对 <strong><mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="1.294ex" height="1.025ex" role="img" focusable="false" viewBox="0 -442 572 453"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="x"><g data-mml-node="mi" data-latex="x"><path data-c="1D465" d="M527 373C527 419 482 442 432 442C389 442 355 419 329 373C308 419 273 442 222 442C173 442 133 419 101 374C74 335 60 306 60 287C60 278 65 273 75 273C84 273 90 278 92 287C111 345 153 413 220 413C253 413 269 392 269 351C269 330 251 252 216 118C199 51 169 18 126 18C112 18 99 21 88 26C114 36 127 54 127 80C127 106 114 119 87 119C54 119 29 91 29 58C29 12 76-11 125-11C167-11 201 12 228 58C247 12 283-11 335-11C383-11 423 12 455 57C482 96 496 125 496 144C496 153 491 158 481 158C472 158 467 153 464 144C447 87 402 18 337 18C304 18 287 38 287 79C287 92 292 120 303 165L337 300C356 375 387 413 431 413C445 413 458 410 469 405C442 396 429 378 429 351C429 325 443 312 470 312C502 312 527 341 527 373Z"></path></g></g></g></svg></mjx-container>（输入）</strong> 求梯度、沿梯度方向推一点点让 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="1.541ex" height="1.548ex" role="img" focusable="false" viewBox="0 -684 681 684"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="L"><g data-mml-node="mi" data-latex="L"><path data-c="1D43F" d="M520 667C520 678 513 683 500 683L354 680L223 683C208 684 200 676 200 659C200 652 203 647 209 646C218 645 226 644 231 644C262 643 279 641 284 640C289 639 292 636 292 631C292 629 291 623 288 613L156 82C150 60 140 47 125 42C119 40 101 39 70 39C49 39 39 31 39 15C39 5 49 0 70 0L527 0C552 0 554 0 561 19L639 233C642 240 643 245 643 248C643 258 638 263 627 263C617 263 612 254 607 240C588 191 570 154 555 131C518 75 455 39 363 39L270 39C259 39 252 39 249 40C242 40 239 42 239 45C239 47 241 54 244 67L377 601C383 624 396 637 415 642C421 643 442 644 478 644C506 644 520 644 520 667Z"></path></g></g></g></svg></mjx-container> 变大（预测翻车）。注意攻击改的是 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="1.294ex" height="1.025ex" role="img" focusable="false" viewBox="0 -442 572 453"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="x"><g data-mml-node="mi" data-latex="x"><path data-c="1D465" d="M527 373C527 419 482 442 432 442C389 442 355 419 329 373C308 419 273 442 222 442C173 442 133 419 101 374C74 335 60 306 60 287C60 278 65 273 75 273C84 273 90 278 92 287C111 345 153 413 220 413C253 413 269 392 269 351C269 330 251 252 216 118C199 51 169 18 126 18C112 18 99 21 88 26C114 36 127 54 127 80C127 106 114 119 87 119C54 119 29 91 29 58C29 12 76-11 125-11C167-11 201 12 228 58C247 12 283-11 335-11C383-11 423 12 455 57C482 96 496 125 496 144C496 153 491 158 481 158C472 158 467 153 464 144C447 87 402 18 337 18C304 18 287 38 287 79C287 92 292 120 303 165L337 300C356 375 387 413 431 413C445 413 458 410 469 405C442 396 429 378 429 351C429 325 443 312 470 312C502 312 527 341 527 373Z"></path></g></g></g></svg></mjx-container>，不是 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="1.061ex" height="1.62ex" role="img" focusable="false" viewBox="0 -705 469 716"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="\theta"><g data-mml-node="mi" data-latex="\theta"><path data-c="1D703" d="M164-11C209-11 256 16 302 70C382 163 455 335 455 498C455 539 448 582 434 625C416 678 382 705 333 705C288 705 243 678 196 624C116 532 42 360 42 196C42 94 75-11 164-11M332 675C365 675 382 637 382 560C382 517 372 452 352 367L155 367C180 460 204 529 229 574C266 641 301 675 332 675M145 327L341 327C322 246 299 181 274 132C235 57 199 19 164 19C131 19 115 58 115 135C115 185 125 249 145 327Z"></path></g></g></g></svg></mjx-container>。</p>
+<h2 id="3-无监督学习：聚类与-PCA"><a href="#3-无监督学习：聚类与-PCA" class="headerlink" title="3 无监督学习：聚类与 PCA"></a>3 无监督学习：聚类与 PCA</h2><p>没有标签，靠数据自身结构找规律。</p>
+<ul>
+<li><strong>聚类（K-Means）</strong>：把样本分成 K 簇，常用于”未知攻击类型归堆”。</li>
+<li><strong>PCA（主成分分析）</strong>：把高维数据降到低维、保留最大方差方向——直接复用 <code>math.md</code> 里的特征分解/SVD。</li>
+</ul>
+<h3 id="3-1-K-Means-聚类：把样本自动分成-K-堆"><a href="#3-1-K-Means-聚类：把样本自动分成-K-堆" class="headerlink" title="3.1 K-Means 聚类：把样本自动分成 K 堆"></a>3.1 K-Means 聚类：把样本自动分成 K 堆</h3><p>无监督 = <strong>只有 X、没有 y</strong>，算法自己按”距离”把样本分组。<code>n_clusters=2</code> 就是”分成 2 堆”。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.cluster <span class="hljs-keyword">import</span> KMeans<br><br>km = KMeans(n_clusters=<span class="hljs-number">2</span>, random_state=<span class="hljs-number">0</span>).fit(X)<br><span class="hljs-comment">#    ↑ 分成 2 簇      ↑ 随机种子：聚类起始点是随机选的，</span><br><span class="hljs-comment">#                      固定后结果可复现（和 numpy 的 seed 一个道理）</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">"簇标签:"</span>, km.labels_[:<span class="hljs-number">5</span>])        <span class="hljs-comment"># labels_：每条样本的簇编号（0 或 1），[:5] 取前 5 条</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">"簇中心:"</span>, km.cluster_centers_)   <span class="hljs-comment"># 每簇的代表点（这里是 2 × 20 的矩阵）</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">"SSE:"</span>, km.inertia_)              <span class="hljs-comment"># 簇内距离平方和：越小说明簇越紧凑</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>💡 聚类和分类（§1 逻辑回归）最大的区别：<strong>没有标签也能学</strong>。分类是”老师告诉我是哪类”（有 y），聚类是”我自己觉得谁和谁长得像”（无 y）。注意 <code>labels_</code> 的 0/1 只是<strong>簇的编号</strong>，没有绝对含义——不代表”恶意/正常”，只表示”第几堆”。</p>
+</blockquote>
+<p><strong>在哪用</strong>：没有标签的流量/日志先聚类归堆——正常行为聚成一大簇，<strong>离所有簇中心都很远的点 = 可疑</strong>（异常检测的直觉：恶意样本往往”不随大流”）。学到模块 K 之后，也常用聚类给 embedding 向量分群。</p>
+<h3 id="3-2-PCA-降维：20-维压到-1-维，信息去哪了？"><a href="#3-2-PCA-降维：20-维压到-1-维，信息去哪了？" class="headerlink" title="3.2 PCA 降维：20 维压到 1 维，信息去哪了？"></a>3.2 PCA 降维：20 维压到 1 维，信息去哪了？</h3><p>PCA = 找到数据里<strong>方差最大的方向</strong>（主成分），把样本投影上去。sklearn 里它和所有模型共用同一套 API：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>.fit(X)</code></td>
+<td>学主成分方向（只用 X、不需要 y，所以也是无监督）</td>
+</tr>
+<tr>
+<td><code>.transform(X)</code></td>
+<td>把数据投影到学好的主成分上</td>
+</tr>
+<tr>
+<td><code>.fit_transform(X)</code></td>
+<td>上面两步连写，一步到位（最常用）</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.decomposition <span class="hljs-keyword">import</span> PCA<br><br>pca = PCA(n_components=<span class="hljs-number">1</span>).fit_transform(X)   <span class="hljs-comment"># 一步完成"学方向 + 投影"</span><br><span class="hljs-comment">#        ↑ 降到 1 维                        # 20 列 → 1 列</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">"降维后形状:"</span>, pca.shape)              <span class="hljs-comment"># (200, 1)：样本数不变，特征从 20 → 1</span><br></code></pre></td></tr></table></figure>
+
+<p><code>(200, 1)</code> 说明<strong>样本没丢、特征压缩了</strong>。为什么要压？三个理由：</p>
+<ol>
+<li><strong>可视化</strong>：人只能看 2D/3D，20 维没法画图；压到 2 维就能画散点图看两类分布（下图就是）。</li>
+<li><strong>去冗余/去噪</strong>：20 维里很多特征是相关的（两个特征几乎同向变化 = 重复信息），PCA 把它们合并成一个方向。</li>
+<li><strong>提速</strong>：维度低 → 训练快、省内存。</li>
+</ol>
+<p><strong>怎么证明”信息还在”</strong>：看每个主成分”解释了多少方差”：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">pca2 = PCA(n_components=<span class="hljs-number">1</span>).fit(X)            <span class="hljs-comment"># 先只学方向，不投影</span><br><span class="hljs-built_in">print</span>(pca2.explained_variance_ratio_)        <span class="hljs-comment"># 每个主成分解释的方差占比</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>在我这份数据上：第 1 主成分 ≈ <strong>0.26</strong>，第 2 个只有 ≈0.07，后面全是 5% 上下的”噪声级”——因为 20 个特征里只有 2 个真正有区分度，<strong>PCA 把信号集中到第 1 主成分，噪声摊薄到其余 19 个方向</strong>。压到 1 维丢的主要是噪声，不是信息（你的 X 数值会略有不同，量级类似）。</p>
+</blockquote>
+<p><img src="/images/core/pca-projection.svg" srcset="/img/loading.gif" lazyload></p>
+<p>上图：200 条样本压到前 2 个主成分后，两类（蓝/橙）在 PC1 上分得清清楚楚（均值 -2.4 vs +2.4，相隔约 4.8 个标准差）；PC2 方向两类完全重叠——那是噪声方向。</p>
+<p><strong>追问</strong>：把 <code>n_components</code> 改成 2，<code>explained_variance_ratio_</code> 前两个加起来是多少？为什么第 1 主成分占比远超后面每一个？</p>
+<blockquote>
+<p><strong>参考答案</strong>：前两个 ≈ 0.26 + 0.07 = 0.33，即压到 2 维保留了约 1/3 方差。第 1 主成分远超后面，是因为”有信号的方差”集中在那个方向，19 个噪声维度每个只有 ~5%。在 IPython 里敲 <code>PCA(n_components=2).fit(X).explained_variance_ratio_</code> 看你的真实值。</p>
+</blockquote>
+<p><strong>累计方差曲线怎么用</strong>（<code>explained_variance_ratio_</code> 的前缀和）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">PCA(n_components=<span class="hljs-number">20</span>).fit(X).explained_variance_ratio_.cumsum()<br><span class="hljs-comment"># 输出形如 [0.18, 0.29, 0.36, ..., 1.0, 1.0, 1.0]（每个数据集不同）</span><br></code></pre></td></tr></table></figure>
+
+<ol>
+<li><strong>选维度</strong>：看曲线从陡变平的”肘部”，或定阈值——保留 80% 信息需要几维？你的数据可能 12 维就到 0.8，20 维是虚胖。</li>
+<li><strong>发现真实维度（秩）</strong>：末尾出现一连串 <code>1.0</code> = 最后几个主成分方差 ≈ 0 = 数据有线性相关（<code>make_classification</code> 默认 <code>n_redundant=2</code>，两个特征是其他特征的线性组合，20 维实际只有 18 个独立方向）。PCA 自动暴露”虚胖”。</li>
+<li>⚠️ 注意：<strong>PCA 找”方差最大的方向”，不等于”分类最有用的方向”</strong>——信号和噪声在 PCA 眼里都是方差。信噪比高的数据谱很陡（PC1 一家独大），各特征同方差的数据谱很平（PC1 只有 ~18%）。所以降维后的低维空间未必保留分类能力，对抗分析里要配合别的工具（模块 J 会回来）。</li>
+</ol>
+<p><strong>在哪用</strong>：PCA 降维既能提速，也是对抗安全的分析工具——对抗样本的扰动往往集中在前几个主成分方向（模块 J 的”对抗扰动子空间”）；异常检测也常把高维特征压到低维再找离群点。</p>
+<h2 id="4-模型评估：混淆矩阵是核心"><a href="#4-模型评估：混淆矩阵是核心" class="headerlink" title="4 模型评估：混淆矩阵是核心"></a>4 模型评估：混淆矩阵是核心</h2><p>路径文档检查点第二题：TP/FP/TN/FN 与准确率。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>预测为正 (1)</th>
+<th>预测为负 (0)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>实际正 (1)</strong></td>
+<td>TP 真正例（正确检出）</td>
+<td>FN 假负例（漏报）</td>
+</tr>
+<tr>
+<td><strong>实际负 (0)</strong></td>
+<td>FP 假正例（误报）</td>
+<td>TN 真负例（正确拒绝）</td>
+</tr>
+</tbody></table>
+<ul>
+<li>准确率 Accuracy = <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="4.179ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1847 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="(TP+TN) / (全部)"><g data-mml-node="mo" data-latex="("><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z"></path></g><g data-mml-node="mi" data-latex="T" transform="translate(389,0)"><path data-c="1D447" d="M344 631C344 628 343 621 340 611L208 83C204 68 200 59 197 55C188 44 154 39 94 39C63 39 49 42 49 16C49 5 56 0 69 0C120 0 192 4 235 3L317 2C331 2 386 0 403 0C420 0 428 8 428 24C428 34 416 39 391 39C339 39 309 41 300 46C297 48 295 52 295 58L430 603C433 617 436 626 439 629C443 635 467 638 511 638C566 638 604 634 623 625C642 616 652 595 652 561C652 543 649 517 644 483C642 475 641 469 641 464C641 453 646 447 657 447C666 447 672 456 675 473L702 645C703 650 704 656 704 662C704 672 694 677 673 677L125 677C99 677 97 674 89 655L30 481C27 472 25 466 24 462C24 452 29 447 40 447C48 447 55 455 60 470C85 543 110 588 133 607C159 628 209 638 282 638L321 638C332 638 344 639 344 631Z"></path></g><g data-mml-node="mi" data-latex="P" transform="translate(1093,0)"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="14.145ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 6252.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="(TP+TN) / (全部)"><g data-mml-node="mo" data-latex="+"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="mi" data-latex="T" transform="translate(1000.2,0)"><path data-c="1D447" d="M344 631C344 628 343 621 340 611L208 83C204 68 200 59 197 55C188 44 154 39 94 39C63 39 49 42 49 16C49 5 56 0 69 0C120 0 192 4 235 3L317 2C331 2 386 0 403 0C420 0 428 8 428 24C428 34 416 39 391 39C339 39 309 41 300 46C297 48 295 52 295 58L430 603C433 617 436 626 439 629C443 635 467 638 511 638C566 638 604 634 623 625C642 616 652 595 652 561C652 543 649 517 644 483C642 475 641 469 641 464C641 453 646 447 657 447C666 447 672 456 675 473L702 645C703 650 704 656 704 662C704 672 694 677 673 677L125 677C99 677 97 674 89 655L30 481C27 472 25 466 24 462C24 452 29 447 40 447C48 447 55 455 60 470C85 543 110 588 133 607C159 628 209 638 282 638L321 638C332 638 344 639 344 631Z"></path></g><g data-mml-node="mi" data-latex="N" transform="translate(1704.2,0)"><path data-c="1D441" d="M864 683C845 683 783 680 764 680C745 680 682 683 663 683C648 683 641 675 641 659C641 650 648 645 663 644C705 644 726 631 726 605C726 599 725 592 724 585L616 157L401 662C393 681 391 683 366 683L233 683C209 683 200 681 200 659C200 649 211 644 232 644C274 644 295 643 296 640L163 110C154 71 131 49 95 42C69 39 39 43 39 15C39 5 45 0 56 0C74 0 136 3 155 3C174 3 238 0 257 0C272 0 279 8 279 24C279 33 271 38 255 39C214 40 194 53 194 78C194 83 195 90 197 100L326 611L576 21C582 7 590 0 599 0C608 0 614 8 618 24L757 574C770 625 798 643 860 644C874 645 881 653 881 669C878 678 877 683 864 683Z"></path></g><g data-mml-node="mo" data-latex=")" transform="translate(2585.2,0)"><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z"></path></g><g data-mml-node="mo" data-latex="/" transform="translate(2974.2,0)"><path data-c="2F" d="M444 718C445 720 445 723 445 726C445 742 437 750 421 750C410 750 403 745 399 734L57-218C56-220 56-223 56-226C56-242 64-250 80-250C91-250 98-245 102-234Z"></path></g><g data-mml-node="mo" data-latex="(" transform="translate(3474.2,0)"><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z"></path></g><g data-mml-node="mi" data-latex="全" transform="translate(3863.2,0)"><text data-variant="normal" transform="scale(1,-1)" font-size="884px" font-family="serif">全</text></g><g data-mml-node="mi" data-latex="部" transform="translate(4863.2,0)"><text data-variant="normal" transform="scale(1,-1)" font-size="884px" font-family="serif">部</text></g><g data-mml-node="mo" data-latex=")" transform="translate(5863.2,0)"><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z"></path></g></g></g></svg></mjx-container></li>
+<li>精确率 Precision = <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="8.609ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 3805 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="TP / (TP+FP)"><g data-mml-node="mi" data-latex="T"><path data-c="1D447" d="M344 631C344 628 343 621 340 611L208 83C204 68 200 59 197 55C188 44 154 39 94 39C63 39 49 42 49 16C49 5 56 0 69 0C120 0 192 4 235 3L317 2C331 2 386 0 403 0C420 0 428 8 428 24C428 34 416 39 391 39C339 39 309 41 300 46C297 48 295 52 295 58L430 603C433 617 436 626 439 629C443 635 467 638 511 638C566 638 604 634 623 625C642 616 652 595 652 561C652 543 649 517 644 483C642 475 641 469 641 464C641 453 646 447 657 447C666 447 672 456 675 473L702 645C703 650 704 656 704 662C704 672 694 677 673 677L125 677C99 677 97 674 89 655L30 481C27 472 25 466 24 462C24 452 29 447 40 447C48 447 55 455 60 470C85 543 110 588 133 607C159 628 209 638 282 638L321 638C332 638 344 639 344 631Z"></path></g><g data-mml-node="mi" data-latex="P" transform="translate(704,0)"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="mo" data-latex="/" transform="translate(1458,0)"><path data-c="2F" d="M444 718C445 720 445 723 445 726C445 742 437 750 421 750C410 750 403 745 399 734L57-218C56-220 56-223 56-226C56-242 64-250 80-250C91-250 98-245 102-234Z"></path></g><g data-mml-node="mo" data-latex="(" transform="translate(1958,0)"><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z"></path></g><g data-mml-node="mi" data-latex="T" transform="translate(2347,0)"><path data-c="1D447" d="M344 631C344 628 343 621 340 611L208 83C204 68 200 59 197 55C188 44 154 39 94 39C63 39 49 42 49 16C49 5 56 0 69 0C120 0 192 4 235 3L317 2C331 2 386 0 403 0C420 0 428 8 428 24C428 34 416 39 391 39C339 39 309 41 300 46C297 48 295 52 295 58L430 603C433 617 436 626 439 629C443 635 467 638 511 638C566 638 604 634 623 625C642 616 652 595 652 561C652 543 649 517 644 483C642 475 641 469 641 464C641 453 646 447 657 447C666 447 672 456 675 473L702 645C703 650 704 656 704 662C704 672 694 677 673 677L125 677C99 677 97 674 89 655L30 481C27 472 25 466 24 462C24 452 29 447 40 447C48 447 55 455 60 470C85 543 110 588 133 607C159 628 209 638 282 638L321 638C332 638 344 639 344 631Z"></path></g><g data-mml-node="mi" data-latex="P" transform="translate(3051,0)"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="6.548ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2894.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="TP / (TP+FP)"><g data-mml-node="mo" data-latex="+"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="mi" data-latex="F" transform="translate(1000.2,0)"><path data-c="1D439" d="M199 656C199 646 210 641 231 641C271 641 291 637 291 628C291 625 289 618 286 605L156 82C150 60 140 47 126 42C119 40 101 39 70 39C48 39 38 37 38 16C38 5 44 0 57 0L187 3L335 0C351 0 359 8 359 23C359 40 348 39 322 39C278 39 253 41 247 46C244 47 243 51 243 56L307 321L400 321C446 321 478 319 478 281C478 268 476 252 471 233C470 230 469 226 468 222C468 211 473 206 484 206C489 207 496 214 503 229L557 444C559 452 560 458 560 461C557 470 551 475 544 475C536 475 530 467 526 452C516 414 502 390 486 378C470 366 442 360 402 360L317 360L379 606C387 640 387 641 429 641L559 641C656 641 700 626 700 537C700 517 699 499 697 484C696 473 695 467 695 466C695 455 700 450 710 450C720 450 726 459 728 478L748 649C751 677 744 680 717 680L233 680C210 680 199 679 199 656Z"></path></g><g data-mml-node="mi" data-latex="P" transform="translate(1751.2,0)"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="mo" data-latex=")" transform="translate(2505.2,0)"><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z"></path></g></g></g></svg></mjx-container>（报警里有多少是真的）</li>
+<li>召回率 Recall = <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="8.609ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 3805 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="TP / (TP+FN)"><g data-mml-node="mi" data-latex="T"><path data-c="1D447" d="M344 631C344 628 343 621 340 611L208 83C204 68 200 59 197 55C188 44 154 39 94 39C63 39 49 42 49 16C49 5 56 0 69 0C120 0 192 4 235 3L317 2C331 2 386 0 403 0C420 0 428 8 428 24C428 34 416 39 391 39C339 39 309 41 300 46C297 48 295 52 295 58L430 603C433 617 436 626 439 629C443 635 467 638 511 638C566 638 604 634 623 625C642 616 652 595 652 561C652 543 649 517 644 483C642 475 641 469 641 464C641 453 646 447 657 447C666 447 672 456 675 473L702 645C703 650 704 656 704 662C704 672 694 677 673 677L125 677C99 677 97 674 89 655L30 481C27 472 25 466 24 462C24 452 29 447 40 447C48 447 55 455 60 470C85 543 110 588 133 607C159 628 209 638 282 638L321 638C332 638 344 639 344 631Z"></path></g><g data-mml-node="mi" data-latex="P" transform="translate(704,0)"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g><g data-mml-node="mo" data-latex="/" transform="translate(1458,0)"><path data-c="2F" d="M444 718C445 720 445 723 445 726C445 742 437 750 421 750C410 750 403 745 399 734L57-218C56-220 56-223 56-226C56-242 64-250 80-250C91-250 98-245 102-234Z"></path></g><g data-mml-node="mo" data-latex="(" transform="translate(1958,0)"><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z"></path></g><g data-mml-node="mi" data-latex="T" transform="translate(2347,0)"><path data-c="1D447" d="M344 631C344 628 343 621 340 611L208 83C204 68 200 59 197 55C188 44 154 39 94 39C63 39 49 42 49 16C49 5 56 0 69 0C120 0 192 4 235 3L317 2C331 2 386 0 403 0C420 0 428 8 428 24C428 34 416 39 391 39C339 39 309 41 300 46C297 48 295 52 295 58L430 603C433 617 436 626 439 629C443 635 467 638 511 638C566 638 604 634 623 625C642 616 652 595 652 561C652 543 649 517 644 483C642 475 641 469 641 464C641 453 646 447 657 447C666 447 672 456 675 473L702 645C703 650 704 656 704 662C704 672 694 677 673 677L125 677C99 677 97 674 89 655L30 481C27 472 25 466 24 462C24 452 29 447 40 447C48 447 55 455 60 470C85 543 110 588 133 607C159 628 209 638 282 638L321 638C332 638 344 639 344 631Z"></path></g><g data-mml-node="mi" data-latex="P" transform="translate(3051,0)"><path data-c="1D443" d="M555 683L235 683C212 683 201 682 201 660C201 649 212 644 234 644C254 644 294 647 294 631C294 629 293 623 290 613L158 82C152 60 142 47 128 42C121 40 103 39 72 39C50 39 40 37 40 16C40 5 46 0 59 0L184 3L248 2C259 2 299 0 312 0C328 0 336 8 336 24C336 34 325 39 304 39C264 39 244 43 244 52C244 52 245 55 247 68L307 312L472 312C537 312 599 332 657 371C722 414 754 467 754 530C754 629 660 683 555 683M524 644C611 644 654 614 654 554C654 498 626 423 597 397C559 363 509 346 447 346L313 346L379 610C387 644 387 644 429 644Z"></path></g></g></g></svg><mjx-break size="3"> </mjx-break><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="6.835ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 3021.2 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="TP / (TP+FN)"><g data-mml-node="mo" data-latex="+"><path data-c="2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path></g><g data-mml-node="mi" data-latex="F" transform="translate(1000.2,0)"><path data-c="1D439" d="M199 656C199 646 210 641 231 641C271 641 291 637 291 628C291 625 289 618 286 605L156 82C150 60 140 47 126 42C119 40 101 39 70 39C48 39 38 37 38 16C38 5 44 0 57 0L187 3L335 0C351 0 359 8 359 23C359 40 348 39 322 39C278 39 253 41 247 46C244 47 243 51 243 56L307 321L400 321C446 321 478 319 478 281C478 268 476 252 471 233C470 230 469 226 468 222C468 211 473 206 484 206C489 207 496 214 503 229L557 444C559 452 560 458 560 461C557 470 551 475 544 475C536 475 530 467 526 452C516 414 502 390 486 378C470 366 442 360 402 360L317 360L379 606C387 640 387 641 429 641L559 641C656 641 700 626 700 537C700 517 699 499 697 484C696 473 695 467 695 466C695 455 700 450 710 450C720 450 726 459 728 478L748 649C751 677 744 680 717 680L233 680C210 680 199 679 199 656Z"></path></g><g data-mml-node="mi" data-latex="N" transform="translate(1751.2,0)"><path data-c="1D441" d="M864 683C845 683 783 680 764 680C745 680 682 683 663 683C648 683 641 675 641 659C641 650 648 645 663 644C705 644 726 631 726 605C726 599 725 592 724 585L616 157L401 662C393 681 391 683 366 683L233 683C209 683 200 681 200 659C200 649 211 644 232 644C274 644 295 643 296 640L163 110C154 71 131 49 95 42C69 39 39 43 39 15C39 5 45 0 56 0C74 0 136 3 155 3C174 3 238 0 257 0C272 0 279 8 279 24C279 33 271 38 255 39C214 40 194 53 194 78C194 83 195 90 197 100L326 611L576 21C582 7 590 0 599 0C608 0 614 8 618 24L757 574C770 625 798 643 860 644C874 645 881 653 881 669C878 678 877 683 864 683Z"></path></g><g data-mml-node="mo" data-latex=")" transform="translate(2632.2,0)"><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z"></path></g></g></g></svg></mjx-container>（真恶意里抓出多少）</li>
+</ul>
+<p><img src="/images/core/confusion-matrix.svg" srcset="/img/loading.gif" lazyload></p>
+<p><strong>实例（算一遍）</strong>：100 条样本，模型判 20 条为恶意，其中真恶意 15 条；实际共 18 条真恶意。</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-attribute">TP</span>=15, <span class="hljs-attribute">FP</span>=5, <span class="hljs-attribute">FN</span>=3, <span class="hljs-attribute">TN</span>=77<br>准确率 = (15+77)/100 = 0.92<br>精确率 = 15/(15+5)   = 0.75   ← 报警里 3/4 是真的<br>召回率 = 15/(15+3)   = 0.83   ← 真恶意漏了 3 条<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.metrics <span class="hljs-keyword">import</span> confusion_matrix, accuracy_score, precision_score, recall_score<br><br><span class="hljs-comment"># 构造 100 条样本的真实/预测标签（顺序任意，sklearn 自动对号入座）</span><br>y_true = [<span class="hljs-number">1</span>]*<span class="hljs-number">18</span> + [<span class="hljs-number">0</span>]*<span class="hljs-number">82</span>                                   <span class="hljs-comment"># 18 条真恶意 + 82 条真正常</span><br>y_pred = [<span class="hljs-number">1</span>]*<span class="hljs-number">15</span> + [<span class="hljs-number">0</span>]*<span class="hljs-number">3</span> + [<span class="hljs-number">1</span>]*<span class="hljs-number">5</span> + [<span class="hljs-number">0</span>]*<span class="hljs-number">77</span>                   <span class="hljs-comment"># 15 TP + 3 FN + 5 FP + 77 TN</span><br><span class="hljs-built_in">print</span>(confusion_matrix(y_true, y_pred))<br><span class="hljs-comment"># [[77  5]                                                # 第 0 行 = 实际为 0（正常）</span><br><span class="hljs-comment">#  [ 3 15]]                                               # 第 1 行 = 实际为 1（恶意）</span><br><span class="hljs-comment">#  注意 sklearn 输出是 [[TN FP] [FN TP]]，和上面的表格行列顺序相反，别数错</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">"acc=%.2f prec=%.2f rec=%.2f"</span> % (<br>    accuracy_score(y_true, y_pred),      <span class="hljs-comment"># (TP+TN)/全部</span><br>    precision_score(y_true, y_pred),     <span class="hljs-comment"># TP/(TP+FP)  报警里多少是真的</span><br>    recall_score(y_true, y_pred)))       <span class="hljs-comment"># TP/(TP+FN)  真恶意抓出多少</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>追问</strong>：把”报警阈值”调低一点（更容易报恶意），FP 和 FN 会怎么变？precision 和 recall 各升还是降？</p>
+<blockquote>
+<p><strong>参考答案</strong>：阈值调低 → 报警变多 → TP 和 FP 同时变多、FN 变少 → <strong>precision 降（误报多）、recall 升（漏报少）</strong>。安全团队天天在调这个平衡：宁可多报（recall 高）还是宁可少吵（precision 高）？告警疲劳 = precision 太低没人看；漏报 = recall 太低真攻击跑了。</p>
+</blockquote>
+<p><strong>在哪用</strong>：安全场景里 <strong>FP（误报）代价极高</strong>——告警疲劳让真攻击被淹没；所以除了准确率，必须盯 precision/recall（呼应 <code>math.md</code> 的贝叶斯基率谬误：基率低时 precision 会被压垮）。</p>
+<h2 id="5-过拟合与正则化"><a href="#5-过拟合与正则化" class="headerlink" title="5 过拟合与正则化"></a>5 过拟合与正则化</h2><p>路径文档检查点第三题：过拟合的 3 个解决方法。</p>
+<p>过拟合 = 模型在训练集上很准、验证集上很差，把噪声当规律记死了（见图）。</p>
+<p><img src="/images/core/overfit-curve.svg" srcset="/img/loading.gif" lazyload></p>
+<p><strong>3 个常用解法</strong>：</p>
+<ol>
+<li><strong>更多/更干净的数据</strong>——最根本。</li>
+<li><strong>正则化</strong>——L2 权重衰减（见 <code>math.md §4.3</code>）、L1 稀疏化，限制模型复杂度。</li>
+<li><strong>交叉验证 + 早停</strong>——用验证集监控，验证误差开始回升就停训（early stopping）；k 折交叉验证把数据切成 k 份轮流当验证集，估计泛化能力。</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> train_test_split, cross_val_score<br><br>X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=<span class="hljs-number">0.3</span>, random_state=<span class="hljs-number">0</span>)<br><span class="hljs-comment">#      ↑ 训练集  ↑ 测试集   ↑ 30% 当测试       ↑ 固定随机切分，结果可复现</span><br><span class="hljs-comment">#   必须只用训练集学，测试集"模拟未来没见过的新数据"，专用来检验泛化能力</span><br>clf.fit(X_tr, y_tr)                                        <span class="hljs-comment"># 只在训练集上学</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">"测试集准确率:"</span>, clf.score(X_te, y_te))             <span class="hljs-comment"># 用测试集打分 = 真实水平</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">"5 折交叉验证:"</span>, cross_val_score(clf, X, y, cv=<span class="hljs-number">5</span>).<span class="hljs-built_in">round</span>(<span class="hljs-number">3</span>))<br><span class="hljs-comment">#                          ↑ 把数据切 5 份，轮流拿 1 份当验证集、其余 4 份训练，</span><br><span class="hljs-comment">#                          跑 5 次取平均——比单次切分更稳，避免"运气好/坏"的切分</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>⚠️ <strong>报错 <code>inconsistent numbers of samples: [200, 3]</code>？</strong> 不是代码错了，是 IPython 会话里 <code>y</code> 被之前的某行覆盖了（比如把 <code>clf.predict(X[:3])</code> 的结果赋给了 <code>y</code>，3 条覆盖了 200 条）。用 <code>len(y)</code> 确认长度，然后<strong>重新跑 §1 的 <code>make_classification</code> 那两行</strong>即可恢复（这就是 <code>random_state=0</code> 的价值：数据随时可重建）。IPython 里变量是”活的”，同名赋值就会覆盖，养成习惯：预测结果起名叫 <code>pred</code>，别用 <code>y</code>。</p>
+</blockquote>
+<blockquote>
+<p>sklearn 里的正则化强度用 <code>C</code> 参数调：<code>LogisticRegression(C=0.1)</code> 的 <code>C</code> 越小，正则化越强（权重被压得越小、模型越简单）。<code>C=1.0</code> 是默认值。L1/L2 的数学原理见 <code>math.md §4.3</code>。</p>
+</blockquote>
+<p><strong>追问</strong>：怎么用代码判断模型过拟合了？</p>
+<blockquote>
+<p><strong>参考答案</strong>：对比训练分和测试分：<code>clf.score(X_tr, y_tr)</code> 很高（如 0.99）而 <code>clf.score(X_te, y_te)</code> 明显低（如 0.85）→ 过拟合。交叉验证的 5 个分数如果高低差异很大，也说明模型不稳定。过拟合的模型更怕对抗样本（把训练噪声当特征，扰动一点就翻车）。</p>
+</blockquote>
+<p><strong>在哪用</strong>：过拟合的模型更易被对抗样本攻击（把训练噪声当特征 → 扰动一点就翻车）；对抗训练（模块 J）本质是用”加了对抗样本的数据”做正则化，提升鲁棒性。</p>
+<h2 id="6-常见误区"><a href="#6-常见误区" class="headerlink" title="6 常见误区"></a>6 常见误区</h2><ol>
+<li><strong>以为”准确率高 = 模型好”</strong> —— 类别不平衡（恶意样本占比 1%）时，全判”正常”准确率 99% 却是废模型。必须看 precision/recall（呼应贝叶斯基率谬误）。</li>
+<li><strong>以为攻击改的是模型参数 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="1.061ex" height="1.62ex" role="img" focusable="false" viewBox="0 -705 469 716"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="\theta"><g data-mml-node="mi" data-latex="\theta"><path data-c="1D703" d="M164-11C209-11 256 16 302 70C382 163 455 335 455 498C455 539 448 582 434 625C416 678 382 705 333 705C288 705 243 678 196 624C116 532 42 360 42 196C42 94 75-11 164-11M332 675C365 675 382 637 382 560C382 517 372 452 352 367L155 367C180 460 204 529 229 574C266 641 301 675 332 675M145 327L341 327C322 246 299 181 274 132C235 57 199 19 164 19C131 19 115 58 115 135C115 185 125 249 145 327Z"></path></g></g></g></svg></mjx-container></strong> —— FGSM 改的是<strong>输入 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="1.294ex" height="1.025ex" role="img" focusable="false" viewBox="0 -442 572 453"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="x"><g data-mml-node="mi" data-latex="x"><path data-c="1D465" d="M527 373C527 419 482 442 432 442C389 442 355 419 329 373C308 419 273 442 222 442C173 442 133 419 101 374C74 335 60 306 60 287C60 278 65 273 75 273C84 273 90 278 92 287C111 345 153 413 220 413C253 413 269 392 269 351C269 330 251 252 216 118C199 51 169 18 126 18C112 18 99 21 88 26C114 36 127 54 127 80C127 106 114 119 87 119C54 119 29 91 29 58C29 12 76-11 125-11C167-11 201 12 228 58C247 12 283-11 335-11C383-11 423 12 455 57C482 96 496 125 496 144C496 153 491 158 481 158C472 158 467 153 464 144C447 87 402 18 337 18C304 18 287 38 287 79C287 92 292 120 303 165L337 300C356 375 387 413 431 413C445 413 458 410 469 405C442 396 429 378 429 351C429 325 443 312 470 312C502 312 527 341 527 373Z"></path></g></g></g></svg></mjx-container></strong>：<code>x' = x + ε·sign(∇_x L)</code>。训练才改 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="1.061ex" height="1.62ex" role="img" focusable="false" viewBox="0 -705 469 716"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="\theta"><g data-mml-node="mi" data-latex="\theta"><path data-c="1D703" d="M164-11C209-11 256 16 302 70C382 163 455 335 455 498C455 539 448 582 434 625C416 678 382 705 333 705C288 705 243 678 196 624C116 532 42 360 42 196C42 94 75-11 164-11M332 675C365 675 382 637 382 560C382 517 372 452 352 367L155 367C180 460 204 529 229 574C266 641 301 675 332 675M145 327L341 327C322 246 299 181 274 132C235 57 199 19 164 19C131 19 115 58 115 135C115 185 125 249 145 327Z"></path></g></g></g></svg></mjx-container>。这个混淆是 J 模块初学者第一坎。</li>
+<li><strong>以为”分类器输出就是结论”</strong> —— 输出是概率；<code>predict</code> 只是按阈值挑边。接近 0.5 的样本最容易被一小点扰动翻盘（这正是对抗攻击的发力点）。</li>
+<li><strong>以为 PCA 降维后”信息都在”</strong> —— PCA 保留的是<strong>方差</strong>，不是<strong>分类信号</strong>；信噪比低时降维可能丢分类能力（见 §3.2 的 ⚠️）。</li>
+<li><strong>以为过拟合只是”训练太好”</strong> —— 过拟合的模型把训练噪声当特征，<strong>更怕对抗样本</strong>：扰动一点就翻车。对抗训练本质就是”用对抗数据做正则化”。</li>
+</ol>
+<h2 id="7-实验清单（Labs）"><a href="#7-实验清单（Labs）" class="headerlink" title="7 实验清单（Labs）"></a>7 实验清单（Labs）</h2><table>
+<thead>
+<tr>
+<th>Lab</th>
+<th>目标</th>
+<th>脚本</th>
+<th>依赖</th>
+<th>硬件/成本</th>
+<th>过关判据</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ml01</td>
+<td>load_digits 全流程：训练逻辑回归 + 混淆矩阵 + 准确率 + 观察最易混淆的数字对</td>
+<td><code>labs/ml01_digits_pipeline.py</code></td>
+<td>numpy, scikit-learn</td>
+<td>CPU，秒级</td>
+<td>准确率 ≈0.95；能读混淆矩阵说出哪对数字最易混（8↔1/9）</td>
+</tr>
+</tbody></table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> 01-foundation/ml/labs<br>pip install numpy scikit-learn<br>python ml01_digits_pipeline.py<br></code></pre></td></tr></table></figure>
+
+<h2 id="8-检查点（自测）"><a href="#8-检查点（自测）" class="headerlink" title="8 检查点（自测）"></a>8 检查点（自测）</h2><ul>
+<li><input disabled="" type="checkbox"> 损失函数 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.561ex;" xmlns="http://www.w3.org/2000/svg" width="8.777ex" height="2.253ex" role="img" focusable="false" viewBox="0 -748 3879.3 996"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="L(\theta,x,y)"><g data-mml-node="mi" data-latex="L"><path data-c="1D43F" d="M520 667C520 678 513 683 500 683L354 680L223 683C208 684 200 676 200 659C200 652 203 647 209 646C218 645 226 644 231 644C262 643 279 641 284 640C289 639 292 636 292 631C292 629 291 623 288 613L156 82C150 60 140 47 125 42C119 40 101 39 70 39C49 39 39 31 39 15C39 5 49 0 70 0L527 0C552 0 554 0 561 19L639 233C642 240 643 245 643 248C643 258 638 263 627 263C617 263 612 254 607 240C588 191 570 154 555 131C518 75 455 39 363 39L270 39C259 39 252 39 249 40C242 40 239 42 239 45C239 47 241 54 244 67L377 601C383 624 396 637 415 642C421 643 442 644 478 644C506 644 520 644 520 667Z"></path></g><g data-mml-node="mo" data-latex="(" transform="translate(681,0)"><path data-c="28" d="M318-248C327-248 332-243 332-234C332-231 330-227 327-223C275-183 233-117 202-26C175 53 161 131 161 208L161 292C161 369 175 447 202 526C233 617 275 683 327 723C330 726 332 730 332 734C332 743 327 748 318 748C317 748 314 747 311 745C251 699 201 631 160 540C121 453 101 371 101 292L101 208C101 129 121 47 160-40C201-131 251-199 311-245C314-247 317-248 318-248Z"></path></g><g data-mml-node="mi" data-latex="\theta" transform="translate(1070,0)"><path data-c="1D703" d="M164-11C209-11 256 16 302 70C382 163 455 335 455 498C455 539 448 582 434 625C416 678 382 705 333 705C288 705 243 678 196 624C116 532 42 360 42 196C42 94 75-11 164-11M332 675C365 675 382 637 382 560C382 517 372 452 352 367L155 367C180 460 204 529 229 574C266 641 301 675 332 675M145 327L341 327C322 246 299 181 274 132C235 57 199 19 164 19C131 19 115 58 115 135C115 185 125 249 145 327Z"></path></g><g data-mml-node="mo" data-latex="," transform="translate(1539,0)"><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z"></path></g><g data-mml-node="mi" data-latex="x" transform="translate(1983.7,0)"><path data-c="1D465" d="M527 373C527 419 482 442 432 442C389 442 355 419 329 373C308 419 273 442 222 442C173 442 133 419 101 374C74 335 60 306 60 287C60 278 65 273 75 273C84 273 90 278 92 287C111 345 153 413 220 413C253 413 269 392 269 351C269 330 251 252 216 118C199 51 169 18 126 18C112 18 99 21 88 26C114 36 127 54 127 80C127 106 114 119 87 119C54 119 29 91 29 58C29 12 76-11 125-11C167-11 201 12 228 58C247 12 283-11 335-11C383-11 423 12 455 57C482 96 496 125 496 144C496 153 491 158 481 158C472 158 467 153 464 144C447 87 402 18 337 18C304 18 287 38 287 79C287 92 292 120 303 165L337 300C356 375 387 413 431 413C445 413 458 410 469 405C442 396 429 378 429 351C429 325 443 312 470 312C502 312 527 341 527 373Z"></path></g><g data-mml-node="mo" data-latex="," transform="translate(2555.7,0)"><path data-c="2C" d="M139 106C107 106 86 82 86 50C86 20 109-5 139-5C153-5 165-1 174 8L175 0C175-63 154-117 112-160C105-168 101-174 101-178C101-188 105-193 114-193C123-193 135-181 152-158C186-110 203-57 203 0C203 53 185 106 139 106Z"></path></g><g data-mml-node="mi" data-latex="y" transform="translate(3000.3,0)"><path data-c="1D466" d="M163 442C118 442 83 417 58 367C39 328 29 301 29 286C29 277 34 272 45 272C59 272 60 278 64 293C87 372 119 412 160 412C173 412 180 403 180 385C180 369 175 346 164 317C126 214 107 145 107 108C107 32 154-13 231-13C264-13 295-1 323 23C288-109 233-175 158-175C124-175 101-164 89-142C129-140 149-121 149-85C149-60 136-47 109-47C72-47 50-78 50-115C50-170 100-205 158-205C273-205 367-99 392-1L486 377C489 388 490 396 490 401C490 421 479 431 458 431C442 431 429 423 420 408C414 387 409 369 406 354L342 97C332 61 279 16 234 16C196 16 177 41 177 92C177 134 194 198 227 284C240 319 247 343 247 357C247 406 212 442 163 442Z"></path></g><g data-mml-node="mo" data-latex=")" transform="translate(3490.3,0)"><path data-c="29" d="M78-245C138-199 188-131 229-40C268 47 288 129 288 208L288 292C288 371 268 453 229 540C188 631 138 699 78 745C75 747 72 748 71 748C62 748 57 743 57 734C57 730 59 726 62 723C114 683 156 617 187 526C214 447 228 369 228 292L228 208C228 131 214 53 187-26C156-117 114-183 62-223C59-227 57-231 57-234C57-243 62-248 71-248C72-248 75-247 78-245Z"></path></g></g></g></svg></mjx-container> 中 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="1.061ex" height="1.62ex" role="img" focusable="false" viewBox="0 -705 469 716"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="\theta"><g data-mml-node="mi" data-latex="\theta"><path data-c="1D703" d="M164-11C209-11 256 16 302 70C382 163 455 335 455 498C455 539 448 582 434 625C416 678 382 705 333 705C288 705 243 678 196 624C116 532 42 360 42 196C42 94 75-11 164-11M332 675C365 675 382 637 382 560C382 517 372 452 352 367L155 367C180 460 204 529 229 574C266 641 301 675 332 675M145 327L341 327C322 246 299 181 274 132C235 57 199 19 164 19C131 19 115 58 115 135C115 185 125 249 145 327Z"></path></g></g></g></svg></mjx-container>、<mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="1.294ex" height="1.025ex" role="img" focusable="false" viewBox="0 -442 572 453"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="x"><g data-mml-node="mi" data-latex="x"><path data-c="1D465" d="M527 373C527 419 482 442 432 442C389 442 355 419 329 373C308 419 273 442 222 442C173 442 133 419 101 374C74 335 60 306 60 287C60 278 65 273 75 273C84 273 90 278 92 287C111 345 153 413 220 413C253 413 269 392 269 351C269 330 251 252 216 118C199 51 169 18 126 18C112 18 99 21 88 26C114 36 127 54 127 80C127 106 114 119 87 119C54 119 29 91 29 58C29 12 76-11 125-11C167-11 201 12 228 58C247 12 283-11 335-11C383-11 423 12 455 57C482 96 496 125 496 144C496 153 491 158 481 158C472 158 467 153 464 144C447 87 402 18 337 18C304 18 287 38 287 79C287 92 292 120 303 165L337 300C356 375 387 413 431 413C445 413 458 410 469 405C442 396 429 378 429 351C429 325 443 312 470 312C502 312 527 341 527 373Z"></path></g></g></g></svg></mjx-container>、<mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.464ex;" xmlns="http://www.w3.org/2000/svg" width="1.109ex" height="1.464ex" role="img" focusable="false" viewBox="0 -442 490 647"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="y"><g data-mml-node="mi" data-latex="y"><path data-c="1D466" d="M163 442C118 442 83 417 58 367C39 328 29 301 29 286C29 277 34 272 45 272C59 272 60 278 64 293C87 372 119 412 160 412C173 412 180 403 180 385C180 369 175 346 164 317C126 214 107 145 107 108C107 32 154-13 231-13C264-13 295-1 323 23C288-109 233-175 158-175C124-175 101-164 89-142C129-140 149-121 149-85C149-60 136-47 109-47C72-47 50-78 50-115C50-170 100-205 158-205C273-205 367-99 392-1L486 377C489 388 490 396 490 401C490 421 479 431 458 431C442 431 429 423 420 408C414 387 409 369 406 354L342 97C332 61 279 16 234 16C196 16 177 41 177 92C177 134 194 198 227 284C240 319 247 343 247 357C247 406 212 442 163 442Z"></path></g></g></g></svg></mjx-container> 各代表什么？攻击时改的是哪一个？</li>
+<li><input disabled="" type="checkbox"> 交叉熵和 MSE 有什么区别？为什么分类任务（包括 LLM 训练）用交叉熵？</li>
+<li><input disabled="" type="checkbox"> <code>predict</code> 和 <code>predict_proba</code> 什么关系？为什么”分数接近 0.5 的样本最危险”？</li>
+<li><input disabled="" type="checkbox"> 混淆矩阵 TP/FP/TN/FN 含义？准确率、精确率、召回率公式？调低报警阈值后 precision/recall 怎么变？</li>
+<li><input disabled="" type="checkbox"> 无监督和监督的区别？<code>km.labels_</code> 是什么？PCA 为什么能”丢了 19 维还有用”？（看 <code>explained_variance_ratio_</code>）</li>
+<li><input disabled="" type="checkbox"> 过拟合的 3 个解决方法？怎么用代码判断过拟合？为什么安全里要特别盯 precision/recall 而非只看准确率？</li>
+<li><input disabled="" type="checkbox"> 用 scikit-learn 在自带数据集（如 <code>make_classification</code> / MNIST）上完成一次”训练 + 混淆矩阵 + 准确率”全流程。</li>
+</ul>
+<blockquote>
+<p><strong>参考答案（load_digits 全流程）</strong>：<code>load_digits</code> 是 sklearn 官方的 MNIST 迷你版（1797 张 8×8 手写数字图、10 类）——和你后面 pytorch.md 里 MNIST CNN 用的同一类数据，先拿它热身：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.datasets <span class="hljs-keyword">import</span> load_digits<br><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> train_test_split<br><span class="hljs-keyword">from</span> sklearn.linear_model <span class="hljs-keyword">import</span> LogisticRegression<br><span class="hljs-keyword">from</span> sklearn.metrics <span class="hljs-keyword">import</span> confusion_matrix, accuracy_score<br><br>digits = load_digits()<br>X, y = digits.data, digits.target       <span class="hljs-comment"># (1797, 64)：图展平成 64 维向量；y 是数字 0-9</span><br>X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=<span class="hljs-number">0.3</span>, random_state=<span class="hljs-number">0</span>)<br>clf = LogisticRegression(max_iter=<span class="hljs-number">1000</span>) <span class="hljs-comment"># 10 类多分类自动处理；max_iter 加大防不收敛警告</span><br>clf.fit(X_tr, y_tr)<br>pred = clf.predict(X_te)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">"准确率:"</span>, <span class="hljs-built_in">round</span>(accuracy_score(y_te, pred), <span class="hljs-number">4</span>))   <span class="hljs-comment"># ≈ 0.95</span><br><span class="hljs-built_in">print</span>(confusion_matrix(y_te, pred))     <span class="hljs-comment"># 10×10：行=真实数字，列=预测数字，对角线=预测对的</span><br></code></pre></td></tr></table></figure>
+
+<p>读矩阵要点：主对角线高 = 整体准；某行非对角线上的数字集中在哪几列，就是”哪两个数字容易混”（如 8 常被认成 1 和 9，长得像）。</p>
+</blockquote>
+<blockquote>
+<p>及格线：能用 scikit-learn 在 MNIST 或 sklearn 自带数据集上完成一次完整训练 + 评估（含准确率/混淆矩阵）。GPU 不需要，CPU 跑 sklearn 足够。</p>
+</blockquote>
+<h2 id="9-与主线的连接"><a href="#9-与主线的连接" class="headerlink" title="9 与主线的连接"></a>9 与主线的连接</h2><ul>
+<li><strong>→ 模块 J §3.1 FGSM</strong>：FGSM 里的 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="1.541ex" height="1.548ex" role="img" focusable="false" viewBox="0 -684 681 684"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="L"><g data-mml-node="mi" data-latex="L"><path data-c="1D43F" d="M520 667C520 678 513 683 500 683L354 680L223 683C208 684 200 676 200 659C200 652 203 647 209 646C218 645 226 644 231 644C262 643 279 641 284 640C289 639 292 636 292 631C292 629 291 623 288 613L156 82C150 60 140 47 125 42C119 40 101 39 70 39C49 39 39 31 39 15C39 5 49 0 70 0L527 0C552 0 554 0 561 19L639 233C642 240 643 245 643 248C643 258 638 263 627 263C617 263 612 254 607 240C588 191 570 154 555 131C518 75 455 39 363 39L270 39C259 39 252 39 249 40C242 40 239 42 239 45C239 47 241 54 244 67L377 601C383 624 396 637 415 642C421 643 442 644 478 644C506 644 520 644 520 667Z"></path></g></g></g></svg></mjx-container> 就是本模块 §2 的交叉熵；攻击对 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="1.294ex" height="1.025ex" role="img" focusable="false" viewBox="0 -442 572 453"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="x"><g data-mml-node="mi" data-latex="x"><path data-c="1D465" d="M527 373C527 419 482 442 432 442C389 442 355 419 329 373C308 419 273 442 222 442C173 442 133 419 101 374C74 335 60 306 60 287C60 278 65 273 75 273C84 273 90 278 92 287C111 345 153 413 220 413C253 413 269 392 269 351C269 330 251 252 216 118C199 51 169 18 126 18C112 18 99 21 88 26C114 36 127 54 127 80C127 106 114 119 87 119C54 119 29 91 29 58C29 12 76-11 125-11C167-11 201 12 228 58C247 12 283-11 335-11C383-11 423 12 455 57C482 96 496 125 496 144C496 153 491 158 481 158C472 158 467 153 464 144C447 87 402 18 337 18C304 18 287 38 287 79C287 92 292 120 303 165L337 300C356 375 387 413 431 413C445 413 458 410 469 405C442 396 429 378 429 351C429 325 443 312 470 312C502 312 527 341 527 373Z"></path></g></g></g></svg></mjx-container> 求梯度 = “损失函数拆开看”的延伸。J01 实验的 victim 模型就是逻辑回归（本模块主力模型）。</li>
+<li><strong>→ 模块 J §7 评估</strong>：鲁棒准确率/ASR = 混淆矩阵思想在”攻击前后”的复用；读对抗论文时用 precision/recall 的警惕心读 ASR。</li>
+<li><strong>→ 模块 L（副线）</strong>：用 ML 做威胁检测（恶意流量/恶意代码分类）就是本模块 §1/§4 的直接应用——但记得 L 是副线，J/K 优先。</li>
+<li><strong>→ 模块 A（数学）</strong>：PCA 复用 SVD/特征分解；交叉熵与信息论同源（math.md §2.4）。</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">AI安全学习</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/%E5%9F%BA%E7%A1%80%E9%98%B6%E6%AE%B5/" class="category-chain-item">基础阶段</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/%E5%9F%BA%E7%A1%80%E9%98%B6%E6%AE%B5/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">机器学习</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%9C%80%E4%BC%98%E5%8C%96/" class="print-no-link">#最优化</a>
+      
+        <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="print-no-link">#机器学习</a>
+      
+        <a href="/tags/%E7%BB%8F%E5%85%B8ML/" class="print-no-link">#经典ML</a>
+      
+        <a href="/tags/PCA/" class="print-no-link">#PCA</a>
+      
+        <a href="/tags/%E8%BF%87%E6%8B%9F%E5%90%88/" class="print-no-link">#过拟合</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>经典机器学习（C 模块）</div>
+      <div>https://happy-clown123.github.io/2026/08/31/C-ml/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>KachaKacha</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年8月31日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/08/31/D-dl/" title="深度学习（D 模块）">
+                        <span class="hidden-mobile">深度学习（D 模块）</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

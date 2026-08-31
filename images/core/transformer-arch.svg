@@ -1,0 +1,33 @@
+<svg width="600" height="360" viewBox="0 0 600 360" xmlns="http://www.w3.org/2000/svg">
+  <rect width="600" height="360" fill="#ffffff"/>
+  <text x="300" y="24" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#222" text-anchor="middle">Transformer 架构（Encoder–Decoder）</text>
+  <!-- inputs -->
+  <rect x="40" y="70" width="120" height="36" rx="6" fill="#e2e8f0"/>
+  <text x="100" y="93" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#333" text-anchor="middle">输入嵌入 + 位置</text>
+  <rect x="440" y="70" width="120" height="36" rx="6" fill="#e2e8f0"/>
+  <text x="500" y="93" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#333" text-anchor="middle">输出嵌入 + 位置</text>
+  <!-- encoder stack -->
+  <rect x="40" y="130" width="120" height="36" rx="6" fill="#3b82f6"/>
+  <text x="100" y="153" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#fff" text-anchor="middle">自注意力</text>
+  <rect x="40" y="180" width="120" height="36" rx="6" fill="#3b82f6"/>
+  <text x="100" y="203" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#fff" text-anchor="middle">前馈 FFN</text>
+  <rect x="40" y="230" width="120" height="36" rx="6" fill="#3b82f6" opacity="0.55"/>
+  <text x="100" y="253" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#fff" text-anchor="middle">× N 层</text>
+  <text x="100" y="300" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#3b82f6" font-weight="700" text-anchor="middle">Encoder（BERT）</text>
+  <!-- decoder stack -->
+  <rect x="440" y="130" width="120" height="32" rx="6" fill="#8b5cf6"/>
+  <text x="500" y="151" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#fff" text-anchor="middle">掩码自注意力</text>
+  <rect x="440" y="172" width="120" height="32" rx="6" fill="#8b5cf6"/>
+  <text x="500" y="193" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#fff" text-anchor="middle">交叉注意力</text>
+  <rect x="440" y="214" width="120" height="32" rx="6" fill="#8b5cf6"/>
+  <text x="500" y="235" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#fff" text-anchor="middle">前馈 FFN</text>
+  <rect x="440" y="256" width="120" height="32" rx="6" fill="#8b5cf6" opacity="0.55"/>
+  <text x="500" y="277" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#fff" text-anchor="middle">× N 层</text>
+  <text x="500" y="320" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#8b5cf6" font-weight="700" text-anchor="middle">Decoder（GPT）</text>
+  <!-- cross arrow -->
+  <line x1="160" y1="200" x2="440" y2="188" stroke="#888" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#c)"/>
+  <text x="300" y="170" font-family="Segoe UI, Arial, sans-serif" font-size="10" fill="#555" text-anchor="middle">编码向量</text>
+  <defs>
+    <marker id="c" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#888"/></marker>
+  </defs>
+</svg>

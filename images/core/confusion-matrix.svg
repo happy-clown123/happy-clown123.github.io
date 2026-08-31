@@ -1,0 +1,27 @@
+<svg width="520" height="440" viewBox="0 0 520 440" xmlns="http://www.w3.org/2000/svg">
+  <rect width="520" height="440" fill="#ffffff"/>
+  <text x="260" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#222" text-anchor="middle">混淆矩阵 Confusion Matrix</text>
+  <text x="58" y="252" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#555" text-anchor="middle" transform="rotate(-90 58 252)">实际 Actual</text>
+  <text x="275" y="425" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#555" text-anchor="middle">预测 Predicted</text>
+  <rect x="150" y="120" width="140" height="120" fill="#16a34a" opacity="0.85"/>
+  <text x="220" y="178" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">TN</text>
+  <text x="220" y="200" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#fff" text-anchor="middle">真负例</text>
+  <text x="220" y="216" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#fff" text-anchor="middle">(正确拒绝)</text>
+  <rect x="290" y="120" width="140" height="120" fill="#dc2626" opacity="0.85"/>
+  <text x="360" y="178" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">FP</text>
+  <text x="360" y="200" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#fff" text-anchor="middle">假正例</text>
+  <text x="360" y="216" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#fff" text-anchor="middle">(误报)</text>
+  <rect x="150" y="240" width="140" height="120" fill="#dc2626" opacity="0.85"/>
+  <text x="220" y="298" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">FN</text>
+  <text x="220" y="320" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#fff" text-anchor="middle">假负例</text>
+  <text x="220" y="336" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#fff" text-anchor="middle">(漏报)</text>
+  <rect x="290" y="240" width="140" height="120" fill="#16a34a" opacity="0.85"/>
+  <text x="360" y="298" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">TP</text>
+  <text x="360" y="320" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#fff" text-anchor="middle">真正例</text>
+  <text x="360" y="336" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#fff" text-anchor="middle">(正确检出)</text>
+  <text x="120" y="112" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#333" text-anchor="end">负类(0)</text>
+  <text x="120" y="232" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#333" text-anchor="end">正类(1)</text>
+  <text x="220" y="108" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#333" text-anchor="middle">负类(0)</text>
+  <text x="360" y="108" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#333" text-anchor="middle">正类(1)</text>
+  <text x="260" y="408" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#555" text-anchor="middle">准确率=(TP+TN)/全部  精确率=TP/(TP+FP)  召回率=TP/(TP+FN)</text>
+</svg>

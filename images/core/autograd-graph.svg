@@ -1,0 +1,28 @@
+<svg width="600" height="320" viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
+  <rect width="600" height="320" fill="#ffffff"/>
+  <text x="300" y="26" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#222" text-anchor="middle">PyTorch 计算图与自动求导 autograd</text>
+  <!-- forward nodes -->
+  <rect x="60" y="120" width="90" height="50" rx="8" fill="#3b82f6"/>
+  <text x="105" y="142" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">x (叶子)</text>
+  <text x="105" y="160" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#fff" text-anchor="middle">requires_grad</text>
+  <rect x="250" y="120" width="100" height="50" rx="8" fill="#8b5cf6"/>
+  <text x="300" y="142" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">y = x·w</text>
+  <text x="300" y="160" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#fff" text-anchor="middle">乘法节点</text>
+  <rect x="450" y="120" width="100" height="50" rx="8" fill="#16a34a"/>
+  <text x="500" y="142" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">L = (y-t)²</text>
+  <text x="500" y="160" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#fff" text-anchor="middle">损失</text>
+  <!-- forward arrows -->
+  <line x1="150" y1="145" x2="248" y2="145" stroke="#888" stroke-width="2" marker-end="url(#fwd)"/>
+  <line x1="350" y1="145" x2="448" y2="145" stroke="#888" stroke-width="2" marker-end="url(#fwd)"/>
+  <!-- backward arrows -->
+  <line x1="448" y1="175" x2="352" y2="175" stroke="#dc2626" stroke-width="2" marker-end="url(#bwd)"/>
+  <line x1="248" y1="175" x2="152" y2="175" stroke="#dc2626" stroke-width="2" marker-end="url(#bwd)"/>
+  <text x="400" y="200" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#dc2626">∂L/∂y</text>
+  <text x="200" y="200" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#dc2626">∂L/∂x → 存进 x.grad</text>
+  <text x="500" y="200" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#555">L.backward() 触发</text>
+  <text x="300" y="250" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#555" text-anchor="middle">前向建图（黑色）→ .backward() 沿红箭头反传梯度 → 每个 requires_grad 节点得到 .grad</text>
+  <defs>
+    <marker id="fwd" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#888"/></marker>
+    <marker id="bwd" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#dc2626"/></marker>
+  </defs>
+</svg>
