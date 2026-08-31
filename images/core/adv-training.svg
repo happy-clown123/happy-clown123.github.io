@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 320" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+  <rect width="680" height="320" fill="#ffffff"/>
+  <text x="340" y="28" font-size="17" font-weight="700" text-anchor="middle" fill="#1a1a2e">普通训练 vs 对抗训练：决策边界的鲁棒性差异</text>
+
+  <!-- normal training -->
+  <text x="160" y="60" font-size="13" font-weight="600" text-anchor="middle" fill="#c0392b">普通训练（只在干净样本上拟合）</text>
+  <line x1="40" y1="180" x2="290" y2="180" stroke="#bbb" stroke-width="1"/>
+  <!-- decision boundary: wiggly, close to data -->
+  <path d="M40,160 Q120,90 160,170 T290,150" fill="none" stroke="#7b241c" stroke-width="2.5"/>
+  <!-- two classes -->
+  <circle cx="90" cy="200" r="6" fill="#2e7d32"/>
+  <circle cx="110" cy="210" r="6" fill="#2e7d32"/>
+  <circle cx="230" cy="140" r="6" fill="#2980b9"/>
+  <circle cx="250" cy="150" r="6" fill="#2980b9"/>
+  <!-- adversarial point just across boundary -->
+  <circle cx="175" cy="168" r="6" fill="#c0392b" stroke="#000"/>
+  <text x="175" y="120" font-size="10" fill="#c0392b" text-anchor="middle">加极小扰动 →</text>
+  <text x="175" y="110" font-size="10" fill="#c0392b" text-anchor="middle">越界误判</text>
+  <text x="160" y="250" font-size="11" fill="#666" text-anchor="middle">边界紧贴数据，</text>
+  <text x="160" y="266" font-size="11" fill="#666" text-anchor="middle">扰动稍有就跨区</text>
+
+  <!-- adversarial training -->
+  <text x="500" y="60" font-size="13" font-weight="600" text-anchor="middle" fill="#2e7d32">对抗训练（把对抗样本也纳入训练）</text>
+  <line x1="370" y1="180" x2="620" y2="180" stroke="#bbb" stroke-width="1"/>
+  <!-- decision boundary: smooth, with margin -->
+  <path d="M370,150 Q490,120 620,160" fill="none" stroke="#1b5e20" stroke-width="2.5"/>
+  <!-- margin band -->
+  <path d="M370,170 Q490,140 620,180" fill="none" stroke="#2e7d32" stroke-width="1" stroke-dasharray="4 3"/>
+  <circle cx="420" cy="200" r="6" fill="#2e7d32"/>
+  <circle cx="440" cy="210" r="6" fill="#2e7d32"/>
+  <circle cx="560" cy="140" r="6" fill="#2980b9"/>
+  <circle cx="580" cy="150" r="6" fill="#2980b9"/>
+  <circle cx="495" cy="175" r="6" fill="#c0392b" stroke="#000"/>
+  <text x="495" y="120" font-size="10" fill="#2e7d32" text-anchor="middle">同量级扰动</text>
+  <text x="495" y="110" font-size="10" fill="#2e7d32" text-anchor="middle">仍在安全区</text>
+  <text x="500" y="250" font-size="11" fill="#666" text-anchor="middle">边界留出 margin，</text>
+  <text x="500" y="266" font-size="11" fill="#666" text-anchor="middle">抗小扰动更稳</text>
+
+  <line x1="340" y1="80" x2="340" y2="270" stroke="#ddd" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="340" y="298" font-size="11" fill="#666" text-anchor="middle">对抗训练 = Madry 鞍点问题 min_θ max_δ ℓ(θ, x+δ)；代价是干净样本准确率略降（robustness-accuracy trade-off）</text>
+</svg>

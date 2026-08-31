@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 320" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+  <rect width="680" height="320" fill="#ffffff"/>
+  <text x="340" y="28" font-size="17" font-weight="700" text-anchor="middle" fill="#1a1a2e">FGSM：在输入上加极小扰动，让模型高置信度错判</text>
+
+  <!-- original panda -->
+  <rect x="40" y="60" width="150" height="150" rx="8" fill="#f3f3f3" stroke="#bbb"/>
+  <text x="115" y="135" font-size="40" text-anchor="middle">🐼</text>
+  <text x="115" y="232" font-size="13" text-anchor="middle" fill="#1a1a2e">原始输入 x</text>
+  <text x="115" y="252" font-size="12" text-anchor="middle" fill="#2e7d32">真值：panda (57.6%)</text>
+
+  <!-- noise -->
+  <rect x="265" y="60" width="150" height="150" rx="8" fill="#1a1a2e"/>
+  <text x="340" y="120" font-size="12" fill="#ffffff" text-anchor="middle">ε · sign(∇ₓ L)</text>
+  <text x="340" y="142" font-size="11" fill="#cfcfcf" text-anchor="middle">肉眼不可见的高频噪声</text>
+  <text x="340" y="170" font-size="30" text-anchor="middle">∿</text>
+  <text x="340" y="232" font-size="13" text-anchor="middle" fill="#1a1a2e">扰动 δ（L∞ ≤ ε）</text>
+  <text x="340" y="252" font-size="11" text-anchor="middle" fill="#666">ε=0.007 时像素变化 &lt; 2%</text>
+
+  <!-- adversarial gibbon -->
+  <rect x="490" y="60" width="150" height="150" rx="8" fill="#f3f3f3" stroke="#bbb"/>
+  <text x="565" y="135" font-size="40" text-anchor="middle">🐵</text>
+  <text x="565" y="232" font-size="13" text-anchor="middle" fill="#1a1a2e">对抗样本 x' = x + δ</text>
+  <text x="565" y="252" font-size="12" text-anchor="middle" fill="#c0392b">模型判为：gibbon (99.3%)</text>
+
+  <!-- arrows -->
+  <line x1="190" y1="135" x2="260" y2="135" stroke="#444" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="415" y1="135" x2="485" y2="135" stroke="#444" stroke-width="2" marker-end="url(#a)"/>
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#444"/>
+    </marker>
+  </defs>
+
+  <text x="340" y="298" font-size="11" fill="#666" text-anchor="middle">经典案例（Goodfellow 2015）：同一张图加不可见噪声，置信度从 57.6% 翻转为 99.3% 误判</text>
+</svg>

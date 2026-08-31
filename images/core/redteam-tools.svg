@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 280" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+  <rect width="680" height="280" fill="#ffffff"/>
+  <text x="340" y="26" font-size="17" font-weight="700" text-anchor="middle" fill="#1a1a2e">AI 红队工具链与团队角色</text>
+
+  <!-- tools -->
+  <text x="20" y="58" font-size="13" font-weight="700" fill="#444">自动化工具</text>
+  <rect x="20" y="70" width="195" height="48" rx="8" fill="#eaf2fb" stroke="#2980b9"/>
+  <text x="117" y="90" font-size="12" text-anchor="middle" fill="#1b4f72" font-weight="600">PyRIT (Microsoft)</text>
+  <text x="117" y="108" font-size="10" text-anchor="middle" fill="#1b4f72">多轮/多模态/自适应编排</text>
+
+  <rect x="225" y="70" width="195" height="48" rx="8" fill="#e8f8f5" stroke="#16a085"/>
+  <text x="322" y="90" font-size="12" text-anchor="middle" fill="#0e6655" font-weight="600">Garak (NVIDIA)</text>
+  <text x="322" y="108" font-size="10" text-anchor="middle" fill="#0e6655">120+ 探针，CI/CD 门禁</text>
+
+  <rect x="430" y="70" width="230" height="48" rx="8" fill="#fdecea" stroke="#c0392b"/>
+  <text x="545" y="90" font-size="12" text-anchor="middle" fill="#7b241c" font-weight="600">练习场 / 靶场</text>
+  <text x="545" y="108" font-size="10" text-anchor="middle" fill="#7b241c">Gandalf / AgentDojo / DEFCON</text>
+
+  <!-- human -->
+  <text x="20" y="150" font-size="13" font-weight="700" fill="#444">人的因素（不可替代）</text>
+  <rect x="20" y="162" width="200" height="44" rx="8" fill="#fff4e0" stroke="#d68910"/>
+  <text x="120" y="180" font-size="11" text-anchor="middle" fill="#7e5109">理解业务上下文</text>
+  <text x="120" y="196" font-size="11" text-anchor="middle" fill="#7e5109">造新颖上下文相关攻击</text>
+
+  <rect x="240" y="162" width="200" height="44" rx="8" fill="#fef9e7" stroke="#b7950b"/>
+  <text x="340" y="180" font-size="11" text-anchor="middle" fill="#7d6608">工具漏掉的 0-day 思路</text>
+  <text x="340" y="196" font-size="11" text-anchor="middle" fill="#7d6608">多轮社会工程链</text>
+
+  <!-- red/blue/purple -->
+  <text x="20" y="240" font-size="13" font-weight="700" fill="#444">团队角色</text>
+  <rect x="20" y="248" width="200" height="26" rx="6" fill="#fdecea" stroke="#c0392b"/>
+  <text x="120" y="266" font-size="11" text-anchor="middle" fill="#7b241c">红队=攻击方(找洞)</text>
+  <rect x="240" y="248" width="200" height="26" rx="6" fill="#eaf2fb" stroke="#2980b9"/>
+  <text x="340" y="266" font-size="11" text-anchor="middle" fill="#1b4f72">蓝队=防御方(修洞)</text>
+  <rect x="460" y="248" width="200" height="26" rx="6" fill="#f4ecf7" stroke="#8e44ad"/>
+  <text x="560" y="266" font-size="11" text-anchor="middle" fill="#6c3483">紫队=红蓝协同</text>
+
+  <text x="340" y="278" font-size="10.5" fill="#666" text-anchor="middle">工具负责"已知模式"，人负责"创造性上下文攻击"——两者预算都要留</text>
+</svg>

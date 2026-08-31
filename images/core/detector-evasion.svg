@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 300" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+  <rect width="680" height="300" fill="#ffffff"/>
+  <text x="340" y="28" font-size="17" font-weight="700" text-anchor="middle" fill="#1a1a2e">"用 AI 做安全"的阿喀琉斯之踵：检测器被对抗样本绕过</text>
+
+  <!-- normal -->
+  <rect x="30" y="60" width="290" height="180" rx="10" fill="#fdfefe" stroke="#27ae60"/>
+  <text x="175" y="85" font-size="13" font-weight="700" text-anchor="middle" fill="#1e8449">正常情况</text>
+  <circle cx="95" cy="140" r="7" fill="#c0392b"/>
+  <text x="115" y="145" font-size="12" fill="#444">恶意样本</text>
+  <rect x="60" y="165" width="230" height="30" rx="6" fill="#eafaf1" stroke="#27ae60"/>
+  <text x="175" y="185" font-size="11" text-anchor="middle" fill="#1e8449">ML 检测器 → 判为 MALICIOUS ✓</text>
+  <text x="175" y="225" font-size="11" fill="#888" text-anchor="middle">拦截成功</text>
+
+  <!-- adversarial -->
+  <rect x="360" y="60" width="290" height="180" rx="10" fill="#fdfefe" stroke="#c0392b"/>
+  <text x="505" y="85" font-size="13" font-weight="700" text-anchor="middle" fill="#c0392b">对抗攻击（problem-space）</text>
+  <circle cx="425" cy="140" r="7" fill="#c0392b"/>
+  <text x="445" y="145" font-size="12" fill="#444">恶意样本</text>
+  <text x="425" y="165" font-size="20" fill="#c0392b" text-anchor="middle">+</text>
+  <text x="490" y="165" font-size="11" fill="#7b241c">功能保持的扰动</text>
+  <text x="490" y="180" font-size="10" fill="#7b241c">（加良性 API 调用/权限）</text>
+  <rect x="390" y="195" width="230" height="30" rx="6" fill="#fdecea" stroke="#c0392b"/>
+  <text x="505" y="215" font-size="11" text-anchor="middle" fill="#c0392b">ML 检测器 → 判为 BENIGN ✗</text>
+  <text x="505" y="232" font-size="11" fill="#888" text-anchor="middle">绕过！ASR 80–97%（2025 实测）</text>
+
+  <line x1="320" y1="150" x2="358" y2="150" stroke="#444" stroke-width="1.5" marker-end="url(#d)"/>
+  <defs>
+    <marker id="d" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#444"/>
+    </marker>
+  </defs>
+  <text x="340" y="282" font-size="10.5" fill="#666" text-anchor="middle">这说明：模块 J 的 evasion 攻击直接打在模块 L 检测器上。L 越依赖 ML，越要按 J 的方法做对抗鲁棒（对抗训练）</text>
+</svg>

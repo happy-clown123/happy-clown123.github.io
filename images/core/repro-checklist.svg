@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 250" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+  <rect width="680" height="250" fill="#ffffff"/>
+  <text x="340" y="26" font-size="17" font-weight="700" text-anchor="middle" fill="#1a1a2e">论文复现 Checklist（从"读"到"能信"）</text>
+
+  <g font-size="11.5">
+    <rect x="20" y="55" width="300" height="48" rx="8" fill="#eaf2fb" stroke="#2980b9"/>
+    <text x="35" y="76" fill="#1b4f72">① 环境：建隔离 venv/conda，固定随机种子</text>
+    <text x="35" y="94" fill="#1b4f72">   记录 CUDA/torch/库版本（可复现第一关）</text>
+
+    <rect x="360" y="55" width="300" height="48" rx="8" fill="#fff4e0" stroke="#d68910"/>
+    <text x="375" y="76" fill="#7e5109">② 数据：确认数据集与预处理一致</text>
+    <text x="375" y="94" fill="#7e5109">   下载链接/划分/归一化范围（如 [0,1]）</text>
+
+    <rect x="20" y="115" width="300" height="48" rx="8" fill="#fdecea" stroke="#c0392b"/>
+    <text x="35" y="136" fill="#7b241c">③ 代码：跑通官方 repo，对齐超参</text>
+    <text x="35" y="154" fill="#7b241c">   先复现表 1 主结果，再改你的变量</text>
+
+    <rect x="360" y="115" width="300" height="48" rx="8" fill="#e8f8f5" stroke="#16a085"/>
+    <text x="375" y="136" fill="#0e6655">④ 指标：用相同攻击/ε/数据集测</text>
+    <text x="375" y="154" fill="#0e6655">   鲁棒准确率 vs 干净准确率 同时报</text>
+
+    <rect x="190" y="175" width="300" height="48" rx="8" fill="#f4ecf7" stroke="#8e44ad"/>
+    <text x="340" y="196" fill="#6c3483">⑤ 对照：和 SOTA/baseline 同条件比</text>
+    <text x="340" y="214" fill="#6c3483">   记偏差，写清"我验证了/没验证什么"</text>
+  </g>
+
+  <text x="340" y="244" font-size="10.5" fill="#666" text-anchor="middle">复现不是"抄代码"，是验证结论在你环境下是否成立——这是科研诚信与能力底线</text>
+</svg>

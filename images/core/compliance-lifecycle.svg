@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 280" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+  <rect width="680" height="280" fill="#ffffff"/>
+  <text x="340" y="26" font-size="17" font-weight="700" text-anchor="middle" fill="#1a1a2e">AI 合规生命周期（闭环管理）</text>
+
+  <g font-size="11.5">
+    <rect x="20" y="70" width="120" height="60" rx="8" fill="#eaf2fb" stroke="#2980b9"/>
+    <text x="80" y="95" text-anchor="middle" fill="#1b4f72" font-weight="600">① 盘点</text>
+    <text x="80" y="113" text-anchor="middle" fill="#1b4f72">Inventory</text>
+    <text x="80" y="127" text-anchor="middle" fill="#1b4f72">识别所有 AI 系统</text>
+
+    <rect x="162" y="70" width="120" height="60" rx="8" fill="#fff4e0" stroke="#d68910"/>
+    <text x="222" y="95" text-anchor="middle" fill="#7e5109" font-weight="600">② 分类</text>
+    <text x="222" y="113" text-anchor="middle" fill="#7e5109">Classify</text>
+    <text x="222" y="127" text-anchor="middle" fill="#7e5109">定风险级/法域</text>
+
+    <rect x="304" y="70" width="120" height="60" rx="8" fill="#fdecea" stroke="#c0392b"/>
+    <text x="364" y="95" text-anchor="middle" fill="#7b241c" font-weight="600">③ 评估</text>
+    <text x="364" y="113" text-anchor="middle" fill="#7b241c">Assess</text>
+    <text x="364" y="127" text-anchor="middle" fill="#7b241c">对抗/隐私/偏见</text>
+
+    <rect x="446" y="70" width="120" height="60" rx="8" fill="#e8f8f5" stroke="#16a085"/>
+    <text x="506" y="95" text-anchor="middle" fill="#0e6655" font-weight="600">④ 控制</text>
+    <text x="506" y="113" text-anchor="middle" fill="#0e6655">Control</text>
+    <text x="506" y="127" text-anchor="middle" fill="#0e6655">护栏/标识/人审</text>
+
+    <rect x="588" y="70" width="72" height="60" rx="8" fill="#f4ecf7" stroke="#8e44ad"/>
+    <text x="624" y="95" text-anchor="middle" fill="#6c3483" font-weight="600">⑤ 审计</text>
+    <text x="624" y="113" text-anchor="middle" fill="#6c3483">Audit</text>
+    <text x="624" y="127" text-anchor="middle" fill="#6c3483">记录/复盘</text>
+  </g>
+
+  <line x1="140" y1="100" x2="160" y2="100" stroke="#444" stroke-width="1.5" marker-end="url(#e)"/>
+  <line x1="282" y1="100" x2="302" y2="100" stroke="#444" stroke-width="1.5" marker-end="url(#e)"/>
+  <line x1="424" y1="100" x2="444" y2="100" stroke="#444" stroke-width="1.5" marker-end="url(#e)"/>
+  <line x1="566" y1="100" x2="586" y2="100" stroke="#444" stroke-width="1.5" marker-end="url(#e)"/>
+  <!-- loop back -->
+  <path d="M624,130 C624,200 80,200 80,132" fill="none" stroke="#aaa" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#e)"/>
+
+  <defs>
+    <marker id="e" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#444"/>
+    </marker>
+  </defs>
+  <text x="340" y="250" font-size="10.5" fill="#666" text-anchor="middle">第 ③ 步的"评估"正是模块 J/K 的活：对抗鲁棒测试、红队、隐私/偏见测量——合规把安全技术变成强制项</text>
+  <text x="340" y="268" font-size="10.5" fill="#666" text-anchor="middle">文档化贯穿全程：EU AI Act 罚则之下，"无法证明合规"即违规</text>
+</svg>
