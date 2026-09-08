@@ -29,7 +29,7 @@
 <meta property="og:image" content="https://happy-clown123.github.io/images/core/attack-taxonomy.svg">
 <meta property="og:image" content="https://happy-clown123.github.io/images/core/adv-training.svg">
 <meta property="article:published_time" content="2026-08-30T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-08-31T07:46:04.239Z">
+<meta property="article:modified_time" content="2026-09-08T02:59:09.973Z">
 <meta property="article:author" content="KachaKacha">
 <meta property="article:tag" content="CIFAR10">
 <meta property="article:tag" content="FGSM">
@@ -456,7 +456,7 @@ mjx-container[display="true"] + br {
         
         
         
-          165 分钟
+          167 分钟
         
       </span>
     
@@ -1019,10 +1019,22 @@ x^{(t+1)} = \Pi_{B_\varepsilon(x)}\Big(x^{(t)} + \alpha \cdot \text{sign}!\big(\
 </ul>
 <hr>
 <h2 id="13-与主线的连接"><a href="#13-与主线的连接" class="headerlink" title="13 与主线的连接"></a>13 与主线的连接</h2><ul>
-<li><strong>→ 模块 K §2 prompt injection</strong>：同构关系。对抗样本 = 图像上的像素扰动 → 错误分类；prompt injection = 文本里的 token 扰动 → 错误指令。共同的骨架是「输入 → 扰动 → 错误输出」。你在 J 学的威胁模型三要素（知识/目标/预算）直接平移：攻击者知识 = 是否知道系统 prompt；目标 = 越狱 / 指令劫持；预算 = 字符数、日志可见性约束。</li>
-<li><strong>→ 模块 K §4 RAG 投毒</strong>：知识库注入 = “检索库版的 poisoning”。J 的 backdoor 概念（平时正常、触发时定向）对应 RAG 场景里”文档里藏毒、检索命中即生效”。</li>
-<li><strong>→ 模块 K §5 评估</strong>：你在 J 学的「鲁棒准确率 + 干净准确率 + 攻击 + ε」四件套，就是 LLM 安全评估（越狱成功率、注入成功率 vs 正常任务准确率）的同款方法论。</li>
-<li><strong>→ 模块 M（红队）</strong>：J 的对抗样本生成就是模型红队的核心动作之一；Auto-ART / Garak 在 M 会变成你的主力工具。</li>
+<li><p><strong>→ 模块 K §2 prompt injection</strong>：同构关系。对抗样本 = 图像上的像素扰动 → 错误分类；prompt injection = 文本里的 token 扰动 → 错误指令。共同的骨架是「输入 → 扰动 → 错误输出」。你在 J 学的威胁模型三要素（知识/目标/预算）直接平移：攻击者知识 = 是否知道系统 prompt；目标 = 越狱 / 指令劫持；预算 = 字符数、日志可见性约束。</p>
+</li>
+<li><p><strong>→ 模块 K §4 RAG 投毒</strong>：知识库注入 = “检索库版的 poisoning”。J 的 backdoor 概念（平时正常、触发时定向）对应 RAG 场景里”文档里藏毒、检索命中即生效”。</p>
+</li>
+<li><p><strong>→ 模块 K §5 评估</strong>：你在 J 学的「鲁棒准确率 + 干净准确率 + 攻击 + ε」四件套，就是 LLM 安全评估（越狱成功率、注入成功率 vs 正常任务准确率）的同款方法论。</p>
+</li>
+<li><p><strong>→ 模块 M（红队）</strong>：J 的对抗样本生成就是模型红队的核心动作之一；Auto-ART / Garak 在 M 会变成你的主力工具。</p>
+</li>
+<li><p><strong>→ K 靶场实战（反向索引）</strong>：J 的知识点在 K 的 25 项靶场清单里有对应练习，<strong>学完本节即可去打</strong>，不必等 K 学完：</p>
+<ul>
+<li>§3.6 CLIP 多模态对抗 → K 靶场第 22 项「对抗样本注入」（★5）</li>
+<li>§4.2 Backdoor → K 靶场第 11 项「模型后门触发」（★5，配 <code>labs/j03_backdoor_digits.py</code>）</li>
+<li>§5.1 模型窃取 / 推断 → K 靶场第 7 项「训练数据泄露」（★3，用 garak 自动扫）</li>
+</ul>
+<p>完整清单与免费平替见 <code>03-core/llm-security/llm-security.md</code> §K-靶场；按难度推进的顺序见同节「靶场难度阶梯」。</p>
+</li>
 </ul>
 <blockquote>
 <p><strong>下一步</strong>：切到模块 K（大模型安全），先看 prompt injection——你会发现它等价于”文本版对抗样本（evasion）”，同样的 <code>输入 → 扰动 → 错误输出</code> 结构，只是输入空间从像素变成了 token。</p>
@@ -1341,9 +1353,9 @@ x^{(t+1)} = \Pi_{B_\varepsilon(x)}\Big(x^{(t)} + \alpha \cdot \text{sign}!\big(\
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2026/08/31/L-ai-driven-security/" title="用 AI 做安全（L 模块）">
+                      <a href="/2026/08/31/E-pytorch/" title="PyTorch 实操（E 模块）">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">用 AI 做安全（L 模块）</span>
+                        <span class="hidden-mobile">PyTorch 实操（E 模块）</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -1351,8 +1363,8 @@ x^{(t+1)} = \Pi_{B_\varepsilon(x)}\Big(x^{(t)} + \alpha \cdot \text{sign}!\big(\
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2026/08/31/K-llm-security/" title="大模型安全（K 模块）">
-                        <span class="hidden-mobile">大模型安全（K 模块）</span>
+                      <a href="/2026/08/31/I-re/" title="逆向工程基础（I 模块）">
+                        <span class="hidden-mobile">逆向工程基础（I 模块）</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

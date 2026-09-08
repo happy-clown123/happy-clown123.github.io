@@ -27,7 +27,7 @@
 <meta property="og:description" content="模块 K：大模型安全（LLM Security） 定位：研究大模型本身的安全问题——prompt injection &#x2F; jailbreak &#x2F; RAG 投毒 &#x2F; Agent 安全，是 2025-26 最热、最贴你考研方向的交叉点。前置：模块 J（对抗 ML，建立”文本版对抗样本”直觉）｜ 后继：模块 L（用 AI 做安全，副线）及格线：Gandalf 8 关全通 + 能用 garak 扫出一个模">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-08-30T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-08-31T07:46:04.670Z">
+<meta property="article:modified_time" content="2026-09-08T02:59:10.014Z">
 <meta property="article:author" content="KachaKacha">
 <meta property="article:tag" content="Agent安全">
 <meta property="article:tag" content="Jailbreak">
@@ -441,7 +441,7 @@ mjx-container[display="true"] + br {
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          18k 字
+          19k 字
         
       </span>
     
@@ -452,7 +452,7 @@ mjx-container[display="true"] + br {
         
         
         
-          150 分钟
+          155 分钟
         
       </span>
     
@@ -1149,6 +1149,56 @@ mjx-container[display="true"] + br {
 <blockquote>
 <p><strong>系统化的实战演练教材</strong>：本清单是”打点”，若想看”一次完整 AI 红队交战怎么从头打到尾”，去读 M 模块主参考课程《AI Red 攻防指南》（OffSec AI-300 中文翻译版，本地资料）——它的第 3/4/5/7 章就是本清单各项的”剧本化动手版”，且自带 Capstone 实验（详见 <code>05-advanced/redteam/redteam.md</code> §12）。</p>
 </blockquote>
+<h3 id="靶场难度阶梯（按这个顺序打，别跳级）"><a href="#靶场难度阶梯（按这个顺序打，别跳级）" class="headerlink" title="靶场难度阶梯（按这个顺序打，别跳级）"></a>靶场难度阶梯（按这个顺序打，别跳级）</h3><p>上表是”按攻击面”组织的打点清单；这张是”按难度”的推进路线。两者交叉使用：先按难度推进建立手感，再回头按攻击面查漏。</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>靶场</th>
+<th>主打能力</th>
+<th>通关信号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1 入门</td>
+<td><a target="_blank" rel="noopener" href="https://gandalf.lakera.ai/">Gandalf baseline</a></td>
+<td>prompt injection 直觉</td>
+<td>8 关全过，能说清每关绕过的是哪类过滤</td>
+</tr>
+<tr>
+<td>2 加固</td>
+<td>Prompt Airlines / HackAPrompt</td>
+<td>编码混淆、多语言、心理诱导</td>
+<td>5 类以上绕过手法各成功一次</td>
+</tr>
+<tr>
+<td>3 综合</td>
+<td><a target="_blank" rel="noopener" href="https://crucible.dreadnode.io/">Dreadnode Crucible</a></td>
+<td>65+ 关覆盖 injection / model inversion / evasion</td>
+<td>打完 30 关以上，开始需要分类思考而非试错</td>
+</tr>
+<tr>
+<td>4 Agent 专项</td>
+<td><a target="_blank" rel="noopener" href="https://gandalf.lakera.ai/">Gandalf: Agent Breaker</a></td>
+<td>工具调用与多步推理注入</td>
+<td>能让 Agent 调用不该调用的工具</td>
+</tr>
+<tr>
+<td>5 Agent 深水</td>
+<td><a target="_blank" rel="noopener" href="https://github.com/ReversecLabs/damn-vulnerable-llm-agent">Damn Vulnerable LLM Agent</a></td>
+<td>工具滥用 / 权限逃逸 / 记忆污染</td>
+<td>三类漏洞各复现一次并写出防护方案</td>
+</tr>
+<tr>
+<td>6 实战检验</td>
+<td><a target="_blank" rel="noopener" href="https://aivillage.org/">AI Village @ DEF CON</a></td>
+<td>年度 CTF，贴近真实场景</td>
+<td>能独立完成 3 题以上，或看懂官方 writeup 的攻击链</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>第 4–5 阶段是<strong>当前最缺人的方向</strong>，也是 K 模块与 Agent 安全的接口——打完这两档，前面”常见误区”第 1 条（Agent 安全是 LLM 安全的延伸）才会有实感。</p>
+</blockquote>
 <hr>
 <h2 id="3-常见误区"><a href="#3-常见误区" class="headerlink" title="3 常见误区"></a>3 常见误区</h2><ol>
 <li><p><strong>很多人以为 Agent 安全是 LLM 安全之外的另一个领域，其实</strong>它是 LLM 安全的延伸——继承 prompt injection 所有老问题，但危害出口从”说什么”变成”借工具做了什么”（调了恶意 API、转了账、改了系统）。</p>
@@ -1612,9 +1662,9 @@ mjx-container[display="true"] + br {
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2026/08/31/J-adversarial-ml/" title="对抗机器学习（J 模块）">
+                      <a href="/2026/08/31/F-llm/" title="Transformer 与 LLM 基础（F 模块）">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">对抗机器学习（J 模块）</span>
+                        <span class="hidden-mobile">Transformer 与 LLM 基础（F 模块）</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -1622,8 +1672,8 @@ mjx-container[display="true"] + br {
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2026/08/31/P-privacy/" title="数据隐私（P 模块）">
-                        <span class="hidden-mobile">数据隐私（P 模块）</span>
+                      <a href="/2026/08/31/G-netsec/" title="网络安全基础（G 模块）">
+                        <span class="hidden-mobile">网络安全基础（G 模块）</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
