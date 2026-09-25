@@ -19,15 +19,15 @@
   <meta name="author" content="KachaKacha">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Pandas 跟着敲：每段代码直接跑，看输出，再想”换条件结果变不变”。默认环境：本机 WSL（Ubuntu）。先确认 pandas 已装：  12pip install pandas        # 个人环境直接装；共享服务器务必先激活自己的 venv&#x2F;conda 再装python -c &quot;import pandas; print(pandas.__version__)&quot;   # 能打印版本即">
+    <meta name="description" content="Pandas 本文行动导航：把本文示例整理成一张 10–20 行的模拟访问日志；完成过滤后找出失败请求，完成 groupby 后统计每个 IP 的请求数&#x2F;失败率，完成缺失值后解释删除与填充的影响。产物保存为代码和 CSV，随后在 L01 中观察“特征处理如何影响安全检测器”。   跟着敲：每段代码两种跑法都行，推荐法 A边敲边看：  法 A（推荐）：开交互解释器 python（或 python3；">
 <meta property="og:type" content="article">
 <meta property="og:title" content="pandas 笔记">
 <meta property="og:url" content="https://happy-clown123.github.io/2026/07/27/B-Pandas/index.html">
 <meta property="og:site_name" content="KachaKacha的空间">
-<meta property="og:description" content="Pandas 跟着敲：每段代码直接跑，看输出，再想”换条件结果变不变”。默认环境：本机 WSL（Ubuntu）。先确认 pandas 已装：  12pip install pandas        # 个人环境直接装；共享服务器务必先激活自己的 venv&#x2F;conda 再装python -c &quot;import pandas; print(pandas.__version__)&quot;   # 能打印版本即">
+<meta property="og:description" content="Pandas 本文行动导航：把本文示例整理成一张 10–20 行的模拟访问日志；完成过滤后找出失败请求，完成 groupby 后统计每个 IP 的请求数&#x2F;失败率，完成缺失值后解释删除与填充的影响。产物保存为代码和 CSV，随后在 L01 中观察“特征处理如何影响安全检测器”。   跟着敲：每段代码两种跑法都行，推荐法 A边敲边看：  法 A（推荐）：开交互解释器 python（或 python3；">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-07-26T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-07-27T02:53:07.484Z">
+<meta property="article:modified_time" content="2026-09-25T16:32:37.346Z">
 <meta property="article:author" content="KachaKacha">
 <meta property="article:tag" content="pandas">
 <meta name="twitter:card" content="summary_large_image">
@@ -438,7 +438,7 @@ mjx-container[display="true"] + br {
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.8k 字
+          3k 字
         
       </span>
     
@@ -449,7 +449,7 @@ mjx-container[display="true"] + br {
         
         
         
-          15 分钟
+          26 分钟
         
       </span>
     
@@ -494,26 +494,66 @@ mjx-container[display="true"] + br {
               <div class="markdown-body">
                 
                 <h1 id="Pandas"><a href="#Pandas" class="headerlink" title="Pandas"></a>Pandas</h1><blockquote>
-<p>跟着敲：每段代码直接跑，看输出，再想”换条件结果变不变”。<br>默认环境：本机 WSL（Ubuntu）。先确认 pandas 已装：</p>
+<p><strong>本文行动导航</strong>：把本文示例整理成一张 10–20 行的模拟访问日志；完成过滤后找出失败请求，完成 <code>groupby</code> 后统计每个 IP 的请求数/失败率，完成缺失值后解释删除与填充的影响。产物保存为代码和 CSV，随后在 L01 中观察“特征处理如何影响安全检测器”。</p>
+</blockquote>
+<blockquote>
+<p>跟着敲：每段代码两种跑法都行，推荐<strong>法 A</strong>边敲边看：</p>
+<ul>
+<li><strong>法 A（推荐）</strong>：开交互解释器 <code>python</code>（或 <code>python3</code>；想要高亮/补完可 <code>pip install ipython</code> 后用 <code>ipython</code>，非必须）→ 直接粘贴每段代码 → 立刻看输出 → 改条件再跑。最贴合”看输出、想变化”的学法。</li>
+<li><strong>法 B（写文件）</strong>：把代码存成 <code>pandas_lab.py</code>，<code>python pandas_lab.py</code> 运行；适合 §4/§6 多行演练，方便反复跑、留档。练习脚本建议放 <code>~/py-lab</code>（自己建，别用 /tmp，也别和 linux 的 /tmp/linux-lab 混）：<code>mkdir -p ~/py-lab &amp;&amp; cd ~/py-lab</code>。<br>默认环境：本机 WSL（Ubuntu）。先确认 pandas 已装（个人环境直接装；共享服务器务必先激活自己的 venv/conda 再装）：</li>
+</ul>
 </blockquote>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cmake">pip <span class="hljs-keyword">install</span> pandas        <span class="hljs-comment"># 个人环境直接装；共享服务器务必先激活自己的 venv/conda 再装</span><br>python -c <span class="hljs-string">"import pandas; print(pandas.__version__)"</span>   <span class="hljs-comment"># 能打印版本即 OK</span><br></code></pre></td></tr></table></figure>
+
 <blockquote>
 <p>安全味贯穿：把”服务器访问日志”当成 DataFrame 来过滤、统计、分组——这正是蓝队日常。</p>
 </blockquote>
 <h2 id="1-创建与读取"><a href="#1-创建与读取" class="headerlink" title="1 创建与读取"></a>1 创建与读取</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd<br><br><span class="hljs-comment"># 直接用字典造一张表（像多条访问记录）</span><br>df = pd.DataFrame({<br>    <span class="hljs-string">"ip"</span>:      [<span class="hljs-string">"10.0.0.1"</span>, <span class="hljs-string">"10.0.0.2"</span>, <span class="hljs-string">"10.0.0.1"</span>, <span class="hljs-string">"192.168.1.9"</span>],<br>    <span class="hljs-string">"method"</span>:  [<span class="hljs-string">"GET"</span>, <span class="hljs-string">"POST"</span>, <span class="hljs-string">"GET"</span>, <span class="hljs-string">"POST"</span>],<br>    <span class="hljs-string">"status"</span>:  [<span class="hljs-number">200</span>, <span class="hljs-number">403</span>, <span class="hljs-number">200</span>, <span class="hljs-number">500</span>],<br>    <span class="hljs-string">"bytes"</span>:   [<span class="hljs-number">1200</span>, <span class="hljs-number">0</span>, <span class="hljs-number">800</span>, <span class="hljs-number">2048</span>],<br>})<br><span class="hljs-built_in">print</span>(df)<br><span class="hljs-built_in">print</span>(df.shape)                    <span class="hljs-comment"># (4, 4)  →  (行数, 列数)</span><br></code></pre></td></tr></table></figure>
-<p>真实场景通常用 <code>pd.read_csv("access.log")</code> 直接读日志文件。</p>
+
+<p>只有日志本身是 CSV 格式时才能直接用 <code>pd.read_csv("access.log")</code>；JSONL 可用 <code>pd.read_json(..., lines=True)</code>，服务器原始文本日志需先按实际格式解析。扩展名 <code>.log</code> 不决定文件格式。</p>
+<blockquote>
+<p>💡 DataFrame = 一张带列名的二维表；每列有自己的 dtype。读入后核对 <code>dtypes</code>、行数与关键字段；状态码读成字符串时，比较操作可能报错或不符合预期。</p>
+</blockquote>
 <h2 id="2-查看与选择"><a href="#2-查看与选择" class="headerlink" title="2 查看与选择"></a>2 查看与选择</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">print</span>(df.head(<span class="hljs-number">2</span>))                 <span class="hljs-comment"># 看前 2 行</span><br><span class="hljs-built_in">print</span>(df[<span class="hljs-string">"ip"</span>])                    <span class="hljs-comment"># 取单列（返回 Series）</span><br><span class="hljs-built_in">print</span>(df[[<span class="hljs-string">"ip"</span>, <span class="hljs-string">"status"</span>]])      <span class="hljs-comment"># 取多列</span><br><br><span class="hljs-built_in">print</span>(df.loc[<span class="hljs-number">0</span>])                  <span class="hljs-comment"># 按"标签"取第 0 行</span><br><span class="hljs-built_in">print</span>(df.iloc[<span class="hljs-number">0</span>])                 <span class="hljs-comment"># 按"位置"取第 0 行</span><br><span class="hljs-built_in">print</span>(df.iloc[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>])             <span class="hljs-comment"># 第 0 行第 1 列的值 → 'GET'</span><br></code></pre></td></tr></table></figure>
+
 <p><code>loc</code> 按索引标签、<code>iloc</code> 按整数位置——别混。</p>
+<blockquote>
+<p>💡 标签（loc）是行叫什么名字，位置（iloc）是第几个（从 0 数）。两者偶尔不同，混淆时优先用 <code>iloc</code>，最不容易出错。</p>
+</blockquote>
 <h2 id="3-条件过滤（安全核心操作）"><a href="#3-条件过滤（安全核心操作）" class="headerlink" title="3 条件过滤（安全核心操作）"></a>3 条件过滤（安全核心操作）</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 找出所有失败/异常的请求</span><br>bad = df[df[<span class="hljs-string">"status"</span>] &gt;= <span class="hljs-number">400</span>]<br><span class="hljs-built_in">print</span>(bad)<br><br><span class="hljs-comment"># 找出某个 IP 的全部记录</span><br>suspect = df[df[<span class="hljs-string">"ip"</span>] == <span class="hljs-string">"10.0.0.1"</span>]<br><span class="hljs-built_in">print</span>(suspect)<br></code></pre></td></tr></table></figure>
+
 <p>追问：怎么选出”<code>method</code> 是 POST <strong>且</strong> <code>status</code> 是 403”的记录？（提示：用 <code>&amp;</code> 连接两个条件，每个条件加括号）</p>
+<blockquote>
+<p>💡 <code>df["status"] &gt;= 400</code> 先算出一串 True/False（布尔掩码），再用它筛行。多条件必须用 <code>&amp;</code>/<code>|</code> 且每个加括号：<code>(条件1) &amp; (条件2)</code>——因为 Python 里 <code>and</code>/<code>or</code> 和位运算优先级不同，不加括号会报错或结果错。</p>
+</blockquote>
 <h2 id="4-分组聚合（统计攻击来源）"><a href="#4-分组聚合（统计攻击来源）" class="headerlink" title="4 分组聚合（统计攻击来源）"></a>4 分组聚合（统计攻击来源）</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 按 IP 统计：每个来源出现了几次、平均返回多少字节</span><br>g = df.groupby(<span class="hljs-string">"ip"</span>).agg(<br>    count=(<span class="hljs-string">"status"</span>, <span class="hljs-string">"size"</span>),<br>    avg_bytes=(<span class="hljs-string">"bytes"</span>, <span class="hljs-string">"mean"</span>),<br>)<br><span class="hljs-built_in">print</span>(g)<br><br><span class="hljs-comment"># 只看被拒绝(403)的次数，按 IP 排个序</span><br>denied = df[df[<span class="hljs-string">"status"</span>] == <span class="hljs-number">403</span>].groupby(<span class="hljs-string">"ip"</span>).size().sort_values(ascending=<span class="hljs-literal">False</span>)<br><span class="hljs-built_in">print</span>(denied)<br></code></pre></td></tr></table></figure>
+
 <p>蓝队直觉：出现次数异常高、或 403/500 密集的 IP，优先排查。</p>
+<blockquote>
+<p>💡 <code>groupby</code> 是”先按某列分组 → 每组各自统计 → 拼回一张结果表”。蓝队用它数”每个 IP 干了多少次”，谁异常高谁优先查。</p>
+</blockquote>
 <h2 id="5-缺失值与去重"><a href="#5-缺失值与去重" class="headerlink" title="5 缺失值与去重"></a>5 缺失值与去重</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">print</span>(df.isna().<span class="hljs-built_in">sum</span>())           <span class="hljs-comment"># 每列缺失值计数</span><br>df2 = df.dropna()                <span class="hljs-comment"># 丢掉含缺失的行</span><br><span class="hljs-built_in">print</span>(df.drop_duplicates())      <span class="hljs-comment"># 去重（重复日志条目）</span><br></code></pre></td></tr></table></figure>
+
 <p>日志里常有空字段，分析前先看清缺失情况。</p>
-<h2 id="6-简单特征工程"><a href="#6-简单特征工程" class="headerlink" title="6 简单特征工程"></a>6 简单特征工程</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 加一列：是否异常（status &gt;= 400 记为 1，否则 0）</span><br>df[<span class="hljs-string">"is_error"</span>] = (df[<span class="hljs-string">"status"</span>] &gt;= <span class="hljs-number">400</span>).astype(<span class="hljs-built_in">int</span>)<br><span class="hljs-built_in">print</span>(df[[<span class="hljs-string">"ip"</span>, <span class="hljs-string">"status"</span>, <span class="hljs-string">"is_error"</span>]])<br><br><span class="hljs-comment"># 按 IP 汇总"异常次数"</span><br><span class="hljs-built_in">print</span>(df.groupby(<span class="hljs-string">"ip"</span>)[<span class="hljs-string">"is_error"</span>].<span class="hljs-built_in">sum</span>())<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>💡 日志常有空字段或重复的脏数据，<code>isna().sum()</code> 先看缺多少，<code>dropna()</code>/<code>drop_duplicates()</code> 再清理，否则后面的统计会偏。</p>
+</blockquote>
+<h2 id="6-简单特征工程"><a href="#6-简单特征工程" class="headerlink" title="6 简单特征工程"></a>6 简单特征工程</h2><p>删除空值和重复行是分析决策：两个相同 IP、状态码的请求可能是真实重复行为，不能随手去掉。应优先用 <code>request_id</code> 等业务唯一键判断重复，并记录清理前后的行数。</p>
+<blockquote>
+<p><strong>学到这里立刻做</strong>：给示例增加一条完全相同的请求和一条缺失状态码的请求，分别比较“保留”“删除”“标记未知”三种处理对请求数、失败数、失败率的影响。先写分母口径：所有请求，还是仅有已知状态码的请求？400/500 表示请求失败，不能直接当成恶意攻击标签；误把错误码当真值会污染后续 L01 的评测。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 加一列：是否异常（status &gt;= 400 记为 1，否则 0）</span><br>df[<span class="hljs-string">"is_error"</span>] = (df[<span class="hljs-string">"status"</span>] &gt;= <span class="hljs-number">400</span>).astype(<span class="hljs-built_in">int</span>)<br><span class="hljs-built_in">print</span>(df[[<span class="hljs-string">"ip"</span>, <span class="hljs-string">"status"</span>, <span class="hljs-string">"is_error"</span>]])<br><br><span class="hljs-comment"># 按 IP 汇总"异常次数"</span><br><span class="hljs-built_in">print</span>(df.groupby(<span class="hljs-string">"ip"</span>)[<span class="hljs-string">"is_error"</span>].<span class="hljs-built_in">sum</span>())<br></code></pre></td></tr></table></figure>
+
 <p>这一步把原始日志变成”每 IP 的异常计数”——已经是一张可喂给检测模型的特征表了。</p>
+<blockquote>
+<p>💡 <code>(df["status"] &gt;= 400).astype(int)</code> 把”是否异常”从布尔变成 0/1 数字列——这就是把文字日志转成”模型能吃的数字特征”的关键一步。</p>
+</blockquote>
 <h2 id="7-与-numpy-打通"><a href="#7-与-numpy-打通" class="headerlink" title="7 与 numpy 打通"></a>7 与 numpy 打通</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">print</span>(df[[<span class="hljs-string">"bytes"</span>]].to_numpy())  <span class="hljs-comment"># DataFrame 的列 → numpy 数组，送模型前常用</span><br></code></pre></td></tr></table></figure>
+
 <p>pandas 负责”读表/清洗/分组”，numpy 负责”数值计算”，两者接力。</p>
+<blockquote>
+<p>💡 模型（PyTorch / sklearn）吃的是 numpy 数组，所以清洗完用 <code>to_numpy()</code> 把列交出去。pandas 管”表”，numpy 管”算”，在 ML 流水线里接力。</p>
+</blockquote>
 <hr>
 <blockquote>
 <p>学完标准：能用 pandas 读表、按条件过滤、groupby 聚合、处理缺失值、造简单特征列，并把列转成 numpy 数组。够用就停——B 阶段（Python/Linux/Git/Numpy/Pandas）到此收口，直奔模块 C（经典机器学习）。</p>

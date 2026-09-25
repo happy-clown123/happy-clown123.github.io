@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 360" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 360" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">Agent 分层防御示意</title>
+  <desc id="desc">展示输入检查、规划与工具限制、执行约束和审计等不同位置的防御；各层需分别验证。</desc>
   <rect width="680" height="360" fill="#ffffff"/>
   <text x="340" y="28" font-size="17" font-weight="700" text-anchor="middle" fill="#1a1a2e">Agent 分层防御（PALADIN 思路，2026 生产级）</text>
   <text x="340" y="48" font-size="11" fill="#666" text-anchor="middle">各层是"乘法"关系：攻击者必须同时突破多层，门槛指数级上升</text>

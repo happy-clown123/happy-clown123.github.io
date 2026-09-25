@@ -1,4 +1,6 @@
-<svg width="520" height="440" viewBox="0 0 520 440" xmlns="http://www.w3.org/2000/svg">
+<svg role="img" aria-labelledby="title desc" width="520" height="440" viewBox="0 0 520 440" xmlns="http://www.w3.org/2000/svg">
+  <title id="title">二分类混淆矩阵</title>
+  <desc id="desc">行表示实际标签，列表示预测标签，四格为真负、假正、假负、真正，并列出准确率、精确率和召回率。</desc>
   <rect width="520" height="440" fill="#ffffff"/>
   <text x="260" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#222" text-anchor="middle">混淆矩阵 Confusion Matrix</text>
   <text x="58" y="252" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#555" text-anchor="middle" transform="rotate(-90 58 252)">实际 Actual</text>

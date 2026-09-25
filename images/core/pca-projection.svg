@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 420" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+<svg role="img" aria-labelledby="title desc" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 420" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+  <title id="title">PCA 投影与分类信息</title>
+  <desc id="desc">样本投影到主成分方向，提醒最大方差方向未必是保留类别区分信息最多的方向。</desc>
 <rect width="560" height="420" fill="#ffffff"/>
 <line x1="290.0" y1="20" x2="290.0" y2="370" stroke="#ddd" stroke-width="1"/>
 <line x1="60" y1="200.0" x2="520" y2="200.0" stroke="#ddd" stroke-width="1"/>

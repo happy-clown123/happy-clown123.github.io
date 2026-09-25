@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 360" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 360" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">LLM 应用架构与威胁面</title>
+  <desc id="desc">把用户输入、检索、模型与工具组成的数据流映射到不同攻击入口和受保护资产。</desc>
   <rect width="680" height="360" fill="#ffffff"/>
   <text x="340" y="28" font-size="17" font-weight="700" text-anchor="middle" fill="#1a1a2e">LLM 应用架构与威胁面（对照 OWASP LLM Top 10）</text>
 

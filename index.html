@@ -447,6 +447,334 @@ mjx-container[display="true"] + br {
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
+        <a href="/2026/09/26/K4-prompt-injection-playbook/" target="_self">
+          Prompt Injection 攻击手法与防御（脱敏版）
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2026/09/26/K4-prompt-injection-playbook/" target="_self">
+        <div>
+          Prompt Injection 攻击实战手册（Agent-Breaker 类关卡通用） 目标：认真读完本文件后，你下次遇到”让 AI Agent 做一件它不该做的事”这类红队/沙箱关卡，可以不借助 AI 自己完成。适用对象：Lakera Agent Breaker、Gandalf（prompt injection 游戏）、以及任何”Agent 会读取你可控外部内容”的评测/演练。定位：本文件是方
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2026-09-26 00:00" pubdate>
+              2026-09-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">AI安全学习</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA/" class="category-chain-item">实战靶场</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%AE%89%E5%85%A8/" class="category-chain-item">大模型安全</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Prompt-Injection/">#Prompt Injection</a>
+            
+              <a href="/tags/%E7%BA%A2%E9%98%9F/">#红队</a>
+            
+              <a href="/tags/%E6%94%BB%E5%87%BB%E6%89%8B%E6%B3%95/">#攻击手法</a>
+            
+              <a href="/tags/%E9%98%B2%E5%BE%A1/">#防御</a>
+            
+              <a href="/tags/%E9%9D%B6%E5%9C%BA/">#靶场</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2026/09/26/K2-agent-security/" target="_self">
+          Agent 安全专题（K 模块深入）
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2026/09/26/K2-agent-security/" target="_self">
+        <div>
+          Agent 安全专题（Agent Security Engineering） 定位：作为模块 K 的深入子篇，把 prompt injection 扩展到“有工具、有记忆、能改变外部状态”的 Agent 系统。前置：模块 F（LLM 基础）、G/H（网络与 Web 信任边界）、K §2.1（prompt injection）｜后继：模块 M（红队评测）、O（论文复现）。及格线：能为一个带 tool
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2026-09-26 00:00" pubdate>
+              2026-09-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">AI安全学习</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97/" class="category-chain-item">核心模块</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%AE%89%E5%85%A8/" class="category-chain-item">大模型安全</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Agent%E5%AE%89%E5%85%A8/">#Agent安全</a>
+            
+              <a href="/tags/MCP/">#MCP</a>
+            
+              <a href="/tags/%E5%B7%A5%E5%85%B7%E5%AE%89%E5%85%A8/">#工具安全</a>
+            
+              <a href="/tags/%E8%AE%B0%E5%BF%86%E6%8A%95%E6%AF%92/">#记忆投毒</a>
+            
+              <a href="/tags/%E5%A8%81%E8%83%81%E6%A8%A1%E5%9E%8B/">#威胁模型</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2026/09/26/K3-lakera-trippy-planner/" target="_self">
+          Lakera Agent Breaker 实战笔记：间接 Prompt Injection（脱敏版）
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2026/09/26/K3-lakera-trippy-planner/" target="_self">
+        <div>
+          Lakera Agent Breaker — Trippy Planner (Level 1) 实战笔记 定位：间接 prompt injection 红队演练。目标是一个在沙箱里抓取网页的 AI 旅行助手，不是真实用户，属授权 AI 安全教育。攻击目标：在亚美尼亚 7 日行程里插入原样钓鱼句{{目标句：由关卡给定，须原样输出}}  1. 原理（为什么能成）LLM 分不清”数据”和”指令”。旅行助
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2026-09-26 00:00" pubdate>
+              2026-09-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">AI安全学习</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA/" class="category-chain-item">实战靶场</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/%E5%AE%9E%E6%88%98%E9%9D%B6%E5%9C%BA/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%AE%89%E5%85%A8/" class="category-chain-item">大模型安全</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Prompt-Injection/">#Prompt Injection</a>
+            
+              <a href="/tags/%E7%BA%A2%E9%98%9F/">#红队</a>
+            
+              <a href="/tags/Lakera/">#Lakera</a>
+            
+              <a href="/tags/%E9%97%B4%E6%8E%A5%E6%B3%A8%E5%85%A5/">#间接注入</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2026/09/26/O2-agent-security-career/" target="_self">
+          中国 Agent 安全就业判断与能力路径
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2026/09/26/O2-agent-security-career/" target="_self">
+        <div>
+          中国 Agent 安全就业判断（截至 2026-09-21） 使用动作：先完成本文阶段 A–D 和 Secure Agent 项目，再用 5–10 条仍有效的官方岗位重新做一次技能词统计。把每项 JD 要求映射到“课程知识、可运行代码、威胁模型、评测报告”四类证据；招聘信息变化快，投递前回官方页面核验。   定位：把“想做 Agent 安全”翻译成国内实际岗位名、能力证据与可执行学习路径。数据边界
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2026-09-26 00:00" pubdate>
+              2026-09-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">AI安全学习</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97/" class="category-chain-item">核心模块</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97/%E7%A7%91%E7%A0%94%E6%96%B9%E6%B3%95/" class="category-chain-item">科研方法</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Agent%E5%AE%89%E5%85%A8/">#Agent安全</a>
+            
+              <a href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/">#职业规划</a>
+            
+              <a href="/tags/%E5%B0%B1%E4%B8%9A/">#就业</a>
+            
+              <a href="/tags/%E8%83%BD%E5%8A%9B%E8%AF%81%E6%8D%AE/">#能力证据</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
         <a href="/2026/08/31/C-ml/" target="_self">
           经典机器学习（C 模块）
         </a>
@@ -455,7 +783,7 @@ mjx-container[display="true"] + br {
       
       <a class="index-excerpt index-excerpt__noimg" href="/2026/08/31/C-ml/" target="_self">
         <div>
-          经典机器学习（Classical Machine Learning） 定位：对抗攻击的本质是”利用 ML 模型的漏洞”——不懂 ML 基本原理，就不知道漏洞在哪。FGSM 攻击依赖损失函数  的梯度，你得先知道什么是损失函数、什么是训练，才能理解攻击怎么做。前置：模块 A（数学）、B（Python）｜ 后继：模块 D（深度学习）、J（对抗 ML）、L（副线：用 ML 做安全）及格线：能用 scik
+          经典机器学习（Classical Machine Learning） 本文行动导航：监督学习、指标和 PCA 三部分读完后分别回到 labs/ml01_digits_pipeline.py 找对应代码；先预测混淆矩阵和最易混淆数字，再运行验证。完成后阅读 J 模块 §1–§2，写出“普通测试误差”和“攻击者主动构造误差”的差别。   定位：对抗攻击的本质是”利用 ML 模型的漏洞”——不懂 ML
         </div>
       </a>
 
@@ -538,7 +866,7 @@ mjx-container[display="true"] + br {
       
       <a class="index-excerpt index-excerpt__noimg" href="/2026/08/31/D-dl/" target="_self">
         <div>
-          深度学习（Deep Learning） 定位：对抗攻击主要攻击的就是深度神经网络——理解 CNN、损失、反向传播，是读懂 FGSM/PGD/C&amp;W 攻击代码的前提。Carlini-Wagner 需要理解输出概率分布，没原理底子连”攻击代码为什么那样写”都看不懂。前置：模块 C（经典 ML）、A（数学：链式法则、Jacobian）｜ 后继：模块 E（PyTorch）、J（对抗 ML）及格线：
+          深度学习（Deep Learning） 本文行动导航：激活函数读完后手画两层网络；链式法则读完后先手算 dL/dw1、dL/dw2、dL/dx，再运行 labs/dl01_backprop_handcalc.py 与 autograd 对照。最后解释为什么训练取参数梯度，而 FGSM 取输入梯度。   定位：对抗攻击主要攻击的就是深度神经网络——理解 CNN、损失、反向传播，是读懂 FGSM/PG
         </div>
       </a>
 
@@ -619,7 +947,7 @@ mjx-container[display="true"] + br {
       
       <a class="index-excerpt index-excerpt__noimg" href="/2026/08/31/F-llm/" target="_self">
         <div>
-          Transformer 与 LLM 基础（Transformer &amp; LLM） 定位：你要研究 LLM 安全——不懂 Transformer 就不知道 RLHF 对齐在干什么、不知道 jailbreak 绕过的是哪一层。Prompt injection 攻击的是 system prompt 拼接机制，得先理解输入输出结构才能找到注入点。前置：模块 D（深度学习）、B（Python）｜ 后继
+          Transformer 与 LLM 基础（Transformer &amp; LLM） 定位：先理解模型如何读取上下文、产生下一 token，再研究输入如何影响行为。Prompt injection 涉及指令与外部数据的信任混淆；jailbreak 涉及模型及系统的安全行为，二者都不能仅凭某一层 attention 或 RLHF 解释。前置：模块 D（深度学习）、B（Python）｜ 后继：模块
         </div>
       </a>
 
@@ -700,7 +1028,7 @@ mjx-container[display="true"] + br {
       
       <a class="index-excerpt index-excerpt__noimg" href="/2026/08/31/K-llm-security/" target="_self">
         <div>
-          模块 K：大模型安全（LLM Security） 定位：研究大模型本身的安全问题——prompt injection / jailbreak / RAG 投毒 / Agent 安全，是 2025-26 最热、最贴你考研方向的交叉点。前置：模块 J（对抗 ML，建立”文本版对抗样本”直觉）｜ 后继：模块 L（用 AI 做安全，副线）及格线：Gandalf 8 关全通 + 能用 garak 扫出一个模
+          模块 K：大模型安全（LLM Security） 定位：学习 LLM 与其应用的安全边界——prompt injection、jailbreak、数据泄露、RAG 投毒与 Agent 工具安全。你的重点是“外部信息如何影响 Agent 的实际动作”。前置：基础 LLM/RAG 概念、Python 与 Web/API 权限；模块 J 用于补优化和评测知识，不必全部完成才进入 Agent 安全。后继：
         </div>
       </a>
 
@@ -781,7 +1109,7 @@ mjx-container[display="true"] + br {
       
       <a class="index-excerpt index-excerpt__noimg" href="/2026/08/31/G-netsec/" target="_self">
         <div>
-          网络安全基础（Network Security） 定位：理解攻击者视角——TCP 握手、DNS、HTTP/HTTPS 是所有安全人的通用词汇。你不需要深入，但要能听懂、能关联到 AI 安全。前置：无（可并行于任何模块）｜ 后继：模块 H（Web）、I（逆向）、J/K（主线需要网络上下文）及格线：能口述 HTTPS 握手（客户端发请求→服务器发证书→验证→协商对称密钥）与 DNS 逐级解析；跑通 g
+          网络安全基础（Network Security） 本文行动导航：TCP/HTTP/TLS/DNS 每节读完各画一张最小数据流；完成 TLS 与 DNS 后再运行 labs/g01_net_probe.py。网络探测只针对本机、本人资产或明确授权目标；验收物必须记录目标范围、解析结果、TLS 版本/证书和失败原因，不能背固定端口输出。   定位：理解攻击者视角——TCP 握手、DNS、HTTP/HT
         </div>
       </a>
 
@@ -862,7 +1190,7 @@ mjx-container[display="true"] + br {
       
       <a class="index-excerpt index-excerpt__noimg" href="/2026/08/31/E-pytorch/" target="_self">
         <div>
-          PyTorch 实操（PyTorch Hands-on） 定位：对抗样本实验的第一工具。不会 PyTorch，对抗 ML 实验就没法动手——官方 FGSM 教程就是你第一个 AI 安全实验，得懂 requires_grad、.backward() 才能跑通。前置：模块 D（深度学习）、B（Python）｜ 后继：模块 J（对抗 ML）、F（LLM）及格线：能跑通 pt01（torch 训练小网络
+          PyTorch 实操（PyTorch Hands-on） 本文行动导航：学完 autograd 后手写一次标量反传；学完训练循环后运行 labs/pt01_train_grad_save.py，核对 loss、梯度和模型存取。只有在能解释 train/eval、zero_grad/backward/step 后，才阅读 PyTorch 官方 FGSM 教程 并进入 J01。   定位：对抗样本实验
         </div>
       </a>
 
@@ -922,330 +1250,6 @@ mjx-container[display="true"] + br {
               <a href="/tags/autograd/">#autograd</a>
             
               <a href="/tags/SGD/">#SGD</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2026/08/31/J-adversarial-ml/" target="_self">
-          对抗机器学习（J 模块）
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2026/08/31/J-adversarial-ml/" target="_self">
-        <div>
-          模块 J：对抗机器学习（Adversarial Machine Learning） 定位：研究”AI 本身的安全问题”的算法硬核——攻击者怎么让模型做错事，防御者怎么堵漏洞。与模块 K（大模型安全）是路线的两条腿，交替前进：prompt injection 本质是”文本版对抗样本”，RAG 投毒本质是”检索库版的 poisoning”。前置：模块 D（深度学习基础：梯度、损失、backprop 直
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2026-08-31 00:00" pubdate>
-              2026-08-31
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">AI安全学习</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97/" class="category-chain-item">核心模块</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97/%E5%AF%B9%E6%8A%97%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">对抗机器学习</a>
-  
-  
-
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%AF%B9%E6%8A%97%E6%A0%B7%E6%9C%AC/">#对抗样本</a>
-            
-              <a href="/tags/FGSM/">#FGSM</a>
-            
-              <a href="/tags/PGD/">#PGD</a>
-            
-              <a href="/tags/%E5%AF%B9%E6%8A%97%E8%AE%AD%E7%BB%83/">#对抗训练</a>
-            
-              <a href="/tags/CIFAR10/">#CIFAR10</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2026/08/31/I-re/" target="_self">
-          逆向工程基础（I 模块）
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2026/08/31/I-re/" target="_self">
-        <div>
-          逆向工程基础（Reverse Engineering） 定位：理解别人写的代码在干什么。做对抗样本分析、模型攻击评估、恶意代码检测时，有时需要读二进制或别人的模型代码。前置：模块 G（网络）、B（Python/Linux）｜ 后继：模块 L（恶意代码检测）、M（红队）及格线：能用 Ghidra 打开一个编译好的 C 程序找到 main 并看懂它调用了什么；跑通 i01（单字节 XOR 破解）；能说
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2026-08-31 00:00" pubdate>
-              2026-08-31
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">AI安全学习</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80/" class="category-chain-item">安全基础</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" class="category-chain-item">逆向工程</a>
-  
-  
-
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/">#逆向工程</a>
-            
-              <a href="/tags/%E4%BA%8C%E8%BF%9B%E5%88%B6/">#二进制</a>
-            
-              <a href="/tags/ELF/">#ELF</a>
-            
-              <a href="/tags/PE/">#PE</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2026/08/31/N-compliance/" target="_self">
-          合规与治理（N 模块）
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2026/08/31/N-compliance/" target="_self">
-        <div>
-          模块 N：合规与法规（AI 治理） 定位：进阶模块。合规不是”法务的事”——它把模块 J/K 的安全技术变成强制要求。懂法规，才知道安全做到什么程度算”够”，也是考研/就业面试的高频考点。前置：模块 J/K（合规要求的技术动作就是它们）｜ 后继：模块 O（科研）、就业/考研面试及格线：说清 EU AI Act 四风险级与罚则、中国 2025 标识办法、NIST AI RMF 四函数；跑通 n01（
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2026-08-31 00:00" pubdate>
-              2026-08-31
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">AI安全学习</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97/" class="category-chain-item">核心模块</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97/%E5%90%88%E8%A7%84%E6%B2%BB%E7%90%86/" class="category-chain-item">合规治理</a>
-  
-  
-
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%90%88%E8%A7%84/">#合规</a>
-            
-              <a href="/tags/EU-AI-Act/">#EU AI Act</a>
-            
-              <a href="/tags/%E7%AE%97%E6%B3%95%E5%A4%87%E6%A1%88/">#算法备案</a>
-            
-              <a href="/tags/%E5%85%AC%E5%B9%B3%E6%80%A7/">#公平性</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2026/08/31/O-research/" target="_self">
-          科研与论文阅读（O 模块）
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2026/08/31/O-research/" target="_self">
-        <div>
-          模块 O：科研与论文阅读 定位：进阶模块 / 收口。前面 J/K/L/M/N 的知识，最终要落到”读得懂论文、复得了实验、写得出东西”——这是考研复试、进组做课题、发论文的核心能力。东南网安的导师最看重的就是这条。前置：模块 J/K（读论文的主题来源）｜ 后继：考研复试 / 进组课题 / 发论文及格线：能按三遍读法消化一篇 J/K 顶会论文并用 _meta/templates/paper-note
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2026-08-31 00:00" pubdate>
-              2026-08-31
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">AI安全学习</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97/" class="category-chain-item">核心模块</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/AI%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97/%E7%A7%91%E7%A0%94%E6%96%B9%E6%B3%95/" class="category-chain-item">科研方法</a>
-  
-  
-
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">#论文阅读</a>
-            
-              <a href="/tags/%E5%A4%8D%E7%8E%B0/">#复现</a>
-            
-              <a href="/tags/benchmark/">#benchmark</a>
             
           </div>
         

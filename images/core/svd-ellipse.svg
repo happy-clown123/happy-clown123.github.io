@@ -1,0 +1,24 @@
+<svg role="img" aria-labelledby="title desc" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300" font-family="sans-serif">
+  <title id="title">SVD 将单位圆映射为椭圆</title>
+  <desc id="desc">单位圆经矩阵变换成为椭圆，主半轴的长度由奇异值给出。</desc>
+  <rect width="420" height="300" fill="#ffffff"/>
+  <defs>
+    <marker id="ah2" markerWidth="10" markerHeight="8" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#333"/>
+    </marker>
+  </defs>
+  <!-- unit circle -->
+  <circle cx="100" cy="150" r="60" fill="none" stroke="#1f77b4" stroke-width="2.5"/>
+  <text x="100" y="232" text-anchor="middle" font-size="12" fill="#444">输入：单位圆</text>
+  <!-- arrow A -->
+  <line x1="175" y1="150" x2="225" y2="150" stroke="#333" stroke-width="2" marker-end="url(#ah2)"/>
+  <text x="200" y="138" text-anchor="middle" font-size="12" fill="#333">A = UΣVᵀ</text>
+  <!-- ellipse -->
+  <ellipse cx="320" cy="150" rx="85" ry="32" fill="none" stroke="#ff7f0e" stroke-width="2.5"/>
+  <text x="320" y="232" text-anchor="middle" font-size="12" fill="#444">输出：椭圆</text>
+  <!-- principal axes -->
+  <line x1="320" y1="150" x2="405" y2="150" stroke="#2ca02c" stroke-width="2.5" marker-end="url(#ah2)"/>
+  <line x1="320" y1="150" x2="320" y2="118" stroke="#2ca02c" stroke-width="2.5" marker-end="url(#ah2)"/>
+  <text x="345" y="142" font-size="12" fill="#2ca02c">σ₁</text>
+  <text x="328" y="112" font-size="12" fill="#2ca02c">σ₂</text>
+</svg>

@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 320" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 320" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">SQL 注入与参数化查询</title>
+  <desc id="desc">对比输入进入 SQL 字符串拼接后改变条件，以及参数绑定保持查询结构。</desc>
   <rect width="680" height="320" fill="#f7f8fa"/>
   <text x="20" y="26" font-size="16" font-weight="700" fill="#111827">SQL 注入：字符串拼接如何变成"永远为真"</text>
 

@@ -1,4 +1,6 @@
-<svg width="560" height="360" viewBox="0 0 560 360" xmlns="http://www.w3.org/2000/svg">
+<svg role="img" aria-labelledby="title desc" width="560" height="360" viewBox="0 0 560 360" xmlns="http://www.w3.org/2000/svg">
+  <title id="title">训练误差与验证误差示意</title>
+  <desc id="desc">比较模型复杂度或训练进程增加时的训练误差和验证误差，通过两条曲线识别欠拟合与过拟合。</desc>
   <rect width="560" height="360" fill="#ffffff"/>
   <text x="280" y="26" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#222" text-anchor="middle">过拟合：训练误差↓ 但验证误差↑</text>
   <line x1="70" y1="300" x2="520" y2="300" stroke="#888" stroke-width="1.5"/>

@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 300" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 300" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">ELF 与 PE 文件结构</title>
+  <desc id="desc">并列比较 Linux ELF 和 Windows PE 的文件头、代码、数据和导入信息。</desc>
   <rect width="680" height="300" fill="#f7f8fa"/>
   <text x="20" y="26" font-size="16" font-weight="700" fill="#111827">ELF（Linux）vs PE（Windows）结构对比</text>
 

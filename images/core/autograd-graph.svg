@@ -1,4 +1,6 @@
-<svg width="600" height="320" viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
+<svg role="img" aria-labelledby="title desc" width="600" height="320" viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
+  <title id="title">PyTorch 前向计算与自动求导</title>
+  <desc id="desc">输入经过乘法和平方损失，反向传播沿计算图返回梯度；叶子张量默认累积梯度，数值例子的输入梯度为六。</desc>
   <rect width="600" height="320" fill="#ffffff"/>
   <text x="300" y="26" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#222" text-anchor="middle">PyTorch 计算图与自动求导 autograd</text>
   <!-- forward nodes -->
@@ -20,7 +22,9 @@
   <text x="400" y="200" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#dc2626">∂L/∂y</text>
   <text x="200" y="200" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#dc2626">∂L/∂x → 存进 x.grad</text>
   <text x="500" y="200" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#555">L.backward() 触发</text>
-  <text x="300" y="250" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#555" text-anchor="middle">前向建图（黑色）→ .backward() 沿红箭头反传梯度 → 每个 requires_grad 节点得到 .grad</text>
+  <text x="300" y="250" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#555" text-anchor="middle">前向建图 → backward 沿红箭头反传 → 默认累积到需梯度的叶子张量</text>
+  <text x="300" y="278" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#555" text-anchor="middle">x=2, w=3, t=5：y=6，L=1，∂L/∂x=2(y−t)w=6</text>
+  <text x="300" y="301" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#555" text-anchor="middle">中间节点若要保留 .grad，先调用 retain_grad()</text>
   <defs>
     <marker id="fwd" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#888"/></marker>
     <marker id="bwd" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#dc2626"/></marker>

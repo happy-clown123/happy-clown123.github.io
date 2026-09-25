@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 380" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 380" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">法域与 AI 治理资料分类图</title>
+  <desc id="desc">按中国、欧盟、美国及其他地区区分法律、标准和自愿框架；欧盟栏按 2026 年现行修订提示条款与阶段日期，具体适用性仍须回官方原文核验。</desc>
   <rect width="680" height="380" fill="#ffffff"/>
   <text x="340" y="26" font-size="17" font-weight="700" text-anchor="middle" fill="#1a1a2e">主要法域 AI 监管框架速查（2025–2026）</text>
 
@@ -22,7 +24,7 @@
     <text x="20" y="128" fill="#333">网安法/数安法/</text>
     <text x="20" y="142" fill="#333">个保法(三法)</text>
     <text x="185" y="128" fill="#333">AI Act 2024/1689</text>
-    <text x="185" y="142" fill="#333">(全球首部全面法)</text>
+    <text x="185" y="142" fill="#333">(含 2026/1744 修订)</text>
     <text x="350" y="128" fill="#333">NIST AI RMF</text>
     <text x="350" y="142" fill="#333">(自愿, G/M/M/M)</text>
     <text x="515" y="128" fill="#333">ISO/IEC 42001</text>
@@ -30,8 +32,8 @@
 
     <text x="20" y="176" fill="#333">算法推荐规定</text>
     <text x="20" y="190" fill="#333">(2021)</text>
-    <text x="185" y="176" fill="#333">四风险级:禁/高/</text>
-    <text x="185" y="190" fill="#333">有限/最小</text>
+    <text x="185" y="176" fill="#333">按 Art.5/6/50、</text>
+    <text x="185" y="190" fill="#333">GPAI 与角色判定义务</text>
     <text x="350" y="176" fill="#333">EO 14110(Biden)</text>
     <text x="350" y="190" fill="#333">(2025-01 被撤)</text>
     <text x="515" y="176" fill="#333">韩国 AI 基本法</text>
@@ -39,30 +41,30 @@
 
     <text x="20" y="224" fill="#333">深度合成规定</text>
     <text x="20" y="238" fill="#333">(2022)</text>
-    <text x="185" y="224" fill="#333">高风险义务:</text>
-    <text x="185" y="238" fill="#333">合规评估+人审</text>
+    <text x="185" y="224" fill="#333">Annex III: 2027-12</text>
+    <text x="185" y="238" fill="#333">Annex I: 2028-08</text>
     <text x="350" y="224" fill="#333">改推促创新方针</text>
     <text x="350" y="238" fill="#333">(2025 新政)</text>
     <text x="515" y="224" fill="#333">日本 AI 推进法</text>
     <text x="515" y="238" fill="#333">(2025-06)</text>
 
     <text x="20" y="272" fill="#333">生成式AI暂行办法</text>
-    <text x="20" y="286" fill="#333">(2023,全球首部)</text>
-    <text x="185" y="272" fill="#333">罚款≤€35M或</text>
-    <text x="185" y="286" fill="#333">7%全球营收</text>
+    <text x="20" y="286" fill="#333">(2023-08 施行)</text>
+    <text x="185" y="272" fill="#333">罚款上限分档:</text>
+    <text x="185" y="286" fill="#333">7% / 3% / 1%</text>
     <text x="350" y="272" fill="#333"> </text>
     <text x="350" y="286" fill="#333"> </text>
     <text x="515" y="272" fill="#333">印度 DPDP+</text>
     <text x="515" y="286" fill="#333">deepfake 规则</text>
 
-    <text x="20" y="320" fill="#333">生成合成内容</text>
-    <text x="20" y="334" fill="#333">标识办法(2025-09)</text>
+    <text x="20" y="320" fill="#333">标识办法 +</text>
+    <text x="20" y="334" fill="#333">GB 45438-2025</text>
     <text x="185" y="320" fill="#333">域外管辖</text>
-    <text x="185" y="334" fill="#333">(output 在 EU 即适用)</text>
+    <text x="185" y="334" fill="#333">(范围与例外见 Art.2)</text>
     <text x="350" y="320" fill="#333"> </text>
     <text x="350" y="334" fill="#333"> </text>
     <text x="515" y="320" fill="#333">OWASP/ATLAS</text>
     <text x="515" y="334" fill="#333">(安全基线)</text>
   </g>
-  <text x="340" y="368" font-size="10.5" fill="#666" text-anchor="middle">共同点：都要求"风险分级 + 数据治理 + 透明/标识 + 人类监督 + 安全评估"，且都越来越把 AI 安全（对抗鲁棒等）纳入强制</text>
+  <text x="340" y="368" font-size="10.5" fill="#666" text-anchor="middle">按法域、对象、用途核查适用要求；法律义务、技术标准和自愿框架分别判断</text>
 </svg>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="390" viewBox="0 0 1200 390" role="img" aria-labelledby="title desc">
+<title id="title">研究证据链</title><desc id="desc">从冻结输入经检索和生成到实际观察，最后形成带边界的结论。每一阶段都不能跳过所需证据。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#52647a"/></marker></defs>
+<rect width="1200" height="390" rx="20" fill="#f4f7fb"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#172c46">
+<text x="36" y="49" font-size="27" font-weight="700">研究证据链：每一步都回答不同的问题</text>
+<g fill="#ffffff" stroke="#b5c5d8" stroke-width="2">
+<rect x="36" y="85" width="252" height="186" rx="14"/><rect x="328" y="85" width="252" height="186" rx="14"/>
+<rect x="620" y="85" width="252" height="186" rx="14"/><rect x="912" y="85" width="252" height="186" rx="14"/>
+</g>
+<g font-size="23" font-weight="700"><text x="56" y="124">1 固定输入</text><text x="348" y="124">2 记录处理</text><text x="640" y="124">3 保留观察</text><text x="932" y="124">4 限制结论</text></g>
+<g font-size="20"><text x="56" y="163">问题 / 语料 / 哈希</text><text x="56" y="198">模型 / 预算 / 判据</text><text x="56" y="235">开发集与测试集分开</text>
+<text x="348" y="163">检索排名与上下文</text><text x="348" y="198">生成输入与实际输出</text><text x="348" y="235">删除时是否重新检索</text>
+<text x="640" y="163">正确 / 错误 / 拒答</text><text x="640" y="198">逐例标注与分母</text><text x="640" y="235">保留负结果和异常</text>
+<text x="932" y="163">观察支持哪条假设</text><text x="932" y="198">哪些解释尚未排除</text><text x="932" y="235">何时需要补新对照</text></g>
+<g stroke="#52647a" stroke-width="3" marker-end="url(#arrow)"><path d="M292 177 H320"/><path d="M584 177 H612"/><path d="M876 177 H904"/></g>
+<rect x="36" y="297" width="1128" height="60" rx="12" fill="#e6eef8"/>
+<text x="57" y="334" font-size="21">检回 ≠ 采纳错误　｜　输出变化 ≠ 恶意证明　｜　单次小样本 ≠ 稳定成功率</text>
+</g></svg>

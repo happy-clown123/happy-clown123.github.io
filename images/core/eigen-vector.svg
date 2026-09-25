@@ -1,0 +1,28 @@
+<svg role="img" aria-labelledby="title desc" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300" font-family="sans-serif">
+  <title id="title">特征向量与线性变换</title>
+  <desc id="desc">特征向量在线性变换后仍沿原来的直线方向，特征值表示有符号的缩放倍数。</desc>
+  <rect width="420" height="300" fill="#ffffff"/>
+  <defs>
+    <marker id="ah" markerWidth="10" markerHeight="8" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#333"/>
+    </marker>
+  </defs>
+  <!-- left panel: eigenvector -->
+  <text x="120" y="28" text-anchor="middle" font-size="13" fill="#c0392b" font-weight="bold">特征向量 v</text>
+  <line x1="60" y1="250" x2="60" y2="40" stroke="#ccc"/>
+  <line x1="20" y1="250" x2="200" y2="250" stroke="#ccc"/>
+  <line x1="60" y1="250" x2="140" y2="150" stroke="#c0392b" stroke-width="2.5" marker-end="url(#ah)"/>
+  <line x1="60" y1="250" x2="180" y2="100" stroke="#c0392b" stroke-width="2.5" stroke-dasharray="5,4" marker-end="url(#ah)"/>
+  <text x="150" y="162" font-size="12" fill="#c0392b">v</text>
+  <text x="186" y="112" font-size="12" fill="#c0392b">Av = 3v</text>
+  <text x="120" y="285" text-anchor="middle" font-size="12" fill="#444">方向不变，只是被拉长 λ 倍</text>
+  <!-- right panel: generic vector -->
+  <text x="320" y="28" text-anchor="middle" font-size="13" fill="#2980b9" font-weight="bold">普通向量 w</text>
+  <line x1="260" y1="250" x2="260" y2="40" stroke="#ccc"/>
+  <line x1="220" y1="250" x2="400" y2="250" stroke="#ccc"/>
+  <line x1="260" y1="250" x2="320" y2="130" stroke="#2980b9" stroke-width="2.5" marker-end="url(#ah)"/>
+  <line x1="260" y1="250" x2="370" y2="190" stroke="#2980b9" stroke-width="2.5" stroke-dasharray="5,4" marker-end="url(#ah)"/>
+  <text x="325" y="125" font-size="12" fill="#2980b9">w</text>
+  <text x="376" y="186" font-size="12" fill="#2980b9">Aw</text>
+  <text x="320" y="285" text-anchor="middle" font-size="12" fill="#444">方向被扭走 → 不是特征向量</text>
+</svg>

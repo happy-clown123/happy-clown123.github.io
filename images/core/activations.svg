@@ -1,4 +1,6 @@
-<svg width="560" height="300" viewBox="0 0 560 300" xmlns="http://www.w3.org/2000/svg">
+<svg role="img" aria-labelledby="title desc" width="560" height="300" viewBox="0 0 560 300" xmlns="http://www.w3.org/2000/svg">
+  <title id="title">Sigmoid 与 ReLU 激活函数</title>
+  <desc id="desc">对照 Sigmoid 的饱和曲线与 ReLU 的分段直线，观察正负输入区域的输出和斜率。</desc>
   <rect width="560" height="300" fill="#ffffff"/>
   <text x="280" y="26" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#222" text-anchor="middle">激活函数：为什么要它？</text>
   <line x1="70" y1="250" x2="510" y2="250" stroke="#888" stroke-width="1.5"/>

@@ -1,0 +1,47 @@
+<svg role="img" aria-labelledby="title desc" width="680" height="300" viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg">
+  <title id="title">梯度方向与 Hessian 局部曲率</title>
+  <desc id="desc">二次函数等高线展示上升梯度和下降步骤，另一侧比较两个坐标方向的曲率。</desc>
+  <rect width="680" height="300" fill="#ffffff"/>
+  <text x="340" y="24" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#222" text-anchor="middle">Jacobian 与 Hessian：梯度方向 &amp; 局部曲率</text>
+
+  <!-- 面板 A：梯度与 Hessian 曲率（等高线） -->
+  <text x="175" y="48" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#374151" text-anchor="middle">f(x,y)=x²+2y² 的等高线</text>
+  <!-- 等高线椭圆（中心 175,170） -->
+  <ellipse cx="175" cy="170" rx="28"  ry="20"  fill="none" stroke="#cbd5e1" stroke-width="1.2"/>
+  <ellipse cx="175" cy="170" rx="55"  ry="39"  fill="none" stroke="#cbd5e1" stroke-width="1.2"/>
+  <ellipse cx="175" cy="170" rx="82"  ry="58"  fill="none" stroke="#cbd5e1" stroke-width="1.2"/>
+  <ellipse cx="175" cy="170" rx="108" ry="76"  fill="none" stroke="#cbd5e1" stroke-width="1.2"/>
+  <!-- 最小值点 -->
+  <circle cx="175" cy="170" r="4" fill="#16a34a"/>
+  <text x="183" y="168" font-family="Arial" font-size="10" fill="#16a34a">最小值</text>
+  <!-- 采样点 -->
+  <circle cx="250" cy="125" r="4" fill="#111"/>
+  <text x="256" y="122" font-family="Arial" font-size="10" fill="#111">当前点</text>
+  <!-- 红箭头：梯度（ uphill / 上升） -->
+  <line x1="250" y1="125" x2="288" y2="106" stroke="#ef4444" stroke-width="2.5"/>
+  <polygon points="288,106 280,108 283,115" fill="#ef4444"/>
+  <text x="292" y="102" font-family="Arial" font-size="11" fill="#ef4444">∇f (上升)</text>
+  <!-- 蓝箭头：下降步 -->
+  <line x1="250" y1="125" x2="212" y2="144" stroke="#2563eb" stroke-width="2.5"/>
+  <polygon points="212,144 220,142 217,135" fill="#2563eb"/>
+  <text x="150" y="160" font-family="Arial" font-size="11" fill="#2563eb">−η∇f (下降步)</text>
+
+  <!-- 面板 B：Hessian = 局部曲率方向 -->
+  <text x="500" y="48" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#374151" text-anchor="middle">Hessian 特征值 = 各方向曲率</text>
+  <circle cx="500" cy="160" r="6" fill="#111"/>
+  <!-- x 方向箭头（λ=2，平缓） -->
+  <line x1="500" y1="160" x2="560" y2="160" stroke="#3b82f6" stroke-width="3"/>
+  <polygon points="560,160 551,155 551,165" fill="#3b82f6"/>
+  <line x1="500" y1="160" x2="440" y2="160" stroke="#3b82f6" stroke-width="3"/>
+  <polygon points="440,160 449,155 449,165" fill="#3b82f6"/>
+  <text x="500" y="190" font-family="Arial" font-size="11" fill="#3b82f6" text-anchor="middle">x 方向 曲率 λ=2（平缓）</text>
+  <!-- y 方向箭头（λ=4，更陡） -->
+  <line x1="500" y1="160" x2="500" y2="100" stroke="#ef4444" stroke-width="3"/>
+  <polygon points="500,100 495,109 505,109" fill="#ef4444"/>
+  <line x1="500" y1="160" x2="500" y2="220" stroke="#ef4444" stroke-width="3"/>
+  <polygon points="500,220 495,211 505,211" fill="#ef4444"/>
+  <text x="500" y="240" font-family="Arial" font-size="11" fill="#ef4444" text-anchor="middle">y 方向 曲率 λ=4（更陡）</text>
+  <text x="500" y="262" font-family="Arial" font-size="10" fill="#666" text-anchor="middle">碗在 y 方向更"陡"</text>
+
+  <text x="340" y="290" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#444" text-anchor="middle">Hessian 描述指定变量下的局部曲率；不能单独证明对抗鲁棒性</text>
+</svg>

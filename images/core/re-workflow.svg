@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 300" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 300" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">逆向分析工作流</title>
+  <desc id="desc">从识别文件与字符串到静态反编译，再到动态验证和行为结论。</desc>
   <rect width="680" height="300" fill="#f7f8fa"/>
   <text x="20" y="26" font-size="16" font-weight="700" fill="#111827">逆向分析流程：先静态、后动态</text>
 

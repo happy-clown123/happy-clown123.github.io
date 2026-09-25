@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 300" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 300" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">三类 XSS 数据流</title>
+  <desc id="desc">对比反射型、存储型和 DOM 型 XSS 中不可信数据抵达浏览器执行位置的路径。</desc>
   <rect width="680" height="300" fill="#f7f8fa"/>
   <text x="20" y="26" font-size="16" font-weight="700" fill="#111827">XSS 三类：恶意脚本在哪被执行</text>
 

@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 280" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 280" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">AI 合规工作生命周期</title>
+  <desc id="desc">盘点系统、确定适用范围、评估、落实控制、记录审计，并持续复核的五步流程。</desc>
   <rect width="680" height="280" fill="#ffffff"/>
   <text x="340" y="26" font-size="17" font-weight="700" text-anchor="middle" fill="#1a1a2e">AI 合规生命周期（闭环管理）</text>
 
@@ -41,6 +43,6 @@
       <path d="M0,0 L7,3 L0,6 Z" fill="#444"/>
     </marker>
   </defs>
-  <text x="340" y="250" font-size="10.5" fill="#666" text-anchor="middle">第 ③ 步的"评估"正是模块 J/K 的活：对抗鲁棒测试、红队、隐私/偏见测量——合规把安全技术变成强制项</text>
-  <text x="340" y="268" font-size="10.5" fill="#666" text-anchor="middle">文档化贯穿全程：EU AI Act 罚则之下，"无法证明合规"即违规</text>
+  <text x="340" y="250" font-size="10.5" fill="#666" text-anchor="middle">第 ③ 步选择与用途、威胁模型及适用义务相称的测试，并保留条件与结果</text>
+  <text x="340" y="268" font-size="10.5" fill="#666" text-anchor="middle">持续维护证据；具体义务由法域、系统分类和主体角色确定</text>
 </svg>

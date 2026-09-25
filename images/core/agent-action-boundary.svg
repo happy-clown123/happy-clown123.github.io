@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="470" viewBox="0 0 1100 470" role="img" aria-labelledby="title desc">
+<title id="title">Agent 数据、提案、权限与提交边界</title>
+<desc id="desc">外部内容只影响规划提案。可信身份和策略进入网关，批准需要绑定动作，执行前再次验证；日志关联提案、决定与真实结果。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 Z" fill="#466477"/></marker></defs>
+<rect width="1100" height="470" fill="#f5f8fc" rx="16"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#19354c">
+<text x="30" y="42" font-size="25" font-weight="bold">Agent：内容可以影响建议，不能自行授予权限</text>
+<rect x="30" y="87" width="215" height="105" rx="10" fill="#fbe9e5" stroke="#c97f70"/>
+<text x="50" y="122" font-size="20">外部内容 / 记忆</text><text x="50" y="154" font-size="16">网页、RAG、工具返回</text><text x="50" y="177" font-size="16">记录来源与用途</text>
+<rect x="290" y="87" width="210" height="105" rx="10" fill="#e6edf9" stroke="#8598b9"/>
+<text x="310" y="122" font-size="20">Planner / 模型</text><text x="310" y="154" font-size="16">生成 tool + args 提案</text><text x="310" y="177" font-size="16">提案仍是不可信输入</text>
+<rect x="555" y="87" width="235" height="105" rx="10" fill="#e1f1eb" stroke="#6eab92"/>
+<text x="575" y="122" font-size="20">确定性策略网关</text><text x="575" y="154" font-size="16">schema / scope / 资源</text><text x="575" y="177" font-size="16">拒绝未知或越权调用</text>
+<rect x="835" y="87" width="235" height="105" rx="10" fill="#e1f1eb" stroke="#6eab92"/>
+<text x="855" y="122" font-size="20">提交边界 / 执行器</text><text x="855" y="154" font-size="16">参数绑定、状态复核</text><text x="855" y="177" font-size="16">实际成功或失败回执</text>
+<g stroke="#466477" stroke-width="2" marker-end="url(#arrow)"><path d="M245 140 H282"/><path d="M500 140 H547"/><path d="M790 140 H827"/></g>
+<path d="M528 70 V219" stroke="#c96d54" stroke-width="2" stroke-dasharray="7 5"/><text x="335" y="225" font-size="16" fill="#9e4c3e">跨信任边界：语言 → 动作</text>
+<rect x="555" y="260" width="515" height="82" rx="10" fill="#fff2d6" stroke="#c8a86b"/>
+<text x="575" y="291" font-size="19">可信输入：已认证主体 + 策略 + 本次动作确认</text><text x="575" y="321" font-size="16">确认绑定最终资源、关键参数、有效期；执行前检查状态</text>
+<g stroke="#466477" stroke-width="2" marker-end="url(#arrow)"><path d="M670 260 V200"/><path d="M950 260 V200"/></g>
+<text x="30" y="292" font-size="20" font-weight="bold">三个不同的观察量</text><text x="30" y="325" font-size="18">模型建议 ≠ 网关放行 ≠ 外部副作用成功</text>
+<text x="30" y="397" font-size="18">用 request_id 关联：提案 → 决策 → 提交结果；正文与凭据应最小化记录。</text>
+<text x="30" y="433" font-size="16" fill="#536979">仓内固定夹具只验证策略决策。真实授权还需要可信认证、动作绑定确认和可检查的执行结果。</text>
+</g></svg>

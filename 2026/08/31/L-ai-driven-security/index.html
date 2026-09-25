@@ -19,22 +19,23 @@
   <meta name="author" content="KachaKacha">
   <meta name="keywords" content="">
   
-    <meta name="description" content="模块 L：AI 驱动的安全（副线 · 用 AI 做安全） 定位：副线 &#x2F; 应用拓展。主线 J&#x2F;K 研究”AI 本身的安全问题”；本模块反过来——用 AI 解决传统安全问题（威胁检测、SOC、钓鱼识别）。J&#x2F;K 有余力再碰。前置：模块 C（ML）、J（对抗 ML——本模块 §4 的交叉点必读）｜ 后继：模块 M（红队）及格线：跑通 l01（自己的检测器被特征空间扰动绕过）；说清”L 造的 detec">
+    <meta name="description" content="模块 L：AI 驱动的安全（副线 · 用 AI 做安全） 本文行动导航：先完成特征、训练&#x2F;测试划分和 precision&#x2F;recall，再运行 labs&#x2F;l01_detector_evasion.py。记录每个指标的分子、分母、攻击资格集合、配置预算与实际扰动，并回到 J 模块解释检测器为何也是可被攻击的 ML 模型；本模块是应用副线，不替代 J&#x2F;K 主线。   定位：副线 &#x2F; 应用拓展。主线 J">
 <meta property="og:type" content="article">
 <meta property="og:title" content="用 AI 做安全（L 模块）">
 <meta property="og:url" content="https://happy-clown123.github.io/2026/08/31/L-ai-driven-security/index.html">
 <meta property="og:site_name" content="KachaKacha的空间">
-<meta property="og:description" content="模块 L：AI 驱动的安全（副线 · 用 AI 做安全） 定位：副线 &#x2F; 应用拓展。主线 J&#x2F;K 研究”AI 本身的安全问题”；本模块反过来——用 AI 解决传统安全问题（威胁检测、SOC、钓鱼识别）。J&#x2F;K 有余力再碰。前置：模块 C（ML）、J（对抗 ML——本模块 §4 的交叉点必读）｜ 后继：模块 M（红队）及格线：跑通 l01（自己的检测器被特征空间扰动绕过）；说清”L 造的 detec">
+<meta property="og:description" content="模块 L：AI 驱动的安全（副线 · 用 AI 做安全） 本文行动导航：先完成特征、训练&#x2F;测试划分和 precision&#x2F;recall，再运行 labs&#x2F;l01_detector_evasion.py。记录每个指标的分子、分母、攻击资格集合、配置预算与实际扰动，并回到 J 模块解释检测器为何也是可被攻击的 ML 模型；本模块是应用副线，不替代 J&#x2F;K 主线。   定位：副线 &#x2F; 应用拓展。主线 J">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://happy-clown123.github.io/images/core/ai-detection-pipeline.svg">
 <meta property="og:image" content="https://happy-clown123.github.io/images/core/detector-evasion.svg">
 <meta property="article:published_time" content="2026-08-30T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-08-31T07:46:04.684Z">
+<meta property="article:modified_time" content="2026-09-25T16:32:37.485Z">
 <meta property="article:author" content="KachaKacha">
 <meta property="article:tag" content="AI驱动安全">
 <meta property="article:tag" content="SOC">
 <meta property="article:tag" content="威胁检测">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://happy-clown123.github.io/images/core/detector-evasion.svg">
+<meta name="twitter:image" content="https://happy-clown123.github.io/images/core/ai-detection-pipeline.svg">
   
   
   
@@ -442,7 +443,7 @@ mjx-container[display="true"] + br {
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.4k 字
+          4.7k 字
         
       </span>
     
@@ -453,7 +454,7 @@ mjx-container[display="true"] + br {
         
         
         
-          29 分钟
+          40 分钟
         
       </span>
     
@@ -498,7 +499,10 @@ mjx-container[display="true"] + br {
               <div class="markdown-body">
                 
                 <h1 id="模块-L：AI-驱动的安全（副线-·-用-AI-做安全）"><a href="#模块-L：AI-驱动的安全（副线-·-用-AI-做安全）" class="headerlink" title="模块 L：AI 驱动的安全（副线 · 用 AI 做安全）"></a>模块 L：AI 驱动的安全（副线 · 用 AI 做安全）</h1><blockquote>
-<p>定位：<strong>副线 / 应用拓展</strong>。主线 J/K 研究”AI 本身的安全问题”；本模块反过来——<strong>用 AI 解决传统安全问题</strong>（威胁检测、SOC、钓鱼识别）。J/K 有余力再碰。<br>前置：模块 C（ML）、J（对抗 ML——本模块 §4 的交叉点必读）｜ 后继：模块 M（红队）<br>及格线：跑通 l01（自己的检测器被特征空间扰动绕过）；说清”L 造的 detector 是 J 的靶子”。</p>
+<p><strong>本文行动导航</strong>：先完成特征、训练/测试划分和 precision/recall，再运行 <a href="labs/l01_detector_evasion.py"><code>labs/l01_detector_evasion.py</code></a>。记录每个指标的分子、分母、攻击资格集合、配置预算与实际扰动，并回到 J 模块解释检测器为何也是可被攻击的 ML 模型；本模块是应用副线，不替代 J/K 主线。</p>
+</blockquote>
+<blockquote>
+<p>定位：<strong>副线 / 应用拓展</strong>。主线 J/K 研究”AI 本身的安全问题”；本模块反过来——<strong>用 AI 解决传统安全问题</strong>（威胁检测、SOC、钓鱼识别）。J/K 有余力再碰。<br>前置：模块 C（ML）、J（对抗 ML——本模块 §4 的交叉点必读）｜ 后继：模块 M（红队）<br>及格线：跑通 l01，按实际结果报告干净检出与特征空间逃逸，不把合成向量实验外推成真实恶意软件绕过；说清”L 造的 detector 是 J 的靶子”。</p>
 </blockquote>
 <hr>
 <h2 id="0-学习执行清单"><a href="#0-学习执行清单" class="headerlink" title="0 学习执行清单"></a>0 学习执行清单</h2><table>
@@ -528,7 +532,7 @@ mjx-container[display="true"] + br {
 <tr>
 <td>3</td>
 <td>Agentic SOC 形态与它的 K 攻击面</td>
-<td>本笔记 §3 + 模块 K §6</td>
+<td>本笔记 §3 + 模块 K §2.7</td>
 <td>一段话</td>
 <td>能说出 copilot 被注入后为什么危险</td>
 </tr>
@@ -541,10 +545,10 @@ mjx-container[display="true"] + br {
 </tr>
 <tr>
 <td>5</td>
-<td><strong>关键交叉</strong>：detector 被 evasion 打穿</td>
+<td><strong>关键交叉</strong>：评估 detector 的 evasion 风险</td>
 <td>本笔记 §5 + 模块 J §3</td>
 <td>跑 <code>labs/l01_detector_evasion.py</code></td>
-<td>输出：攻击前检出率 ≈1.0，特征扰动后逃逸率显著上升</td>
+<td>报告攻击前检出 <code>n_detected/n_malicious</code>、攻击后逃逸的分子/分母、配置预算和实际扰动；不以固定数值或“必须攻破”为过关条件</td>
 </tr>
 <tr>
 <td>6</td>
@@ -576,7 +580,8 @@ mjx-container[display="true"] + br {
 </tbody></table>
 <p>两者关系：<strong>L 造的 AI detector，正是 J 的攻击对象</strong>。下面 §5 会用代码演示这一点——这是本模块最该记住的一课。</p>
 <hr>
-<h2 id="2-AI-驱动的威胁检测（经典落点）"><a href="#2-AI-驱动的威胁检测（经典落点）" class="headerlink" title="2 AI 驱动的威胁检测（经典落点）"></a>2 AI 驱动的威胁检测（经典落点）</h2><p>传统基于规则/签名的检测对付不了零日与新型攻击，ML 补的是”从数据中学习模式”。</p>
+<h2 id="2-AI-驱动的威胁检测（经典落点）"><a href="#2-AI-驱动的威胁检测（经典落点）" class="headerlink" title="2 AI 驱动的威胁检测（经典落点）"></a>2 AI 驱动的威胁检测（经典落点）</h2><p><img src="/images/core/ai-detection-pipeline.svg" srcset="/img/loading.gif" lazyload alt="ai detection pipeline"></p>
+<p>传统规则/签名对已知模式可解释且高效，但对未覆盖的变体可能召回不足；ML 可以从数据中学习补充信号，也会受到分布漂移、误报和对抗规避影响。两者通常是组合关系，而不是 ML 自动替代规则。</p>
 <table>
 <thead>
 <tr>
@@ -612,15 +617,15 @@ mjx-container[display="true"] + br {
 </tr>
 </tbody></table>
 <blockquote>
-<p>2025 产业落地很猛：Cisco 开源 Foundation-Sec-8B、Trend Micro 推 Cybertron 安全 LLM、SentinelOne/CrowdStrike 的”行为 AI”在端点实时阻断勒索/无文件恶意软件，处理量级到 10 万 EPS、延迟 &lt;1 秒。</p>
+<p>产业产品已把 ML/LLM 用于检测、告警摘要、查询生成和响应编排，但厂商公布的吞吐、延迟和检出数字通常绑定特定数据与部署配置。阅读产品材料时至少记录数据来源、基线、误报率、时延口径和人工审批点，不能把单一宣传指标当成跨环境能力。</p>
 </blockquote>
 <hr>
-<h2 id="3-AI-SOC-与-SecOps（LLM-进来后的形态）"><a href="#3-AI-SOC-与-SecOps（LLM-进来后的形态）" class="headerlink" title="3 AI-SOC 与 SecOps（LLM 进来后的形态）"></a>3 AI-SOC 与 SecOps（LLM 进来后的形态）</h2><p>LLM 改变了安全运营中心（SOC）的工作方式，2025 年关键词是 <strong>Agentic SOC</strong>：</p>
+<h2 id="3-AI-SOC-与-SecOps（LLM-进来后的形态）"><a href="#3-AI-SOC-与-SecOps（LLM-进来后的形态）" class="headerlink" title="3 AI-SOC 与 SecOps（LLM 进来后的形态）"></a>3 AI-SOC 与 SecOps（LLM 进来后的形态）</h2><p>LLM/Agent 正在成为安全运营中心（SOC）的一种辅助形态，常被称为 <strong>Agentic SOC</strong>；下面列的是可能能力，不代表所有产品都能可靠自动完成：</p>
 <ul>
-<li><strong>告警分诊（Triage）</strong>：copilot 把几百条日志压缩成人类可读时间线，自动生成 Splunk/KQL 查询、YARA 规则。</li>
-<li><strong>SOAR 集成</strong>：AI 驱动 playbook 自动隔离端点、禁用账号（高风险动作保留 HITL 人工确认）。</li>
-<li><strong>威胁情报融合</strong>：把观测到的 TTP 自动映射到 MITRE ATT&amp;CK / MITRE ATLAS。</li>
-<li><strong>红蓝对抗演练</strong>：用数字孪生环境让 AI 扮演红队与蓝队自动找防御差距。</li>
+<li><strong>告警分诊（Triage）</strong>：把日志整理为候选时间线，辅助生成 Splunk/KQL 查询或 YARA 规则；输出仍需在原始证据上复核。</li>
+<li><strong>SOAR 集成</strong>：为 playbook 提出处置建议；隔离端点、禁用账号等高影响动作应受最小权限、审批和回滚约束。</li>
+<li><strong>威胁情报融合</strong>：辅助把观测到的行为映射到 MITRE ATT&amp;CK；只有证据与定义匹配时才能确认 TTP。</li>
+<li><strong>红蓝对抗演练</strong>：在隔离、授权环境中生成候选攻击/防御步骤；结果不能替代人工验证。</li>
 </ul>
 <blockquote>
 <p>注意：这里的”AI 帮安全运营”本身又引入模块 K 的攻击面——copilot 可能被 prompt injection 误导生成错误处置，所以 Agentic SOC 也要套 K 的分层防御。</p>
@@ -628,33 +633,41 @@ mjx-container[display="true"] + br {
 <hr>
 <h2 id="4-攻击者也在用-AI（双刃剑）"><a href="#4-攻击者也在用-AI（双刃剑）" class="headerlink" title="4 攻击者也在用 AI（双刃剑）"></a>4 攻击者也在用 AI（双刃剑）</h2><p>防守用 AI，攻击也用 AI，形成军备竞赛：</p>
 <ul>
-<li><strong>AI 生成钓鱼</strong>：用 LLM 写高度个性化、无语法错误的鱼叉邮件，点击率比手写高 ~60%。</li>
-<li><strong>语音克隆（vishing）</strong>：合成高管声音授权转账，2024 多起损失超千万澳元。</li>
-<li><strong>自动漏洞利用</strong>：AI 指纹化技术栈、关联 CVE、自动生成可用 exploit，披露到利用的窗口从”周”缩到”小时”。</li>
-<li><strong>多态恶意软件</strong>：生成式 AI 重写自身代码规避签名检测。</li>
+<li><strong>AI 辅助钓鱼</strong>：LLM 可降低批量改写、翻译和个性化邮件的成本；点击率变化取决于受测人群、消息、基线和防护，不能套用一个通用提升比例。</li>
+<li><strong>语音克隆（vishing）</strong>：合成声音可提高冒充的逼真度；具体损失和是否由 AI 导致必须依据个案证据判断。</li>
+<li><strong>漏洞研究与利用辅助</strong>：模型可辅助技术栈识别、CVE 检索和候选代码生成，但可利用性仍依赖目标版本、环境验证和授权边界。</li>
+<li><strong>恶意代码变体生成</strong>：生成模型可能帮助改变表面代码或混淆形式；能否保持功能并逃逸具体检测器必须实测。</li>
 </ul>
 <blockquote>
-<p>结论：74% 的 CISO 报告过去 12 个月遭遇过 AI 增强攻击（2025 调研）。”用不用 AI”不再是问题，<strong>比对手先用上、且用得安全</strong>才是。</p>
+<p><strong>调查口径不要写错</strong>：<a target="_blank" rel="noopener" href="https://www.bitdefender.com/content/dam/bitdefender/business/campaign/assessment/Official-2025-Cybersecurity-Assessment-Report.pdf">Bitdefender 2025 Cybersecurity Assessment</a> 调查了六个国家、任职于 500 人以上组织的 1,200 名 IT 与安全从业者；对“过去 12 个月，组织是否经历过你认为涉及 AI 的攻击”这一自报问题，63% 的总体受访者回答“是”，美国子样本为 74%。这不是“74% 的 CISO”，也不是经独立事件取证确认的攻击率。它能说明受访者感知到的风险，不能单独证明 AI 攻击的真实基准率或效果。</p>
 </blockquote>
 <hr>
 <h2 id="5-关键交叉点：你的检测器就是模块-J-的靶子"><a href="#5-关键交叉点：你的检测器就是模块-J-的靶子" class="headerlink" title="5 关键交叉点：你的检测器就是模块 J 的靶子"></a>5 关键交叉点：你的检测器就是模块 J 的靶子</h2><p>这是本模块<strong>最该记住的一课</strong>，也是 L 与 J 的硬连接。</p>
-<p>恶意代码检测器的输入是”特征向量”（如 API 调用集合）。攻击者在<strong>保持恶意功能不变</strong>的前提下，往样本里加一些”良性特征”（比如多申请几个无害权限、加几个良性 API 调用），就能把特征向量推到决策边界另一侧，让检测器判为良性。</p>
+<p>恶意代码检测器的输入可以是”特征向量”（如 API 调用集合）。在某些允许添加特征的威胁模型中，攻击者会尝试加入良性行为片段或无关调用，把提取后的表示推向良性区域；但特征向量中可写出的变化未必能落实为合法文件，也未必保持恶意功能或被特征提取器按预期读取。</p>
 <ul>
 <li><strong>特征空间攻击（feature-space）</strong>：直接在特征向量上加扰动（数学干净，但生成的”特征”可能对应不到真实文件）。</li>
-<li><strong>问题空间攻击（problem-space）</strong>：直接改真实文件（加代码/权限），约束是”功能不变 + 不像人为篡改”。这才是现实威胁。</li>
+<li><strong>问题空间攻击（problem-space）</strong>：修改真实对象并满足格式、语义与功能约束。它更接近部署威胁，但可实现性、功能保持和隐蔽性都必须逐项验证；特征空间实验主要用于机制学习和候选上界，不能自动转成问题空间结论。</li>
 </ul>
 <blockquote>
-<p>2025 实测：Android 恶意软件的问题空间攻击在 12 个主流检测器上 ASR 达 <strong>80%–97%</strong>（SMAttack 等），且扰动 &lt;7%。”对抗恶意软件即服务（adversarial-malware-as-a-service）”已被证明可规模化。</p>
+<p><strong>论文结果要绑定威胁模型</strong>：<a target="_blank" rel="noopener" href="https://doi.org/10.1016/j.cose.2025.104708">SMAttack</a> 在论文指定的 <strong>Android、基于 API 特征的黑盒恶意软件检测</strong>设置中，通过子图模仿与 APK 操作评估了 12 个检测器，报告 ASR 为 <strong>80%–97%</strong>。这是该论文数据、检测器、查询接口和成功判据下的结果；不能外推为所有 Android 样本、所有检测器或本仓 l01 的预期结果，也不能据此断言攻击已经以服务形式规模化。</p>
 </blockquote>
-<p><img src="/images/core/detector-evasion.svg" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/images/core/detector-evasion.svg" srcset="/img/loading.gif" lazyload alt="数值特征越过检测决策边界的示意"></p>
 <p><strong>防御这个检测器</strong>（回到模块 J 的方法论）：</p>
 <ul>
-<li><strong>对抗训练</strong>：把对抗样本加入训练集——但问题空间攻击因”功能保持”约束复杂，难度远高于图像。</li>
-<li><strong>问题空间专用防御</strong>：在特征提取前做语义校验、检测”不该出现的特征组合”、模型架构加固。</li>
-<li><strong>混合静态+动态</strong>：光靠静态特征易被绕过，结合行为分析（运行时监控）。</li>
+<li><strong>对抗训练</strong>：把威胁模型内可实现的对抗样本加入训练；离散文件格式、功能保持与特征映射使问题空间样本生成通常更复杂，训练效果仍受攻击覆盖度限制。</li>
+<li><strong>问题空间专用控制</strong>：在特征提取前做格式/语义校验，检查异常组合并审计模型和特征流水线；这些都是候选控制，不是单独的安全保证。</li>
+<li><strong>混合静态+动态</strong>：结合静态结构与运行时行为，减少对单一信号的依赖；动态分析同样可能被环境识别、延迟触发等手法规避，需要自适应评测。</li>
 </ul>
 <hr>
-<h2 id="6-实验清单（Labs）"><a href="#6-实验清单（Labs）" class="headerlink" title="6 实验清单（Labs）"></a>6 实验清单（Labs）</h2><table>
+<h2 id="6-实验清单（Labs）"><a href="#6-实验清单（Labs）" class="headerlink" title="6 实验清单（Labs）"></a>6 实验清单（Labs）</h2><blockquote>
+<p><strong>读图后做 L01，并写出外推边界</strong>：运行 <a href="labs/l01_detector_evasion.py"><code>l01_detector_evasion.py</code></a>，对照上方检测流水线标出“原始对象 → 特征 → 分类结果”。本例只改数值特征；请为每个改动补问“能否生成合法文件、是否保持原功能、是否仍被正确提取为该特征”。答不出时，只能报告 feature-space 结果，不能写成真实恶意软件绕过率。最后阅读模块 J §7，并按下面口径留证：</p>
+<ul>
+<li>干净恶意样本数 <code>n_malicious</code>、其中被检出的 <code>n_detected</code>，检出率为 <code>n_detected / n_malicious</code>；同时另报良性样本上的误报，不能只看恶意子集。</li>
+<li>脚本当前打印的逃逸率以<strong>全部恶意测试样本</strong>为分母；更严格的条件逃逸率应写成“原本被检出、攻击后变成良性”的数量除以 <code>n_detected</code>。两种口径不得混写。</li>
+<li>配置预算是每步仅减小尚未逃逸样本的各维特征 <code>0.05</code>、最多 10 步并裁剪到 <code>[0,1]</code>，所以相对原向量的配置上界为 <code>L∞ ≤ 0.50</code>；再从实际数组报告每条样本的步数、改变坐标数和 <code>L∞</code> 距离。配置上限不等于每条样本的实际扰动。</li>
+</ul>
+</blockquote>
+<table>
 <thead>
 <tr>
 <th>Lab</th>
@@ -667,40 +680,40 @@ mjx-container[display="true"] + br {
 </thead>
 <tbody><tr>
 <td>l01</td>
-<td>训练恶意检测器 + 特征空间逃逸：不加扰动检出率 ≈1.0，沿”良性方向”微调特征后逃逸率显著上升</td>
+<td>训练合成恶意检测器并评估定向特征压低启发式</td>
 <td><code>labs/l01_detector_evasion.py</code></td>
 <td>numpy, scikit-learn</td>
-<td>CPU，秒级</td>
-<td>输出对照：检出率 ≈1.0 → 逃逸率 &gt;0.5；能解释”为什么检测器不可信”</td>
+<td>CPU，通常秒级，依机器而异</td>
+<td>保存种子与原始计数；分别报告干净检出率、全体恶意分母逃逸率、条件逃逸率和实际扰动；允许攻击无效或结果不稳定，但必须解释威胁模型与 feature-space 边界</td>
 </tr>
 </tbody></table>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> 04-applied/ai-driven-security/labs<br>pip install numpy scikit-learn<br>python l01_detector_evasion.py<br></code></pre></td></tr></table></figure>
 
 <blockquote>
-<p>工业级复现用 ART（<code>SklearnClassifier</code> + FGSM，可微模型），见模块 J §8；本 lab 自包含以看清”逃逸是怎么发生的”。</p>
+<p>更完整的复现可参考 ART，并按估计器能力选择攻击：可微模型才适合直接使用 FGSM/PGD，树模型要使用兼容的树攻击、迁移或查询式方法。本 lab 的随机森林攻击没有求梯度，只是反复把合成特征往预设“良性方向”压低并查询标签；不要把它称为 FGSM。</p>
 </blockquote>
 <hr>
 <h2 id="7-常见误区"><a href="#7-常见误区" class="headerlink" title="7 常见误区"></a>7 常见误区</h2><ol>
-<li><strong>以为”L 也是主线”</strong> —— 不是。J/K 决定你进什么公司，L 决定你进去后能否干活。篇幅与深度都不得超过 J/K 任一模块。</li>
-<li><strong>以为”我的检测器足够准就不会被绕过”</strong> —— 精度与对抗鲁棒性正交（模块 J §10 误区 2）：99% 精度的检测器照样被微小特征扰动打穿（l01 会演示）。</li>
-<li><strong>以为特征空间攻击≈问题空间攻击</strong> —— 前者数学干净但可能不现实；后者（保持功能改文件）才是 80%+ ASR 的现实威胁。</li>
+<li><strong>以为”L 也是当前主线”</strong> —— 对你当前的 Agent 安全方向，J/K 优先，L 用来补检测、SOC 和安全工程语境；若未来岗位或研究问题改变，再调整深度，不用给所有人规定同一篇幅。</li>
+<li><strong>以为”我的检测器足够准就不会被绕过”</strong> —— 干净分布精度不等于指定威胁模型下的鲁棒性；l01 只用合成数据演示二者要分开测，不证明任意高精度检测器都会被“微小”扰动打穿。</li>
+<li><strong>以为特征空间攻击≈问题空间攻击</strong> —— 前者的向量修改可能不可实现；后者还必须验证格式、功能和特征提取结果。论文中的高 ASR 也只能在原实验设置内解释。</li>
 <li><strong>以为 Agentic SOC 只是”更聪明的工具”</strong> —— 它引入模块 K 的攻击面：copilot 被注入可能生成错误处置，必须套 K 的分层防御。</li>
-<li><strong>以为”攻击者用 AI”是未来时</strong> —— 已是现在时：AI 钓鱼点击率高 60%、自动利用窗口缩到小时级；防守方必须同等火力。</li>
+<li><strong>以为”攻击者用了 AI”就等于攻击一定更强</strong> —— AI 可以降低内容生成、检索和变体制作成本，但效果取决于任务、数据、目标环境与人工复核；用受控实验和事件证据评价，不引用脱离分母的宣传数字。</li>
 </ol>
 <hr>
 <h2 id="8-检查点（自测）"><a href="#8-检查点（自测）" class="headerlink" title="8 检查点（自测）"></a>8 检查点（自测）</h2><ul>
 <li><input disabled="" type="checkbox"> “用 AI 做安全”和”研究 AI 的安全”本质区别是什么？（L vs J/K）</li>
 <li><input disabled="" type="checkbox"> 列举 3 个 AI 驱动检测的真实场景（恶意流量/代码/钓鱼/UEBA 任选）</li>
 <li><input disabled="" type="checkbox"> 为什么 AI 安全检测器本身会被对抗样本绕过？（提示：它就是一个 ML 模型 = J 的靶子）</li>
-<li><input disabled="" type="checkbox"> 特征空间攻击 vs 问题空间攻击区别？哪个才是现实威胁</li>
-<li><input disabled="" type="checkbox"> 跑通 l01，贴出攻击前后检出率对照——记住这个教训</li>
+<li><input disabled="" type="checkbox"> 特征空间攻击与问题空间攻击分别验证什么？为什么前者的 ASR 不能直接当成后者的部署风险</li>
+<li><input disabled="" type="checkbox"> 跑通 l01，贴出攻击前后的原始计数、各指标分母、条件逃逸率与实际 <code>L∞/L0</code> 扰动；若攻击失败也如实分析</li>
 <li><input disabled="" type="checkbox"> Agentic SOC 里的 copilot 为什么又引入模块 K 的攻击面</li>
 </ul>
 <hr>
 <h2 id="9-与主线的连接"><a href="#9-与主线的连接" class="headerlink" title="9 与主线的连接"></a>9 与主线的连接</h2><ul>
-<li><strong>→ 模块 J §3 evasion</strong>：L 的检测器就是 J 的攻击对象——l01 就是”特征空间的 FGSM”；l01 的逃逸实验 = J01 的检测器版。</li>
+<li><strong>→ 模块 J §3 evasion</strong>：L 的检测器就是 J 的攻击对象。l01 是定向压低特征并查询标签的教学启发式，与 J01 都展示输入修改可能改变模型输出，但 l01 不是 FGSM，也没有验证真实文件可实现性。</li>
 <li><strong>→ 模块 J §6 防御</strong>：对抗训练/输入校验在 L 里是”防御你自己的检测器”；问题空间攻击让对抗训练更难。</li>
-<li><strong>→ 模块 K §6 Agent 安全</strong>：Agentic SOC 的 copilot 是 LLM 应用，Memory Poisoning / 注入直接威胁告警处置质量。</li>
+<li><strong>→ 模块 K §2.7 Agent 安全</strong>：Agentic SOC 的 copilot 是 LLM 应用，Memory Poisoning / 注入直接威胁告警处置质量。</li>
 <li><strong>→ 模块 M（红队）</strong>：L 检测器的对抗评估就是 M 的例行动作。</li>
 </ul>
 <blockquote>

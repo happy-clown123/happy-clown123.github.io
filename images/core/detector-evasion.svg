@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 300" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 300" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">检测器逃逸示意</title>
+  <desc id="desc">攻击者修改可观察特征使样本越过检测边界；真实对象是否保持功能需要额外验证。</desc>
   <rect width="680" height="300" fill="#ffffff"/>
   <text x="340" y="28" font-size="17" font-weight="700" text-anchor="middle" fill="#1a1a2e">"用 AI 做安全"的阿喀琉斯之踵：检测器被对抗样本绕过</text>
 

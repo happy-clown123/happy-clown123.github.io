@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="382" viewBox="0 0 920 390" role="img" aria-labelledby="title desc">
+  <title id="title">因果注意力：先遮挡未来，再按行归一化</title>
+  <desc id="desc">三乘三下三角可见矩阵。第零行仅看自身，第一行看前两项，第二行看全部三项。输出形状由权重矩阵乘值矩阵得到。</desc>
+  <rect width="920" height="390" rx="16" fill="#f8fafc"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#0f172a">
+    <text x="32" y="42" font-size="23" font-weight="700">因果注意力：限制时间可见性</text>
+    <text x="32" y="72" font-size="15" fill="#475569">行 = 当前 query；列 = 被读取的 key。蓝色可见，灰色未来位置被屏蔽。</text>
+    <text x="158" y="111" font-size="16">位置 0</text><text x="242" y="111" font-size="16">位置 1</text><text x="326" y="111" font-size="16">位置 2</text>
+    <text x="40" y="159" font-size="16">位置 0</text><text x="40" y="220" font-size="16">位置 1</text><text x="40" y="281" font-size="16">位置 2</text>
+    <g fill="#dbeafe" stroke="#93c5fd"><rect x="136" y="128" width="78" height="51" rx="6"/><rect x="136" y="189" width="78" height="51" rx="6"/><rect x="220" y="189" width="78" height="51" rx="6"/><rect x="136" y="250" width="78" height="51" rx="6"/><rect x="220" y="250" width="78" height="51" rx="6"/><rect x="304" y="250" width="78" height="51" rx="6"/></g>
+    <g fill="#e2e8f0"><rect x="220" y="128" width="78" height="51" rx="6"/><rect x="304" y="128" width="78" height="51" rx="6"/><rect x="304" y="189" width="78" height="51" rx="6"/></g>
+    <g text-anchor="middle" font-size="17"><text x="175" y="160">1</text><text x="259" y="160">0</text><text x="343" y="160">0</text><text x="175" y="221">1</text><text x="259" y="221">1</text><text x="343" y="221">0</text><text x="175" y="282">1</text><text x="259" y="282">1</text><text x="343" y="282">1</text></g>
+    <rect x="429" y="112" width="459" height="195" rx="12" fill="white" stroke="#cbd5e1"/>
+    <text x="451" y="147" font-size="17" font-weight="700">正确顺序</text>
+    <text x="451" y="181" font-size="16">scores (n,n) → 未来位置设为 −∞</text>
+    <text x="451" y="215" font-size="16">→ 每行 softmax → 权重 (n,n)</text>
+    <text x="451" y="249" font-size="16">→ 乘 V (n,dᵥ) → 输出 (n,dᵥ)</text>
+    <text x="451" y="281" font-size="15" fill="#b45309">不能用 scores × 0 代替屏蔽：exp(0)=1</text>
+    <text x="32" y="345" font-size="17" font-weight="700" fill="#1d4ed8">实验：改变位置 2，位置 0 和 1 的因果输出应保持不变。</text>
+    <text x="32" y="374" font-size="15" fill="#475569">边界：已进入历史上下文的不可信内容仍可见；工具权限需要在模型外检查。</text>
+  </g>
+</svg>

@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 380" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 380" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">TCP 连接建立与断开</title>
+  <desc id="desc">展示三次握手的 SYN、SYN-ACK、ACK 与连接断开的 FIN/ACK 时序。</desc>
   <rect width="680" height="380" fill="#f7f8fa"/>
   <text x="20" y="28" font-size="16" font-weight="700" fill="#111827">TCP 连接的建立与断开</text>
 

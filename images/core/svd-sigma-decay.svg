@@ -1,0 +1,35 @@
+<svg role="img" aria-labelledby="title desc" width="680" height="260" viewBox="0 0 680 260" xmlns="http://www.w3.org/2000/svg">
+  <title id="title">奇异值衰减与截断 SVD</title>
+  <desc id="desc">按大小排列的奇异值展示能量集中程度，说明保留前几个方向与丢失信息之间的权衡。</desc>
+  <rect width="680" height="260" fill="#ffffff"/>
+  <text x="340" y="24" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#222" text-anchor="middle">奇异值谱：为什么要保留前 k 个</text>
+
+  <line x1="80" y1="210" x2="640" y2="210" stroke="#888" stroke-width="1.5"/>
+  <text x="74" y="214" font-family="Arial" font-size="11" fill="#666" text-anchor="end">0</text>
+
+  <!-- 保留的前 3 个 (绿) -->
+  <rect x="93"  y="50"   width="35" height="160"   fill="#22c55e"/>
+  <rect x="148" y="103"  width="35" height="107"   fill="#22c55e"/>
+  <rect x="203" y="143"  width="35" height="67"    fill="#22c55e"/>
+  <!-- 丢弃的后 5 个 (灰) -->
+  <rect x="258" y="170"  width="35" height="40"    fill="#9ca3af"/>
+  <rect x="313" y="190"  width="35" height="20"    fill="#9ca3af"/>
+  <rect x="368" y="199"  width="35" height="11"    fill="#9ca3af"/>
+  <rect x="423" y="205"  width="35" height="5"     fill="#9ca3af"/>
+  <rect x="478" y="207"  width="35" height="3"     fill="#9ca3af"/>
+
+  <!-- 标签 -->
+  <text x="110" y="44"  font-family="Arial" font-size="11" fill="#222" text-anchor="middle">σ₁=12</text>
+  <text x="165" y="97"  font-family="Arial" font-size="11" fill="#222" text-anchor="middle">σ₂=8</text>
+  <text x="220" y="137" font-family="Arial" font-size="11" fill="#222" text-anchor="middle">σ₃=5</text>
+  <text x="275" y="164" font-family="Arial" font-size="10" fill="#555" text-anchor="middle">σ₄=3</text>
+  <text x="330" y="184" font-family="Arial" font-size="10" fill="#555" text-anchor="middle">1.5</text>
+  <text x="385" y="193" font-family="Arial" font-size="10" fill="#555" text-anchor="middle">0.8</text>
+
+  <!-- 分隔线 -->
+  <line x1="240" y1="40" x2="240" y2="210" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <text x="333" y="232" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#22c55e" text-anchor="middle">保留 (top-k)</text>
+  <text x="500" y="232" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#9ca3af" text-anchor="middle">丢弃 (≈噪声)</text>
+
+  <text x="340" y="254" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#444" text-anchor="middle">前 3 个奇异值占能量 (Σσ²) ≈ 95% → 用 U₃Σ₃V₃ᵀ 即可近似原矩阵（压缩 / 降噪 / LoRA 低秩）</text>
+</svg>

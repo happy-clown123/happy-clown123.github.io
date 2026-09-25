@@ -1,0 +1,66 @@
+<svg role="img" aria-labelledby="title desc" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 400" width="680" height="400" font-family="Microsoft YaHei, PingFang SC, Helvetica, Arial, sans-serif">
+  <title id="title">LoRA 冻结权重与低秩旁路</title>
+  <desc id="desc">输入同时经过冻结的原始权重和先降维再升维的低秩旁路，旁路按 alpha 除以 rank 缩放后相加。</desc>
+  <rect x="0" y="0" width="680" height="400" fill="#ffffff"/>
+
+  <text x="340" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1a1a1a">LoRA：冻结原权重 W，只在旁路训练一个低秩增量</text>
+
+  <!-- 输入 -->
+  <rect x="24" y="168" width="72" height="44" rx="6" fill="#F1F3F4" stroke="#9AA0A6" stroke-width="1.5"/>
+  <text x="60" y="190" text-anchor="middle" font-size="16" fill="#202124">输入 x</text>
+  <text x="60" y="207" text-anchor="middle" font-size="13" fill="#5F6368">(k 维)</text>
+
+  <!-- 分叉线 -->
+  <line x1="96" y1="190" x2="126" y2="190" stroke="#5F6368" stroke-width="1.5"/>
+  <line x1="126" y1="190" x2="126" y2="110" stroke="#5F6368" stroke-width="1.5"/>
+  <line x1="126" y1="190" x2="126" y2="250" stroke="#5F6368" stroke-width="1.5"/>
+  <line x1="126" y1="110" x2="160" y2="110" stroke="#5F6368" stroke-width="1.5"/>
+  <line x1="126" y1="250" x2="160" y2="250" stroke="#5F6368" stroke-width="1.5"/>
+
+  <!-- 上路：冻结的 W -->
+  <rect x="160" y="82" width="120" height="56" rx="6" fill="#E8F0FE" stroke="#4285F4" stroke-width="2"/>
+  <text x="220" y="104" text-anchor="middle" font-size="16" font-weight="bold" fill="#1A3D6B">W</text>
+  <text x="220" y="122" text-anchor="middle" font-size="13" fill="#1A3D6B">(d × k)</text>
+  <text x="220" y="156" text-anchor="middle" font-size="13" fill="#C5221F">冻结 · 梯度不更新</text>
+
+  <!-- 下路：A -->
+  <rect x="160" y="222" width="90" height="56" rx="6" fill="#FEF3E2" stroke="#F59E0B" stroke-width="2"/>
+  <text x="205" y="244" text-anchor="middle" font-size="16" font-weight="bold" fill="#7A4A00">A</text>
+  <text x="205" y="262" text-anchor="middle" font-size="13" fill="#7A4A00">(r × k)</text>
+  <text x="205" y="296" text-anchor="middle" font-size="13" fill="#7A4A00">高斯初始化</text>
+
+  <line x1="250" y1="250" x2="282" y2="250" stroke="#5F6368" stroke-width="1.5"/>
+
+  <!-- 下路：B -->
+  <rect x="282" y="222" width="90" height="56" rx="6" fill="#FEF3E2" stroke="#F59E0B" stroke-width="2"/>
+  <text x="327" y="244" text-anchor="middle" font-size="16" font-weight="bold" fill="#7A4A00">B</text>
+  <text x="327" y="262" text-anchor="middle" font-size="13" fill="#7A4A00">(d × r)</text>
+  <text x="327" y="296" text-anchor="middle" font-size="13" fill="#7A4A00">零初始化</text>
+
+  <line x1="372" y1="250" x2="400" y2="250" stroke="#5F6368" stroke-width="1.5"/>
+
+  <!-- 缩放 -->
+  <rect x="400" y="228" width="66" height="44" rx="6" fill="#FFFFFF" stroke="#9AA0A6" stroke-width="1.5"/>
+  <text x="433" y="255" text-anchor="middle" font-size="14" fill="#202124">× α/r</text>
+
+  <line x1="466" y1="250" x2="500" y2="250" stroke="#5F6368" stroke-width="1.5"/>
+  <line x1="500" y1="250" x2="500" y2="190" stroke="#5F6368" stroke-width="1.5"/>
+  <line x1="280" y1="110" x2="500" y2="110" stroke="#5F6368" stroke-width="1.5"/>
+  <line x1="500" y1="110" x2="500" y2="190" stroke="#5F6368" stroke-width="1.5"/>
+
+  <!-- 相加 -->
+  <circle cx="500" cy="190" r="16" fill="#FFFFFF" stroke="#5F6368" stroke-width="1.5"/>
+  <text x="500" y="197" text-anchor="middle" font-size="18" fill="#202124">+</text>
+
+  <line x1="516" y1="190" x2="546" y2="190" stroke="#5F6368" stroke-width="1.5"/>
+
+  <!-- 输出 -->
+  <rect x="546" y="160" width="112" height="60" rx="6" fill="#E6F4EA" stroke="#34A853" stroke-width="2"/>
+  <text x="602" y="183" text-anchor="middle" font-size="15" font-weight="bold" fill="#0D652D">h = Wx +</text>
+  <text x="602" y="203" text-anchor="middle" font-size="15" font-weight="bold" fill="#0D652D">(α/r)·BAx</text>
+
+  <!-- 底部说明区 -->
+  <rect x="24" y="326" width="634" height="58" rx="6" fill="#F8F9FA" stroke="#DADCE0" stroke-width="1"/>
+  <text x="40" y="348" font-size="13" fill="#202124">参数量（d=k=768）：全参数微调 768×768 = 589,824　|　LoRA r=8：8×(768+768) = 12,288　= 2.08%</text>
+  <text x="40" y="370" font-size="13" fill="#202124">r 远小于 min(d,k)，所以只需训 1/50 的参数；推理时可把 (α/r)·BA 合并回 W，不增加延迟</text>
+</svg>

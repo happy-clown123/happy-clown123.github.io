@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 430" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 430" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">对抗机器学习攻击分类</title>
+  <desc id="desc">按攻击发生阶段区分训练时投毒、推理时逃逸以及模型提取与隐私推断。</desc>
   <rect width="680" height="430" fill="#ffffff"/>
   <text x="340" y="30" font-size="18" font-weight="700" text-anchor="middle" fill="#1a1a2e">对抗机器学习攻击分类（按攻击者介入阶段）</text>
 

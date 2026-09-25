@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 250" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 250" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">论文复现的五项核对</title>
+  <desc id="desc">按环境、数据、代码、指标与同条件对照核对实验，并记录已验证和未验证的结论。</desc>
   <rect width="680" height="250" fill="#ffffff"/>
   <text x="340" y="26" font-size="17" font-weight="700" text-anchor="middle" fill="#1a1a2e">论文复现 Checklist（从"读"到"能信"）</text>
 

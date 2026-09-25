@@ -29,7 +29,7 @@
 <meta property="og:image" content="https://happy-clown123.github.io/images/core/sqli-flow.svg">
 <meta property="og:image" content="https://happy-clown123.github.io/images/core/xss-types.svg">
 <meta property="article:published_time" content="2026-08-30T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-08-31T08:17:01.678Z">
+<meta property="article:modified_time" content="2026-09-25T16:32:37.400Z">
 <meta property="article:author" content="KachaKacha">
 <meta property="article:tag" content="OWASP">
 <meta property="article:tag" content="SQL注入">
@@ -444,7 +444,7 @@ mjx-container[display="true"] + br {
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.3k 字
+          7.2k 字
         
       </span>
     
@@ -455,7 +455,7 @@ mjx-container[display="true"] + br {
         
         
         
-          37 分钟
+          61 分钟
         
       </span>
     
@@ -500,7 +500,7 @@ mjx-container[display="true"] + br {
               <div class="markdown-body">
                 
                 <h1 id="Web-安全基础（Web-Security）"><a href="#Web-安全基础（Web-Security）" class="headerlink" title="Web 安全基础（Web Security）"></a>Web 安全基础（Web Security）</h1><blockquote>
-<p>定位：OWASP Top 10（SQL 注入 / XSS / CSRF / SSRF）是安全人的通用词汇表。你不需要成为渗透专家，但<strong>看到 payload 要知道它在干嘛</strong>——因为 LLM 安全的间接 prompt injection 常借 Web 页面注入。<br>前置：模块 G（网络基础）｜ 后继：模块 K（LLM 安全）、M（红队）<br>及格线：能解释 SQL 注入怎么让数据库返回不该返回的数据（h01 对照实验）；能说出 OWASP Top 10:2025 前 3 名；说清存储型 XSS 与间接注入的继承关系。</p>
+<p>定位：OWASP Top 10（SQL 注入 / XSS / CSRF / SSRF）是安全人的通用词汇表。你不需要成为渗透专家，但<strong>看到 payload 要知道它在干嘛</strong>——因为 LLM 安全的间接 prompt injection 常借 Web 页面注入。<br>前置：模块 G（网络基础）｜ 后继：模块 K（LLM 安全）、M（红队）<br>及格线：能解释 SQL 注入怎么让数据库返回不该返回的数据（H01）；能区分 authentication、token scope、对象级授权（BOLA）与功能级授权（BFLA）；能用 H02 解释 Agent 工具为什么必须在模型外做授权和 SSRF 防护。</p>
 </blockquote>
 <hr>
 <h2 id="0-学习执行清单"><a href="#0-学习执行清单" class="headerlink" title="0 学习执行清单"></a>0 学习执行清单</h2><table>
@@ -550,10 +550,17 @@ mjx-container[display="true"] + br {
 </tr>
 <tr>
 <td>6</td>
+<td>API/OAuth 授权 + SSRF</td>
+<td>本笔记 §6 + <code>labs/h02_api_auth_ssrf.py</code></td>
+<td>token/object/function/URL 决策表</td>
+<td>能解释 aud/scope、BOLA/BFLA、DNS rebinding 与禁用重定向</td>
+</tr>
+<tr>
+<td>7</td>
 <td>接上 K：Web 注入 ↔ LLM 注入</td>
-<td>本笔记 §7 + 模块 K §3</td>
+<td>本笔记 §8 + 模块 K §2.1</td>
 <td>一段继承关系分析</td>
-<td>能说出”存储型 XSS 载体 ≈ 间接注入载体”</td>
+<td>能说出“存储型 XSS 载体 ≈ 间接注入载体”，并指出最终损害由工具权限决定</td>
 </tr>
 </tbody></table>
 <hr>
@@ -620,15 +627,19 @@ mjx-container[display="true"] + br {
 <blockquote>
 <p>作为 AI 安全研究者，你重点掌握 <strong>Injection 类（SQLi/XSS）</strong> 和 <strong>SSRF / 访问控制</strong>，其余混个脸熟即可。下面专讲这几类。</p>
 </blockquote>
-<h2 id="2-SQL-注入：最经典的注入"><a href="#2-SQL-注入：最经典的注入" class="headerlink" title="2 SQL 注入：最经典的注入"></a>2 SQL 注入：最经典的注入</h2><p><img src="/images/core/sqli-flow.svg" srcset="/img/loading.gif" lazyload></p>
+<h2 id="2-SQL-注入：最经典的注入"><a href="#2-SQL-注入：最经典的注入" class="headerlink" title="2 SQL 注入：最经典的注入"></a>2 SQL 注入：最经典的注入</h2><p><img src="/images/core/sqli-flow.svg" srcset="/img/loading.gif" lazyload alt="字符串拼接注入与参数化查询对照"></p>
 <p>核心：用户输入被<strong>直接拼进 SQL 字符串</strong>，使得输入从”数据”变成”代码”。</p>
 <p>为什么 <code>' OR 1=1 --</code> 能绕过登录？</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 后端拼接：SELECT * FROM users WHERE username='&lt;输入&gt;' AND password='&lt;输入&gt;'</span><br><span class="hljs-comment">-- 输入用户名：admin' OR '1'='1</span><br><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> users <span class="hljs-keyword">WHERE</span> username<span class="hljs-operator">=</span><span class="hljs-string">'admin'</span> <span class="hljs-keyword">OR</span> <span class="hljs-string">'1'</span><span class="hljs-operator">=</span><span class="hljs-string">'1'</span> <span class="hljs-keyword">AND</span> password<span class="hljs-operator">=</span><span class="hljs-string">'***'</span><br></code></pre></td></tr></table></figure>
 <p><code>'1'='1'</code> 恒为真，<code>OR</code> 让它前面的条件失效 → 整条 WHERE 恒真 → 不需要正确密码也能登录（取决于拼接位置，可能还会拖出整张表）。<code>--</code> 是 SQL 注释，用来吃掉后面的 <code>' AND password=...</code>。</p>
-<p><strong>防御（永远用这个）</strong>：参数化查询 / 预编译，让输入永远是占位符的值：</p>
+<p><strong>处理不可信值时的默认做法</strong>：使用参数化查询 / 预编译，把值与 SQL 结构分离：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 错误：字符串拼接</span><br>cur.execute(<span class="hljs-string">"SELECT * FROM users WHERE username='"</span> + user + <span class="hljs-string">"' AND password='"</span> + pw + <span class="hljs-string">"'"</span>)<br><br><span class="hljs-comment"># 正确：参数化（? 占位符，驱动负责转义）</span><br>cur.execute(<span class="hljs-string">"SELECT * FROM users WHERE username=? AND password=?"</span>, (user, pw))<br></code></pre></td></tr></table></figure>
 
-<h2 id="3-XSS：在别人浏览器里跑你的-JS"><a href="#3-XSS：在别人浏览器里跑你的-JS" class="headerlink" title="3 XSS：在别人浏览器里跑你的 JS"></a>3 XSS：在别人浏览器里跑你的 JS</h2><p><img src="/images/core/xss-types.svg" srcset="/img/loading.gif" lazyload></p>
+<p>参数化通常只绑定“值”，不能替你安全绑定表名、列名或排序方向；这类动态标识符应映射到服务端固定 allowlist。还要配合最小数据库权限、统一错误处理与审计，而不是把参数化误解为覆盖所有 SQL 风险的单一控制。</p>
+<blockquote>
+<p><strong>学到这里立刻做｜H01-SQLi</strong>：运行 <a href="labs/h01_sqli_xss_demo.py"><code>labs/h01_sqli_xss_demo.py</code></a>，把“拼接 SQL”和“参数化 SQL”的最终查询方式并排记录。再做 <a target="_blank" rel="noopener" href="https://portswigger.net/web-security/sql-injection">PortSwigger SQL injection</a> 的入门说明与一个官方练习；只在授权靶场操作。验收物是命中行数对照和一句“为什么参数化不是黑名单过滤”。</p>
+</blockquote>
+<h2 id="3-XSS：在别人浏览器里跑你的-JS"><a href="#3-XSS：在别人浏览器里跑你的-JS" class="headerlink" title="3 XSS：在别人浏览器里跑你的 JS"></a>3 XSS：在别人浏览器里跑你的 JS</h2><p><img src="/images/core/xss-types.svg" srcset="/img/loading.gif" lazyload alt="反射型、存储型与 DOM 型 XSS 数据流"></p>
 <ul>
 <li><strong>反射型</strong>：payload 在 URL 里，服务器把它原样拼回响应 HTML，用户一点击就执行。不经存储。</li>
 <li><strong>存储型</strong>：payload 提交到服务器存库（评论/昵称），其他用户访问时从库取出执行。<strong>最危险、最持久</strong>。</li>
@@ -642,6 +653,9 @@ mjx-container[display="true"] + br {
 <li>Cookie 加 <code>HttpOnly</code> 防止 JS 读取。</li>
 <li>框架（React/Vue）默认转义，但 <code>dangerouslySetInnerHTML</code> / <code>v-html</code> 会绕过——这是 AI 应用里的常见坑。</li>
 </ul>
+<blockquote>
+<p><strong>接着完成｜H01-XSS</strong>：继续观察 H01 的转义前后输出，并阅读 <a target="_blank" rel="noopener" href="https://portswigger.net/web-security/cross-site-scripting">PortSwigger XSS</a> 对 reflected/stored/DOM 三型的区分。画一条“恶意内容写入网页 → 被 Agent/RAG 读取 → 间接注入”的继承链，不要在真实网站测试 payload。</p>
+</blockquote>
 <h2 id="4-CSRF：借你的身份发请求"><a href="#4-CSRF：借你的身份发请求" class="headerlink" title="4 CSRF：借你的身份发请求"></a>4 CSRF：借你的身份发请求</h2><p><strong>原理</strong>：你已登录 <code>bank.com</code>，浏览器持有合法会话 Cookie。攻击者页面偷偷发 <code>POST /transfer?to=attacker&amp;amt=1000</code>，浏览器自动带上 Cookie → 银行以为是你自己发的。</p>
 <p><strong>防御</strong>：</p>
 <ul>
@@ -656,17 +670,73 @@ mjx-container[display="true"] + br {
 <li>出网请求走隔离网络 + 禁用重定向跟随。</li>
 <li>2025 版已把 SSRF 并入 A01 Broken Access Control。</li>
 </ul>
-<h2 id="6-文件上传漏洞（扫盲）"><a href="#6-文件上传漏洞（扫盲）" class="headerlink" title="6 文件上传漏洞（扫盲）"></a>6 文件上传漏洞（扫盲）</h2><ul>
+<h2 id="6-API-身份、授权与-SSRF：Agent-工具的真正边界"><a href="#6-API-身份、授权与-SSRF：Agent-工具的真正边界" class="headerlink" title="6 API 身份、授权与 SSRF：Agent 工具的真正边界"></a>6 API 身份、授权与 SSRF：Agent 工具的真正边界</h2><h3 id="6-1-四个不要混淆的检查"><a href="#6-1-四个不要混淆的检查" class="headerlink" title="6.1 四个不要混淆的检查"></a>6.1 四个不要混淆的检查</h3><table>
+<thead>
+<tr>
+<th>层次</th>
+<th>回答的问题</th>
+<th>典型失败</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Authentication</td>
+<td>这个调用者是谁？token 是否真实有效？</td>
+<td>伪造、过期或错误 issuer 的 token 被接受</td>
+</tr>
+<tr>
+<td>Token restriction</td>
+<td>这个 token 是给哪个 API、哪些动作的？</td>
+<td>不验 <code>aud</code>，把 A 服务 token 拿给 B 服务；scope 过宽</td>
+</tr>
+<tr>
+<td>Object authorization</td>
+<td>这个主体能否操作<strong>这个对象</strong>？</td>
+<td>改 URL 中 <code>document_id</code> 就读到别人数据（BOLA）</td>
+</tr>
+<tr>
+<td>Function authorization</td>
+<td>这个主体能否调用<strong>这个功能</strong>？</td>
+<td>普通成员直接调用管理员删除 API（BFLA）</td>
+</tr>
+</tbody></table>
+<p>对 Agent 而言，LLM 生成的 tool call 只是一个<strong>不可信动作提案</strong>。资源服务器仍需用 <code>subject + action + resource + context</code> 做确定性授权，不能因为调用来自“内部 Agent”就跳过检查。</p>
+<h3 id="6-2-OAuth-最小心智模型"><a href="#6-2-OAuth-最小心智模型" class="headerlink" title="6.2 OAuth 最小心智模型"></a>6.2 OAuth 最小心智模型</h3><p>OAuth 解决的是“客户端获得受限授权去访问资源”，不是给任意字符串贴上可信标签。你至少要认识：resource owner、client、authorization server、resource server，以及 access token 的 <code>iss</code>、<code>aud</code>、<code>scope</code>、<code>exp</code>。</p>
+<ul>
+<li><code>audience</code> 把 token 绑定到目标 API；资源服务器拒绝发给其他服务的 token。</li>
+<li><code>scope</code> 是 token 的权限上限，不等于最终授权；访问具体对象仍要检查 owner/tenant/role。</li>
+<li>公共客户端使用 authorization code + PKCE，redirect URI 做精确匹配。</li>
+<li>Agent/MCP server 不应把收到的 token 原样透传给另一个下游服务；这会混淆受众和责任主体，形成 token passthrough / confused deputy。</li>
+<li>生产环境必须由成熟库验证签名、允许的算法、密钥轮换和时间；不要手写 JWT 验签。</li>
+</ul>
+<p>以当前 OAuth 安全最佳实践 <a target="_blank" rel="noopener" href="https://datatracker.ietf.org/doc/html/rfc9700">RFC 9700</a> 为准；资源服务器元数据可继续看 <a target="_blank" rel="noopener" href="https://datatracker.ietf.org/doc/html/rfc9728">RFC 9728</a>。</p>
+<h3 id="6-3-SSRF-防御不能只做字符串黑名单"><a href="#6-3-SSRF-防御不能只做字符串黑名单" class="headerlink" title="6.3 SSRF 防御不能只做字符串黑名单"></a>6.3 SSRF 防御不能只做字符串黑名单</h3><p>“只禁 <code>127.0.0.1</code>”会漏掉 IPv6、整数/混合编码、域名先解析公网后重绑定内网、以及 30x 重定向。较稳妥的顺序是：</p>
+<ol>
+<li>业务允许时使用 <code>https + hostname + port</code> allowlist，而不是 denylist。</li>
+<li>解析域名后检查<strong>全部</strong> IP，拒绝 loopback、private、link-local、multicast、unspecified 等非公网目的地。</li>
+<li>真实连接固定到已校验的解析结果，并处理 DNS rebinding；网络层限制服务账号出网。</li>
+<li>禁用自动重定向；若业务必须跟随，每一跳都重新执行完整校验。</li>
+<li>限制响应大小、超时、方法和内容类型，避免取回内网数据后再泄露给模型。</li>
+</ol>
+<p>参考 <a target="_blank" rel="noopener" href="https://api-security.owasp.org/editions/2023/en/0x00-header/">OWASP API Security Top 10:2023</a> 的 BOLA/BFLA/SSRF，以及 <a target="_blank" rel="noopener" href="https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html">OWASP SSRF Prevention Cheat Sheet</a>。H02 用固定 DNS 测试夹具离线演示这些决策，不会发请求。</p>
+<blockquote>
+<p><strong>学到这里立刻做｜H02</strong>：运行 <a href="labs/h02_api_auth_ssrf.py"><code>labs/h02_api_auth_ssrf.py</code></a>，给输出按“token / object / function / network destination”四层分类；然后新增一个过期 token case 和一个 allowlist 域名解析到 IPv6 loopback 的 case。阅读 <a target="_blank" rel="noopener" href="https://datatracker.ietf.org/doc/html/rfc9700#section-2">RFC 9700 §2</a> 时只提取 redirect、PKCE、audience、最小权限四项要求。最后在仓库根目录运行 <code>python -m unittest discover -s tests -p "test_security_controls.py" -v</code>，断言通过才算完成。</p>
+</blockquote>
+<h2 id="7-文件上传漏洞（扫盲）"><a href="#7-文件上传漏洞（扫盲）" class="headerlink" title="7 文件上传漏洞（扫盲）"></a>7 文件上传漏洞（扫盲）</h2><blockquote>
+<p><strong>进入下一节前的边界练习</strong>：给同一个“读取文档”请求列出 <code>主体、租户、对象所有者、动作、目的地址</code> 五列。依次只改一列：跨租户、同租户非本人、低权限删除、合法域名解析到私网。先预测 H02 的拒绝层再运行；一条 scope 并不能同时证明这五件事。</p>
+</blockquote>
+<p><strong>回看 H01 的编码边界</strong>：参数绑定固定的是 SQL 值的位置，动态表名/列名仍需受控映射。<code>html.escape</code> 适用于 HTML 文本等上下文，不能作为 JavaScript、CSS 或 URL 的通用防线；<code>javascript:</code> URL 需要协议策略，不是把引号转义就安全。H01 只打印结果，没有在浏览器中执行 XSS。</p>
+<ul>
 <li>传 <code>.php</code>/<code>.jsp</code> 木马 → 直接 getshell；传恶意外壳图 → 解析漏洞执行。</li>
 <li>防御：限制后缀白名单、重命名、存在非执行目录、校验真实 MIME、隔离存储。</li>
 </ul>
-<h2 id="7-和-AI-安全的连接点（核心）"><a href="#7-和-AI-安全的连接点（核心）" class="headerlink" title="7 和 AI 安全的连接点（核心）"></a>7 和 AI 安全的连接点（核心）</h2><ul>
+<h2 id="8-和-AI-安全的连接点（核心）"><a href="#8-和-AI-安全的连接点（核心）" class="headerlink" title="8 和 AI 安全的连接点（核心）"></a>8 和 AI 安全的连接点（核心）</h2><ul>
 <li><strong>间接 prompt injection</strong>：攻击者把恶意指令藏在网页/评论（常借<strong>存储型 XSS 的载体</strong>）里，LLM 检索到这段内容后被执行 → 这就是 Web 漏洞和 LLM 安全的交叉。</li>
 <li><strong>RAG 投毒</strong>：往知识库（可能来自爬取的 Web 页面）注入恶意文本 → 本质是”把 Web 注入搬进 LLM 上下文”。</li>
 <li><strong>OWASP LLM Top 10</strong> 的分类（如 LLM01 Prompt Injection、LLM02 敏感信息泄露）在方法论上继承自 Web Top 10——你懂 Web 注入，就懂 LLM 注入的”为什么危险”。</li>
 <li>你跑红队（模块 M）扫描 LLM 服务时，很多 payload 就是 HTTP 表单/JSON 里的注入字符串。</li>
+<li>Tool 调用最终落到 API；Prompt injection 能否造成实际损害，取决于 API 是否正确检查 token audience/scope、对象权限和出网目的地。</li>
 </ul>
-<h2 id="8-实验清单（Labs）"><a href="#8-实验清单（Labs）" class="headerlink" title="8 实验清单（Labs）"></a>8 实验清单（Labs）</h2><table>
+<h2 id="9-实验清单（Labs）"><a href="#9-实验清单（Labs）" class="headerlink" title="9 实验清单（Labs）"></a>9 实验清单（Labs）</h2><table>
 <thead>
 <tr>
 <th>Lab</th>
@@ -685,33 +755,47 @@ mjx-container[display="true"] + br {
 <td>CPU，秒级</td>
 <td>SQLi 部分：拼接命中全部/参数化命中 0；XSS 部分：不转义可注入/转义后原样显示</td>
 </tr>
+<tr>
+<td>h02</td>
+<td>API token + BOLA/BFLA + SSRF 决策</td>
+<td><code>labs/h02_api_auth_ssrf.py</code></td>
+<td>Python 标准库</td>
+<td>CPU，离线秒级</td>
+<td>正常对象/URL 放行；错误 aud/scope、跨租户、非管理员删除、非公网 URL 全部 fail closed</td>
+</tr>
 </tbody></table>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> 02-security/web/labs<br>python h01_sqli_xss_demo.py<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> 02-security/web/labs<br>python h01_sqli_xss_demo.py<br>python h02_api_auth_ssrf.py<br></code></pre></td></tr></table></figure>
 
 <blockquote>
 <p>进阶靶场（可选）：PortSwigger Web Security Academy 免费 labs；DVWA 用 Docker 本地起。都做官方题即可，不用全刷。</p>
 </blockquote>
-<h2 id="9-常见误区"><a href="#9-常见误区" class="headerlink" title="9 常见误区"></a>9 常见误区</h2><ol>
+<h2 id="10-常见误区"><a href="#10-常见误区" class="headerlink" title="10 常见误区"></a>10 常见误区</h2><ol>
 <li><strong>以为”用户输入过滤一下（黑名单）就安全了”</strong> —— 黑名单永远不完整（编码、大小写、注释变体无数）；SQL 注入的正解是<strong>参数化查询</strong>（结构上隔离），不是过滤。</li>
 <li><strong>以为参数化查询”只是转义”</strong> —— 是编译期把 SQL 结构固定、输入只当数据绑定，攻击者在结构上无路可走。</li>
 <li><strong>以为 XSS 只是”弹个窗”</strong> —— 存储型 XSS + 管理员 Cookie = 接管后台；现代危害是<strong>窃取会话 + 键盘记录 + 借浏览器打内网</strong>（beef 框架的玩法）。</li>
 <li><strong>以为 HTTPS 能防 XSS/CSRF</strong> —— HTTPS 防传输窃听，不防应用层注入；XSS/CSRF 在应用层，TLS 无能为力。</li>
 <li><strong>以为 LLM 应用没有 Web 漏洞</strong> —— LLM 应用是 Web 应用：前端、API、存储全在；<code>v-html</code>/<code>innerHTML</code> 渲染模型输出 = 存储型 XSS 的新载体（对应 LLM05 Improper Output Handling）。</li>
+<li><strong>有合法 token 就等于有权访问任意对象</strong> —— token 验证只是起点；每次请求还要做对象级和功能级授权。</li>
+<li><strong>SSRF 黑名单里写几个内网 IP 就够了</strong> —— 域名重绑定、重定向和地址变体都会绕过；优先 allowlist，并在解析和连接层共同限制。</li>
 </ol>
-<h2 id="10-检查点（自测）"><a href="#10-检查点（自测）" class="headerlink" title="10 检查点（自测）"></a>10 检查点（自测）</h2><ul>
+<h2 id="11-检查点（自测）"><a href="#11-检查点（自测）" class="headerlink" title="11 检查点（自测）"></a>11 检查点（自测）</h2><ul>
 <li><input disabled="" type="checkbox"> SQL 注入的 <code>' OR 1=1 --</code> 为什么能绕过登录？参数化查询怎么挡住它？</li>
 <li><input disabled="" type="checkbox"> XSS 的反射型 vs 存储型区别？各举一例；<code>v-html</code>/<code>innerHTML</code> 为什么是坑</li>
 <li><input disabled="" type="checkbox"> CSRF 借的是什么机制？SameSite / CSRF Token 怎么防？</li>
 <li><input disabled="" type="checkbox"> SSRF 为什么能打到云元数据接口？怎么防御？</li>
+<li><input disabled="" type="checkbox"> <code>iss</code>、<code>aud</code>、<code>scope</code>、<code>exp</code> 分别限制什么？为什么 scope 通过后仍要检查对象所有者？</li>
+<li><input disabled="" type="checkbox"> BOLA 与 BFLA 有什么区别？各为 Agent tool API 写一个失败例子。</li>
+<li><input disabled="" type="checkbox"> 为什么 URL 字符串通过检查后，仍要检查解析 IP、禁用或逐跳验证重定向？</li>
 <li><input disabled="" type="checkbox"> 间接 prompt injection 和 Web 注入（尤其存储型 XSS）有什么继承关系？</li>
-<li><input disabled="" type="checkbox"> 跑通 h01，贴出拼接/参数化命中行数对照与转义前后对照</li>
+<li><input disabled="" type="checkbox"> 跑通 H01/H02，贴出注入对照与 allow/deny 决策表</li>
 </ul>
 <p><strong>及格线</strong>：能解释 SQL 注入怎么让数据库返回不该返回的数据；能说出 OWASP Top 10:2025 前 3 名（Broken Access Control / Security Misconfiguration / Supply Chain Failures）。</p>
 <p><strong>资源</strong>：OWASP Top 10（2025 官网）；PortSwigger Web Security Academy（免费 labs，含 LLM Attacks）；《白帽子讲 Web 安全》；DVWA 靶场（Docker 本地起）。</p>
-<h2 id="11-与主线的连接"><a href="#11-与主线的连接" class="headerlink" title="11 与主线的连接"></a>11 与主线的连接</h2><ul>
-<li><strong>→ 模块 K §3 prompt injection</strong>：间接注入常借<strong>存储型 XSS 的载体</strong>（网页/评论）——LLM 检索到恶意文本后执行，等于”Web 注入搬进 LLM 上下文”。</li>
+<h2 id="12-与主线的连接"><a href="#12-与主线的连接" class="headerlink" title="12 与主线的连接"></a>12 与主线的连接</h2><ul>
+<li><strong>→ 模块 K §2.1 prompt injection</strong>：间接注入常借<strong>存储型 XSS 的载体</strong>（网页/评论）——LLM 检索到恶意文本后执行，等于”Web 注入搬进 LLM 上下文”。</li>
 <li><strong>→ 模块 K §2 LLM05</strong>：模型输出未校验直接进前端渲染（<code>v-html</code>）＝存储型 XSS 的 AI 版；输出必须当不可信输入处理。</li>
 <li><strong>→ 模块 K §5 RAG 投毒</strong>：知识库若来自爬取的 Web 页面，网页注入直接变成 RAG 毒文档。</li>
+<li><strong>→ Agent 安全 §3/§5</strong>：H02 的 audience/scope、对象授权和 SSRF 网关，是 MCP/tool use 从“协议能调用”走向“调用有权限”的底座。</li>
 <li><strong>→ 模块 J §6 防御</strong>：Web 的”输入校验/输出编码”哲学与对抗样本的”输入隔离”同源——都是”不要信输入”。</li>
 </ul>
 

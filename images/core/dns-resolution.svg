@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 320" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 320" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">DNS 递归解析流程</title>
+  <desc id="desc">客户端向递归解析器查询；缓存未命中时依次查询根、顶级域和权威服务器，得到域名对应地址。</desc>
   <rect width="680" height="320" fill="#f7f8fa"/>
   <text x="20" y="28" font-size="16" font-weight="700" fill="#111827">DNS 递归解析流程（以 www.example.com 为例）</text>
 

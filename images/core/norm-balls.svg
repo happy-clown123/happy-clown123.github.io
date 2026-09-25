@@ -1,0 +1,19 @@
+<svg role="img" aria-labelledby="title desc" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 320" font-family="sans-serif">
+  <title id="title">不同范数的二维单位球</title>
+  <desc id="desc">L1 单位球为菱形，L2 为圆，L 无穷范数为正方形；同一预算对应不同的可行扰动集合。</desc>
+  <rect width="420" height="320" fill="#ffffff"/>
+  <!-- axes -->
+  <line x1="20" y1="160" x2="400" y2="160" stroke="#bbb" stroke-width="1"/>
+  <line x1="210" y1="20" x2="210" y2="300" stroke="#bbb" stroke-width="1"/>
+  <!-- L2 circle -->
+  <circle cx="210" cy="160" r="110" fill="none" stroke="#1f77b4" stroke-width="2.5"/>
+  <!-- L1 diamond -->
+  <polygon points="210,50 320,160 210,270 100,160" fill="none" stroke="#ff7f0e" stroke-width="2.5"/>
+  <!-- L∞ square -->
+  <rect x="100" y="50" width="220" height="220" fill="none" stroke="#2ca02c" stroke-width="2.5"/>
+  <!-- labels -->
+  <text x="210" y="146" text-anchor="middle" fill="#1f77b4" font-size="13">L2 (圆)</text>
+  <text x="332" y="156" fill="#2ca02c" font-size="13">L∞</text>
+  <text x="150" y="62" fill="#ff7f0e" font-size="13">L1</text>
+  <text x="210" y="308" text-anchor="middle" fill="#444" font-size="12">p 越大越"方"：L1 鼓励稀疏 → L2 → L∞ 只看最大分量</text>
+</svg>

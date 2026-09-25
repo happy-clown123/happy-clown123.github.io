@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="310" viewBox="0 0 900 310" role="img" aria-labelledby="title desc">
+  <title id="title">归约与广播：每一行减去自己的均值</title>
+  <desc id="desc">二维矩阵有两行三列，按列轴归约并保留维度得到两行一列均值，再沿每行广播，中心化结果为两行负一、零、一。</desc>
+  <rect width="900" height="310" rx="16" fill="#f8fafc"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#0f172a">
+    <text x="28" y="42" font-size="23" font-weight="700">axis=1 归约列轴；keepdims=True 保留轴的位置</text>
+    <rect x="28" y="78" width="245" height="123" rx="10" fill="#dbeafe"/>
+    <rect x="320" y="78" width="245" height="123" rx="10" fill="#dcfce7"/>
+    <rect x="612" y="78" width="260" height="123" rx="10" fill="#ede9fe"/>
+    <g text-anchor="middle" font-size="19"><text x="150" y="109">M : (2,3)</text><text x="150" y="149">1　2　3</text><text x="150" y="180">4　5　6</text><text x="442" y="109">行均值 : (2,1)</text><text x="442" y="149">2 → 2　2　2</text><text x="442" y="180">5 → 5　5　5</text><text x="742" y="109">M − 行均值 : (2,3)</text><text x="742" y="149">−1　0　1</text><text x="742" y="180">−1　0　1</text></g>
+    <text x="291" y="151" text-anchor="middle" font-size="24">→</text><text x="590" y="151" text-anchor="middle" font-size="24">→</text>
+    <text x="28" y="241" font-size="17">mean(axis=1, keepdims=True) 保留 (2,1)，计算时沿宽度为 1 的轴广播。</text>
+    <text x="28" y="275" font-size="17" fill="#b45309">去掉 keepdims 得到 (2,)；与 (2,3) 末轴不兼容，不能直接逐行相减。</text>
+  </g>
+</svg>

@@ -19,16 +19,16 @@
   <meta name="author" content="KachaKacha">
   <meta name="keywords" content="">
   
-    <meta name="description" content="PyTorch 实操（PyTorch Hands-on） 定位：对抗样本实验的第一工具。不会 PyTorch，对抗 ML 实验就没法动手——官方 FGSM 教程就是你第一个 AI 安全实验，得懂 requires_grad、.backward() 才能跑通。前置：模块 D（深度学习）、B（Python）｜ 后继：模块 J（对抗 ML）、F（LLM）及格线：能跑通 pt01（torch 训练小网络">
+    <meta name="description" content="PyTorch 实操（PyTorch Hands-on） 本文行动导航：学完 autograd 后手写一次标量反传；学完训练循环后运行 labs&#x2F;pt01_train_grad_save.py，核对 loss、梯度和模型存取。只有在能解释 train&#x2F;eval、zero_grad&#x2F;backward&#x2F;step 后，才阅读 PyTorch 官方 FGSM 教程 并进入 J01。   定位：对抗样本实验">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PyTorch 实操（E 模块）">
 <meta property="og:url" content="https://happy-clown123.github.io/2026/08/31/E-pytorch/index.html">
 <meta property="og:site_name" content="KachaKacha的空间">
-<meta property="og:description" content="PyTorch 实操（PyTorch Hands-on） 定位：对抗样本实验的第一工具。不会 PyTorch，对抗 ML 实验就没法动手——官方 FGSM 教程就是你第一个 AI 安全实验，得懂 requires_grad、.backward() 才能跑通。前置：模块 D（深度学习）、B（Python）｜ 后继：模块 J（对抗 ML）、F（LLM）及格线：能跑通 pt01（torch 训练小网络">
+<meta property="og:description" content="PyTorch 实操（PyTorch Hands-on） 本文行动导航：学完 autograd 后手写一次标量反传；学完训练循环后运行 labs&#x2F;pt01_train_grad_save.py，核对 loss、梯度和模型存取。只有在能解释 train&#x2F;eval、zero_grad&#x2F;backward&#x2F;step 后，才阅读 PyTorch 官方 FGSM 教程 并进入 J01。   定位：对抗样本实验">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://happy-clown123.github.io/images/core/autograd-graph.svg">
 <meta property="article:published_time" content="2026-08-30T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-08-31T08:17:01.638Z">
+<meta property="article:modified_time" content="2026-09-25T16:32:37.292Z">
 <meta property="article:author" content="KachaKacha">
 <meta property="article:tag" content="PyTorch">
 <meta property="article:tag" content="SGD">
@@ -443,7 +443,7 @@ mjx-container[display="true"] + br {
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          5.7k 字
+          6.3k 字
         
       </span>
     
@@ -454,7 +454,7 @@ mjx-container[display="true"] + br {
         
         
         
-          48 分钟
+          53 分钟
         
       </span>
     
@@ -499,6 +499,9 @@ mjx-container[display="true"] + br {
               <div class="markdown-body">
                 
                 <h1 id="PyTorch-实操（PyTorch-Hands-on）"><a href="#PyTorch-实操（PyTorch-Hands-on）" class="headerlink" title="PyTorch 实操（PyTorch Hands-on）"></a>PyTorch 实操（PyTorch Hands-on）</h1><blockquote>
+<p><strong>本文行动导航</strong>：学完 autograd 后手写一次标量反传；学完训练循环后运行 <a href="labs/pt01_train_grad_save.py"><code>labs/pt01_train_grad_save.py</code></a>，核对 loss、梯度和模型存取。只有在能解释 <code>train/eval</code>、<code>zero_grad/backward/step</code> 后，才阅读 <a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/beginner/fgsm_tutorial.html">PyTorch 官方 FGSM 教程</a> 并进入 J01。</p>
+</blockquote>
+<blockquote>
 <p>定位：对抗样本实验的第一工具。不会 PyTorch，对抗 ML 实验就没法动手——官方 FGSM 教程就是你第一个 AI 安全实验，得懂 <code>requires_grad</code>、<code>.backward()</code> 才能跑通。<br>前置：模块 D（深度学习）、B（Python）｜ 后继：模块 J（对抗 ML）、F（LLM）<br>及格线：能跑通 pt01（torch 训练小网络 + 输入梯度 + 存读模型）；知道攻击评测为什么必须 <code>model.eval()</code>。</p>
 </blockquote>
 <hr>
@@ -562,9 +565,9 @@ mjx-container[display="true"] + br {
 <li><code>x.grad</code>：<code>.backward()</code> 之后，<strong>x 处累积的梯度</strong>就存在这里（对攻击来说，这就是 <mjx-container class="MathJax" jax="SVG" overflow="overflow"><svg style="vertical-align: -0.357ex;" xmlns="http://www.w3.org/2000/svg" width="4.528ex" height="1.904ex" role="img" focusable="false" viewBox="0 -684 2001.5 841.8"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="\nabla_x L"><g data-mml-node="msub" data-latex="\nabla_x"><g data-mml-node="mi" data-latex="\nabla"><path data-c="2207" d="M780 657C783 664 785 669 785 671C785 679 776 683 759 683L73 683C56 683 47 679 47 670L387-13C394-26 403-33 416-33C429-33 438-26 445-13M445 72L179 605L710 605Z"></path></g><g data-mml-node="mi" transform="translate(866,-150) scale(0.707)" data-latex="x"><path data-c="1D465" d="M527 373C527 419 482 442 432 442C389 442 355 419 329 373C308 419 273 442 222 442C173 442 133 419 101 374C74 335 60 306 60 287C60 278 65 273 75 273C84 273 90 278 92 287C111 345 153 413 220 413C253 413 269 392 269 351C269 330 251 252 216 118C199 51 169 18 126 18C112 18 99 21 88 26C114 36 127 54 127 80C127 106 114 119 87 119C54 119 29 91 29 58C29 12 76-11 125-11C167-11 201 12 228 58C247 12 283-11 335-11C383-11 423 12 455 57C482 96 496 125 496 144C496 153 491 158 481 158C472 158 467 153 464 144C447 87 402 18 337 18C304 18 287 38 287 79C287 92 292 120 303 165L337 300C356 375 387 413 431 413C445 413 458 410 469 405C442 396 429 378 429 351C429 325 443 312 470 312C502 312 527 341 527 373Z"></path></g></g><g data-mml-node="mi" data-latex="L" transform="translate(1320.5,0)"><path data-c="1D43F" d="M520 667C520 678 513 683 500 683L354 680L223 683C208 684 200 676 200 659C200 652 203 647 209 646C218 645 226 644 231 644C262 643 279 641 284 640C289 639 292 636 292 631C292 629 291 623 288 613L156 82C150 60 140 47 125 42C119 40 101 39 70 39C49 39 39 31 39 15C39 5 49 0 70 0L527 0C552 0 554 0 561 19L639 233C642 240 643 245 643 248C643 258 638 263 627 263C617 263 612 254 607 240C588 191 570 154 555 131C518 75 455 39 363 39L270 39C259 39 252 39 249 40C242 40 239 42 239 45C239 47 241 54 244 67L377 601C383 624 396 637 415 642C421 643 442 644 478 644C506 644 520 644 520 667Z"></path></g></g></g></svg></mjx-container>）。</li>
 </ul>
 <p><strong>数值实例</strong>：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br>x = torch.tensor(<span class="hljs-number">2.0</span>, requires_grad=<span class="hljs-literal">True</span>)<br>y = x * <span class="hljs-number">3</span><br>L = (y - <span class="hljs-number">5</span>) ** <span class="hljs-number">2</span>            <span class="hljs-comment"># 损失</span><br>L.backward()                 <span class="hljs-comment"># 反向传播，自动算 ∂L/∂x</span><br><span class="hljs-built_in">print</span>(x.grad)               <span class="hljs-comment"># tensor(12.)  = 2*3*(6-5) = 12</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br>x = torch.tensor(<span class="hljs-number">2.0</span>, requires_grad=<span class="hljs-literal">True</span>)<br>y = x * <span class="hljs-number">3</span><br>L = (y - <span class="hljs-number">5</span>) ** <span class="hljs-number">2</span>            <span class="hljs-comment"># 损失</span><br>L.backward()                 <span class="hljs-comment"># 反向传播，自动算 ∂L/∂x</span><br><span class="hljs-built_in">print</span>(x.grad)               <span class="hljs-comment"># tensor(6.) = 2*(6-5)*3 = 6</span><br></code></pre></td></tr></table></figure>
 
-<p><img src="/images/core/autograd-graph.svg" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/images/core/autograd-graph.svg" srcset="/img/loading.gif" lazyload alt="PyTorch 前向计算与自动求导"></p>
 <p><strong>你在哪用</strong>：FGSM 攻击就是把 <code>x</code>（图片像素）设 <code>requires_grad_(True)</code>，前向算损失 → <code>loss.backward()</code> → 读 <code>x.grad</code> 得梯度方向 → <code>x + ε·sign(x.grad)</code>。<strong>这正是模块 J 的第一枪</strong>（对照 dl01 里手算的 <code>dL/dx</code>）。</p>
 <h3 id="1-1-两种乘法：逐元素乘-mul-vs-矩阵乘-matmul"><a href="#1-1-两种乘法：逐元素乘-mul-vs-矩阵乘-matmul" class="headerlink" title="1.1 两种乘法：逐元素乘 * / .mul()  vs  矩阵乘 @ / .matmul()"></a>1.1 两种乘法：逐元素乘 <code>*</code> / <code>.mul()</code>  vs  矩阵乘 <code>@</code> / <code>.matmul()</code></h3><p>新手最易混淆的一对。PyTorch 里”乘”有两种完全不同的含义，形状规则也不同：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br>a = torch.tensor([[<span class="hljs-number">1.</span>, <span class="hljs-number">0.</span>, <span class="hljs-number">1.</span>, <span class="hljs-number">1.</span>],<br>                  [<span class="hljs-number">1.</span>, <span class="hljs-number">0.</span>, <span class="hljs-number">1.</span>, <span class="hljs-number">1.</span>]])      <span class="hljs-comment"># 你今天敲的那个 tensor</span><br><br><span class="hljs-built_in">print</span>(a.mul(a))      <span class="hljs-comment"># 方法写法</span><br><span class="hljs-built_in">print</span>(a * a)         <span class="hljs-comment"># 运算符写法 —— 内部就是调用 .mul()，结果完全一样</span><br><span class="hljs-comment"># 两者都是"逐元素乘"：对应位置相乘，不求和、不跨行列</span><br><span class="hljs-comment"># [[1*1,0*0,1*1,1*1], ...] = [[1,0,1,1], ...]</span><br><span class="hljs-comment"># 你的 tensor 只有 0/1，平方后不变（0²=0, 1²=1），所以输出和原 tensor 一样——</span><br><span class="hljs-comment"># 不是没算，是结果巧合相等。换非 0/1 的数就看得出：[2.,3.]*[2.,3.] -&gt; [4., 9.]</span><br><br><span class="hljs-built_in">print</span>(a @ a.T)       <span class="hljs-comment"># 矩阵乘（@ 或 .matmul()）：行×列求和，形状规则完全不同</span><br></code></pre></td></tr></table></figure>
@@ -580,18 +583,21 @@ mjx-container[display="true"] + br {
 <tbody><tr>
 <td><code>a * b</code> / <code>a.mul(b)</code></td>
 <td>逐元素乘（Hadamard 积）</td>
-<td>a、b <strong>形状必须完全一致</strong></td>
+<td>形状相同，或满足广播规则（从末轴起相等或其中一个为 1）</td>
 </tr>
 <tr>
-<td><code>a @ b</code> / <code>a.matmul(b)</code> / <code>a.mm(b)</code></td>
+<td>二维 <code>a @ b</code> / <code>a.matmul(b)</code> / <code>a.mm(b)</code></td>
 <td>矩阵乘</td>
-<td>a 的列数 <strong>必须 =</strong> b 的行数</td>
+<td>a 的列数 <strong>必须 =</strong> b 的行数；<code>matmul</code> 还支持批量广播，<code>mm</code> 只支持二维</td>
 </tr>
 </tbody></table>
 <blockquote>
 <p>💡 一句话记牢：<strong><code>*</code> 是”位置对位置”，<code>@</code> 是”行乘列求和”。</strong> <code>nn.Linear</code>（你前面搭的网络）内部是 <code>@</code>（矩阵乘）；mask 遮罩、注意力门控、ReLU 后的逐元素操作用的是 <code>* / .mul()</code>。混淆这俩是高频 bug。</p>
 </blockquote>
-<p><strong>在哪用</strong>：FGSM 公式 <code>x' = x + ε·sign(∇L)</code> 里 <code>ε</code> 是标量，<code>ε * sign(∇L)</code> 就是逐元素乘（每个元素都乘同一个数）；注意力里的 <code>scores * mask</code> 把某些位置清零，也是 <code>.mul()</code>。</p>
+<p><strong>在哪用</strong>：FGSM 公式 <code>x' = x + ε·sign(∇L)</code> 里 <code>ε</code> 是标量，<code>ε * sign(∇L)</code> 就是逐元素乘并广播。注意力要在 softmax <strong>前</strong>用 <code>scores.masked_fill(blocked, -torch.inf)</code> 屏蔽不可见位置；仅把分数乘成 0 仍会产生正的 softmax 权重，不能当成因果遮挡。</p>
+<blockquote>
+<p><strong>学到这里立刻做</strong>：先手算 <code>(2, 4) * (4,)</code> 与 <code>(2, 4) @ (4, 3)</code> 的输出形状，再用 Tensor 验证。回到上面的标量例子，用中心差分 <code>(L(x+h)-L(x-h))/(2*h)</code> 验证梯度约为 6；这能区分“公式写错”和“计算图断开”。<code>eval()</code> 只切换模块行为，不会关闭梯度；计算攻击输入梯度时仍需开启 autograd。</p>
+</blockquote>
 <h3 id="1-2-官网-tensor-tutorial-其余要点速查"><a href="#1-2-官网-tensor-tutorial-其余要点速查" class="headerlink" title="1.2 官网 tensor tutorial 其余要点速查"></a>1.2 官网 tensor tutorial 其余要点速查</h3><blockquote>
 <p>完整教程：<a target="_blank" rel="noopener" href="https://docs.pytorch.org/tutorials/beginner/blitz/tensor_tutorial.html">PyTorch Tensor Tutorial</a>。下面只列”本文没讲、但你后面会撞上”的点；基础 API 和 numpy 几乎一致，细节看官网即可。</p>
 </blockquote>
@@ -644,10 +650,10 @@ mjx-container[display="true"] + br {
 <p><strong>四步顺序为什么不能乱</strong>：梯度是累积的——不清空，上个 batch 的梯度会叠加进来；先 forward 后 backward；step 必须等 backward 算完梯度再更新。</p>
 <p><strong>train vs eval</strong>：<code>model.train()</code> 启用 Dropout、BatchNorm 用本 batch 统计；<code>model.eval()</code> 关掉 Dropout、BatchNorm 用全局统计量。<strong>推理/评测/对抗攻击测试必须 <code>model.eval()</code></strong>，否则结果会随机漂移（见 D §5）。</p>
 <hr>
-<h2 id="4-GPU-CPU-切换与模型存取"><a href="#4-GPU-CPU-切换与模型存取" class="headerlink" title="4 GPU / CPU 切换与模型存取"></a>4 GPU / CPU 切换与模型存取</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python">device = <span class="hljs-string">"cuda"</span> <span class="hljs-keyword">if</span> torch.cuda.is_available() <span class="hljs-keyword">else</span> <span class="hljs-string">"cpu"</span><br>model.to(device)                            <span class="hljs-comment"># 模型搬设备</span><br>xb = xb.to(device)                          <span class="hljs-comment"># 数据也要搬同一设备（缺一个就报错）</span><br><br>torch.save(model.state_dict(), <span class="hljs-string">"cnn.pth"</span>)  <span class="hljs-comment"># 存权重</span><br>model.load_state_dict(torch.load(<span class="hljs-string">"cnn.pth"</span>))<span class="hljs-comment"># 读权重</span><br></code></pre></td></tr></table></figure>
+<h2 id="4-GPU-CPU-切换与模型存取"><a href="#4-GPU-CPU-切换与模型存取" class="headerlink" title="4 GPU / CPU 切换与模型存取"></a>4 GPU / CPU 切换与模型存取</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python">device = <span class="hljs-string">"cuda"</span> <span class="hljs-keyword">if</span> torch.cuda.is_available() <span class="hljs-keyword">else</span> <span class="hljs-string">"cpu"</span><br>model.to(device)                            <span class="hljs-comment"># 模型搬设备</span><br>xb = xb.to(device)                          <span class="hljs-comment"># 数据也要搬同一设备（缺一个就报错）</span><br><br>torch.save(model.state_dict(), <span class="hljs-string">"cnn.pth"</span>)  <span class="hljs-comment"># 存权重</span><br>model.load_state_dict(torch.load(<span class="hljs-string">"cnn.pth"</span>, map_location=device, weights_only=<span class="hljs-literal">True</span>))<br>model.<span class="hljs-built_in">eval</span>()                              <span class="hljs-comment"># 恢复权重后显式设定评测行为</span><br></code></pre></td></tr></table></figure>
 
 <blockquote>
-<p>本地 CPU 跑 MNIST 级小网络几秒一个 epoch 完全够；大模型/大数据再上云 GPU。攻击评测一律 CPU 可做（J 模块的 labs 全部 CPU 跑通）。</p>
+<p>小网络可以先用 CPU，耗时取决于硬件、样本量与线程配置。<code>weights_only=True</code> 限制权重反序列化范围，但不验证模型行为可信；本实验仅加载自己刚保存的权重。阅读 <a target="_blank" rel="noopener" href="https://docs.pytorch.org/tutorials/beginner/saving_loading_models.html">PyTorch 模型存取教程的 Save/Load state_dict 小节</a>，对照解释 <code>state_dict</code>、<code>map_location</code> 与 <code>eval()</code> 各自解决什么问题。</p>
 </blockquote>
 <hr>
 <h2 id="5-里程碑：从零写通-MNIST-CNN（约-60-行）"><a href="#5-里程碑：从零写通-MNIST-CNN（约-60-行）" class="headerlink" title="5 里程碑：从零写通 MNIST CNN（约 60 行）"></a>5 里程碑：从零写通 MNIST CNN（约 60 行）</h2><p>完整脚本见 <code>labs/pt01_train_grad_save.py</code>（含训练 + 输入梯度 + 存读模型三合一）。核心循环：</p>
@@ -678,9 +684,9 @@ mjx-container[display="true"] + br {
 <td>pt01</td>
 <td>torch 三合一：训练小 CNN、算输入梯度（FGSM 素材）、存读模型</td>
 <td><code>labs/pt01_train_grad_save.py</code></td>
-<td>torch</td>
-<td>CPU，MNIST 3 epoch 约 1 分钟</td>
-<td>loss 降到 &lt;0.15、测试 acc &gt; 0.9；输出 x.grad 形状与扰动前后预测变化</td>
+<td>torch、torchvision</td>
+<td>CPU；首次下载 MNIST，耗时随硬件变化</td>
+<td>平均 loss 下降、测试 acc &gt; 0.9；打印输入梯度形状，在固定预算下记录攻击是否成功</td>
 </tr>
 </tbody></table>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> 01-foundation/pytorch/labs<br>pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu<br>python pt01_train_grad_save.py<br></code></pre></td></tr></table></figure>

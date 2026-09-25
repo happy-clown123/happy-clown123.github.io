@@ -1,4 +1,6 @@
-<svg width="600" height="320" viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
+<svg role="img" aria-labelledby="title desc" width="600" height="320" viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
+  <title id="title">神经网络前向传播</title>
+  <desc id="desc">输入特征经过隐藏层与激活函数，再到输出层；箭头表示逐层计算与信息传递。</desc>
   <rect width="600" height="320" fill="#ffffff"/>
   <text x="300" y="26" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#222" text-anchor="middle">前馈网络前向传播 Forward Pass</text>
   <!-- input layer -->
